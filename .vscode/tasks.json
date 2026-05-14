@@ -1,0 +1,40 @@
+{
+    "tasks": [
+        {
+            "label": "build",
+            "dependsOn": [
+                "build:windows"
+            ],
+            "dependsOrder": "sequence"
+        },
+        {
+            "label": "build:windows",
+            "type": "cppbuild",
+            "command": "C:\\mingw64\\bin\\g++.exe",
+            "args": [
+                "${workspaceFolder}/src/main.cpp",
+                "-o",
+                "${workspaceFolder}/bin/main.exe",
+                "-I${workspaceFolder}/src",
+                "-I${workspaceFolder}/include",
+                "-lshell32",
+                "-static-libgcc",
+                "-static-libstdc++",
+                //"-flto=2",
+                "-O2"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Vom Debugger generierte Aufgabe.",
+        }
+    ],
+    "version": "2.0.0"
+}
