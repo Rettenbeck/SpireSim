@@ -2,7 +2,7 @@
 
 #include <Core/Card/card_pool.hpp>
 #include <Core/Buff/buff_pool.hpp>
-#include <Core/Character/Intent/enemy_move_pool.hpp>
+#include <Core/Character/Move/enemy_move_pool.hpp>
 #include <Core/Character/enemy_pool.hpp>
 #include <Core/Combat/combat_variables.hpp>
 #include <Core/Combat/pile_handler.hpp>
@@ -110,10 +110,12 @@ namespace SpireSim {
 
 
 
-        // Intent effects
-        void resolveIntent(Id enemyEntityId, Enemy &enemy, EnemyMove &move);
-        void executeIntent(Id enemyEntityId);
-        void executeIntents();
+        // Move effects
+        EnemyMoveId getNextMove(EnemyMoveId move);
+        void advanceMove(EnemyMoveId &move);
+        void resolveMove(Id enemyEntityId, Enemy &enemy, EnemyMove &move);
+        void executeMove(Id enemyEntityId);
+        void executeMoves();
 
 
 

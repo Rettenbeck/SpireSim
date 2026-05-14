@@ -1,8 +1,7 @@
 #pragma once
 
 #include <Core/Character/enemy.hpp>
-#include <Core/Character/Intent/enemy_move_pool.hpp>
-#include <Core/Character/Intent/intent_strategy.hpp>
+#include <Core/Character/Move/enemy_move_pool.hpp>
 
 
 namespace SpireSim {
@@ -39,14 +38,10 @@ namespace SpireSim {
             auto& enemyShrinkerBeetle = retrieveForCreation(EnemyId::ShrinkerBeetle);
             auto& enemyFuzzyWormCrawler = retrieveForCreation(EnemyId::FuzzyWormCrawler);
             
-            enemyShrinkerBeetle.intentStrategies.push_back(
-                IntentStrategy::createCycle({EnemyMoveId::Shrinker, EnemyMoveId::Chomp, EnemyMoveId::Stomp}, {1, 2}, 0)
-            );
+            enemyShrinkerBeetle.initialMoves.push_back(EnemyMoveId::Shrinker);
             enemyShrinkerBeetle.setMaxHp(38 + 2 * isDifficult, 2);
             
-            enemyFuzzyWormCrawler.intentStrategies.push_back(
-                IntentStrategy::createCycle({EnemyMoveId::AcidGoop, EnemyMoveId::Inhale}, {0, 1})
-            );
+            enemyFuzzyWormCrawler.initialMoves.push_back(EnemyMoveId::AcidGoop);
             enemyFuzzyWormCrawler.setMaxHp(55 + 2 * isDifficult, 2);
         }
         

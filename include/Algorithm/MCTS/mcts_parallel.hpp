@@ -76,7 +76,7 @@ namespace SpireSim {
             ss << "Results:\n";
 
             for(auto [action, visits] : results) {
-                ss << "  Action " << action << " has score: " << visits << "\n";
+                ss << "  Action " << action << " has score: " << (visits / (double) optionIterations) << "\n";
             }
             return ss.str();
         }

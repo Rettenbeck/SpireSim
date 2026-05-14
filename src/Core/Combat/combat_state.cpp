@@ -6,7 +6,7 @@
 #include <Core/Combat/param_cond.cpp>
 #include <Core/Combat/execution.cpp>
 #include <Core/Combat/interface.cpp>
-#include <Core/Combat/intent.cpp>
+#include <Core/Combat/move.cpp>
 #include <Core/Combat/fight.cpp>
 #include <Core/Combat/turn_handling.cpp>
 #include <Core/Combat/action.cpp>

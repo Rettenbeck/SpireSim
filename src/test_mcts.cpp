@@ -42,7 +42,7 @@ void test() {
     // SpireSim::MCTS mcts(state.get());
     SpireSim::MCTS_Parallel mcts(state.get());
     mcts.heuristic = std::make_unique<SpireSim::MCTS_Heuristic_Random>(0);
-    mcts.optionIterations = 100000;
+    mcts.optionIterations = 14000;
 
     std::cout << "Threads: " << std::thread::hardware_concurrency() << "\n";
 

@@ -56,6 +56,11 @@
     #include <thread>
 #endif
 
+#ifndef INCL_FUNCTION
+    #define INCL_FUNCTION
+    #include <functional>
+#endif
+
 // // #ifndef INCL_CHRONO
 // //     #define INCL_CHRONO
 // //     #include <chrono>

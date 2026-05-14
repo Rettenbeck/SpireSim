@@ -46,7 +46,7 @@ namespace SpireSim {
     }
     
     void CombatState::handlePhase_Enemy() {
-        executeIntents();
+        executeMoves();
     }
     
     void CombatState::handlePhase_EnemyEnd() {

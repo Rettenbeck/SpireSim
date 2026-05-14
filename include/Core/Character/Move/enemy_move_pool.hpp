@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Core/Buff/buff_pool.hpp>
-#include <Core/Character/Intent/enemy_move.hpp>
+#include <Core/Character/Move/enemy_move.hpp>
 
 
 namespace SpireSim {
@@ -11,6 +11,7 @@ namespace SpireSim {
         EnemyMoves enemyMoves;
         
         EnemyMovePool(BuffPool &buffPool, int isDifficult_ = 0) : isDifficult(isDifficult_) {
+            fillNextEnemyMoveList();
             createEnemyMovePool(buffPool);
         }
         

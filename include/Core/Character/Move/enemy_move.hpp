@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Core/Buff/buff.hpp>
-#include <Core/Character/Intent/enemy_move_id.hpp>
+#include <Core/Character/Move/next_move_list.hpp>
 
 namespace SpireSim {
 

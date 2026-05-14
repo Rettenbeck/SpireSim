@@ -7,8 +7,8 @@ namespace SpireSim {
 
     enum class EnemyMoveId {
         None,
-        Shrinker, Chomp, Stomp,
-        AcidGoop, Inhale,
+        /* Shrinker Beetle */               Shrinker, Chomp, Stomp,
+        /* Fuzzy Worm Crawler */            AcidGoop, Inhale,
         Count
     };
     std::string ToString(EnemyMoveId e) { return ToString(int(e)); }
