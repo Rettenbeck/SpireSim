@@ -8,6 +8,7 @@ namespace SpireSim {
     CombatState::CombatState(  
                                 EffectPool &effectPool_,
                                 RelicPool &relicPool_,
+                                PotionPool &potionPool_,
                                 CardPool &cardPool_,
                                 BuffPool &buffPool_,
                                 EnemyMovePool &movePool_,
@@ -15,10 +16,12 @@ namespace SpireSim {
                                 const Player &player_,
                                 const Enemies &enemies_,
                                 const Relics &relics_,
+                                const Potions &potions_,
                                 Cards &cards
                             ) :
                                 effectPool(effectPool_),
                                 relicPool(relicPool_),
+                                potionPool(potionPool_),
                                 cardPool(cardPool_),
                                 buffPool(buffPool_),
                                 movePool(movePool_),
@@ -28,6 +31,7 @@ namespace SpireSim {
         ecs.registerPlayer(player_);
         registerEnemies(enemies_);
         registerRelics(relics_);
+        registerPotions(potions_);
     }
 
     void CombatState::initialize(bool shuffleDeck) {
@@ -59,6 +63,12 @@ namespace SpireSim {
             auto relicCopy = relic;
             auto eventList = relic.eventList;
             registerEventsFromList(eventList, id);
+        }
+    }
+
+    void CombatState::registerPotions(const Potions &potions) {
+        for(auto& potion : potions) {
+            auto id = ecs.addObject(potion);
         }
     }
 

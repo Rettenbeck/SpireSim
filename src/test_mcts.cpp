@@ -7,6 +7,7 @@ void test() {
     
     SpireSim::EffectPool        effectPool;
     SpireSim::RelicPool         relicPool;
+    SpireSim::PotionPool        potionPool;
     SpireSim::CardPool          cardPool(effectPool);
     SpireSim::BuffPool          buffPool;
     SpireSim::EnemyMovePool     movePool (buffPool, difficultyMoreDmg);
@@ -15,6 +16,7 @@ void test() {
     SpireSim::EncounterFactory  encounterFactory(enemyPool);
     SpireSim::PlayerFactory     playerFactory;
     SpireSim::RelicFactory      relicFactory(relicPool);
+    SpireSim::PotionFactory     potionFactory(potionPool);
 
     SpireSim::Cards deck;
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
@@ -32,6 +34,7 @@ void test() {
     auto state = std::make_unique<SpireSim::CombatState>(
         effectPool,
         relicPool,
+        potionPool,
         cardPool,
         buffPool,
         movePool,
@@ -39,6 +42,7 @@ void test() {
         playerFactory.get(SpireSim::PlayerId::IronClad),
         encounterFactory.get(SpireSim::EncounterId::SF_Test),
         relicFactory.get({SpireSim::RelicId::BagOfPreparation, SpireSim::RelicId::CentennialPuzzle}),
+        potionFactory.get({SpireSim::PotionId::FirePotion, SpireSim::PotionId::FlexPotion}),
         deck);
     
     state->setSeeds(42);

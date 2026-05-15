@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Core/Relic/relic_factory.hpp>
+#include <Core/Potion/potion_factory.hpp>
 #include <Core/Card/card_pool.hpp>
 #include <Core/Buff/buff_pool.hpp>
 #include <Core/Character/Move/enemy_move_pool.hpp>
@@ -23,6 +24,7 @@ namespace SpireSim {
         
         EffectPool& effectPool;
         RelicPool& relicPool;
+        PotionPool& potionPool;
         CardPool& cardPool;
         BuffPool& buffPool;
         EnemyMovePool& movePool;
@@ -50,6 +52,7 @@ namespace SpireSim {
         void initializeCards(Cards &cards);
         void registerEnemies(const Enemies &enemies);
         void registerRelics(const Relics &relics);
+        void registerPotions(const Potions &potions);
         
 
 
@@ -197,6 +200,7 @@ namespace SpireSim {
     public:
         CombatState(EffectPool &effectPool_,
                     RelicPool &relicPool_,
+                    PotionPool &potionPool_,
                     CardPool &cardPool_,
                     BuffPool &buffPool,
                     EnemyMovePool &movePool_,
@@ -204,11 +208,13 @@ namespace SpireSim {
                     const Player &player_,
                     const Enemies &enemies_,
                     const Relics &relics_,
+                    const Potions &potions_,
                     Cards &cards);
         
         CombatState(const CombatState &other):
                     effectPool(other.effectPool),
                     relicPool(other.relicPool),
+                    potionPool(other.potionPool),
                     cardPool(other.cardPool),
                     buffPool(other.buffPool),
                     enemyPool(other.enemyPool),

@@ -2,6 +2,7 @@
 
 #include <Core/Combat/entity.hpp>
 #include <Core/Relic/relic.hpp>
+#include <Core/Potion/potion.hpp>
 #include <Core/Card/card.hpp>
 #include <Core/Character/player.hpp>
 #include <Core/Character/enemy.hpp>
@@ -15,6 +16,7 @@ namespace SpireSim {
         Entities entities;
 
         Relics      cRelics;
+        Potions     cPotions;
         Cards       cCards;
         Players     cPlayers;
         Enemies     cEnemies;
@@ -33,6 +35,7 @@ namespace SpireSim {
             auto id = entities.size();
             entities.push_back(Entity(id, ownerId));
             fillVector(cRelics , id);
+            fillVector(cPotions, id);
             fillVector(cCards  , id);
             fillVector(cPlayers, id);
             fillVector(cEnemies, id);
@@ -64,6 +67,7 @@ namespace SpireSim {
         }
 
         inline Id addObject(const Relic  &relic ) { return addObject(cRelics , relic ); }
+        inline Id addObject(const Potion &potion) { return addObject(cPotions, potion); }
         inline Id addObject(const Card   &card  ) { return addObject(cCards  , card  ); }
         inline Id addObject(const Player &player) { return addObject(cPlayers, player); }
         inline Id addObject(const Enemy  &enemy ) { return addObject(cEnemies, enemy ); }
@@ -89,6 +93,14 @@ namespace SpireSim {
             auto& relic = cRelics[entityId];
             assert(relic.relicId != RelicId::None);
             return cRelics[entityId];
+        }
+
+        inline Potion& getPotion(Id entityId) {
+            assert(entities.size() > entityId);
+            assert(cPotions.size() > entityId);
+            auto& potion = cPotions[entityId];
+            assert(potion.potionId != PotionId::None);
+            return cPotions[entityId];
         }
 
         inline Card& getCard(Id entityId) {
@@ -117,13 +129,20 @@ namespace SpireSim {
             return cBuffs[entityId];
         }
 
+        inline bool isRelic (Id entityId) { return cRelics [entityId].relicId  != RelicId ::None; }
+        inline bool isPotion(Id entityId) { return cPotions[entityId].potionId != PotionId::None; }
         inline bool isCard  (Id entityId) { return cCards  [entityId].cardId   != CardId  ::None; }
         inline bool isPlayer(Id entityId) { return cPlayers[entityId].playerId != PlayerId::None; }
         inline bool isEnemy (Id entityId) { return cEnemies[entityId].enemyId  != EnemyId ::None; }
         inline bool isBuff  (Id entityId) { return cBuffs  [entityId].buffId   != BuffId  ::None; }
 
         inline isValidEntity(Id entityId) {
-            return (isCard(entityId) || isPlayer(entityId) || isEnemy(entityId) || isBuff(entityId));
+            return (isRelic (entityId) ||
+                    isPotion(entityId) ||
+                    isCard  (entityId) ||
+                    isPlayer(entityId) ||
+                    isEnemy (entityId) ||
+                    isBuff  (entityId)  );
         }
 
         template<typename T>
@@ -142,6 +161,7 @@ namespace SpireSim {
             for(auto e : entities) {
                 ss << "\n[ " << e.toString() << "] \n";
                 auto& relic  = cRelics [e.id];
+                auto& potion = cPotions[e.id];
                 auto& card   = cCards  [e.id];
                 auto& player = cPlayers[e.id];
                 auto& enemy  = cEnemies[e.id];
@@ -149,6 +169,7 @@ namespace SpireSim {
                 auto& refs   = cRefs   [e.id];
 
                 if(relic .relicId  != RelicId ::None) ss << "[ " << relic .toString() << "] \n";
+                if(potion.potionId != PotionId::None) ss << "[ " << potion.toString() << "] \n";
                 if(card  .cardId   != CardId  ::None) ss << "[ " << card  .toString() << "] \n";
                 if(player.playerId != PlayerId::None) ss << "[ " << player.toString() << "] \n";
                 if(enemy .enemyId  != EnemyId ::None) ss << "[ " << enemy .toString() << "] \n";
