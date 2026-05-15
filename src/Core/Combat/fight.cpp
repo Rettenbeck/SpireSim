@@ -6,7 +6,6 @@
 namespace SpireSim {
 
     void CombatState::endFight(bool won) {
-        //std::cout << "KAMPF VORBEI! Gewonnen? " << won << "\n";
         waitingForActionOnStack = false;
         waitingForAction = false;
         stopStack = true;
@@ -21,9 +20,19 @@ namespace SpireSim {
     void CombatState::entityDies(Id entityId) {
         if(ecs.cEnemies[entityId].enemyId != EnemyId ::None) {
             if(!ecs.cEnemies[entityId].isMinion) variables.enemies--;
-            ecs.cEnemies[entityId].enemyId  = EnemyId ::None;
+            ecs.cEnemies[entityId].enemyId = EnemyId ::None;
             ecs.buildEnemyEntityIds();
             checkForFightEnd();
+
+            for(auto& entity : ecs.entities) {
+                if(!ecs.isBuff(entity.id)) continue;
+                auto& buff = ecs.getBuff(entity.id);
+                if(buff.createdBy == entityId && buffPool.retrieve(buff.buffId).dependentOnCreator) {
+                    buff.buffId = BuffId::None;
+                    unregisterEventsFromEntity(entity.id);
+                }
+            }
+            unregisterEventsFromEntity(entityId);
         }
         if(entityId == ecs.playerEntityId) {
             ecs.getPlayer().playerId = PlayerId::None;

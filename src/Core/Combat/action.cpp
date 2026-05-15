@@ -8,6 +8,7 @@ namespace SpireSim {
     void CombatState::generateActions() {
         actions.clear();
         if(combatOver) return;
+        actions.push_back(Action(ActionType::EndTurn));
         for(auto& cardId : pileHandler.hand) {
             auto& card = ecs.getCard(cardId);
             if(!isCardPlayable(card)) continue;
@@ -22,7 +23,6 @@ namespace SpireSim {
                     break;
             }
         }
-        actions.push_back(Action(ActionType::EndTurn));
     }
 
     void CombatState::executeAction(int actionIndex) {
