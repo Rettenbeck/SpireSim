@@ -225,14 +225,16 @@ namespace SpireSim {
         Actions& getActions();
         bool isCombatOver();
         bool isCombatVictorious();
+        int getPlayerMaxHealth();
         int getPlayerHealth();
         int getPlayerBlock();
         int getTotalEnemyHp();
+        int getHpLoss();
         
         // Actions
         void generateActions();
         void executeAction(int actionIndex);
-        void startCombat();
+        void startCombat(bool shuffleDeck = true);
         void reshuffleDeck();
 
         // ToString methods

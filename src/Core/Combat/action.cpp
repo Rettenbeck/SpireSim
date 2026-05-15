@@ -46,8 +46,12 @@ namespace SpireSim {
         }
     }
 
-    void CombatState::startCombat() {
-        if(turnId == TurnId::None) proceedPhases();
+    void CombatState::startCombat(bool shuffleDeck) {
+        if(turnId == TurnId::None) {
+            if(shuffleDeck) pileHandler.reshuffleDeck(ecs);
+            variables.initialHp = ecs.getPlayer().data.hp;
+            proceedPhases();
+        }
     }
 
     void CombatState::reshuffleDeck() {

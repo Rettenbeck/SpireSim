@@ -8,6 +8,7 @@ namespace SpireSim {
     const int TARGET_RANDOM = -1;
         
     struct CombatVariables {
+        int initialHp = 0;
         int turn = 0;
         int cardDrawOnTurn = 5;
         int maxHandSize = 10;

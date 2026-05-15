@@ -17,6 +17,10 @@ namespace SpireSim {
         return (variables.enemies == 0 ? true : false);
     }
 
+    int CombatState::getPlayerMaxHealth() {
+        return ecs.getPlayer().data.maxHp;
+    }
+
     int CombatState::getPlayerHealth() {
         return ecs.getPlayer().data.hp;
     }
@@ -31,6 +35,10 @@ namespace SpireSim {
             sum += ecs.getEnemy(enemyId).data.hp;
         }
         return sum;
+    }
+
+    int CombatState::getHpLoss() {
+        return variables.initialHp - ecs.getPlayer().data.hp;
     }
 
 }

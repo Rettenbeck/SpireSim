@@ -60,18 +60,25 @@ namespace SpireSim {
 
         float evaluateState(CombatState& state) {
             if(state.isCombatOver()) {
-                return (state.isCombatVictorious() ? 1 + (state.getPlayerHealth() / MAX_SCORE) : -1);
+                if(state.isCombatVictorious()) {
+                    float loss = ((float) state.getHpLoss()) / ((float) state.getPlayerMaxHealth());
+                    return 1.0f - loss;
+                } else {
+                    return -1.0f;
+                }
             }
             
-            float score = 0;
-            score += state.getPlayerHealth() * 2.0f;
-            score += state.getPlayerBlock () * 1.0f;
-            score -= state.getTotalEnemyHp() * 1.5f;
+            float loss = ((float) state.getHpLoss()) / ((float) state.getPlayerMaxHealth());
 
-            if(score > (MAX_SCORE - 1)) score = MAX_SCORE - 1;
-            if(score < (1 - MAX_SCORE)) score = 1 - MAX_SCORE;
+            // float score = 0;
+            // score += state.getPlayerHealth() * 2.0f;
+            // score += state.getPlayerBlock () * 1.0f;
+            // score -= state.getTotalEnemyHp() * 1.5f;
 
-            return score / MAX_SCORE;
+            // if(score > (MAX_SCORE - 1)) score = MAX_SCORE - 1;
+            // if(score < (1 - MAX_SCORE)) score = 1 - MAX_SCORE;
+
+            return -loss;
         }
 
         MCTSNode* select(MCTSNode* root) {
