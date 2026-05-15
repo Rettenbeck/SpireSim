@@ -13,7 +13,7 @@ namespace SpireSim {
         putEffectOntoStack(Effect(EffectType::UnpackCard, {}, cardEntityId));
     }
     
-    void CombatState::resolveInterceptor(Effect &effect, InterceptorContext &context, int &value) {
+    void CombatState::resolveInterceptor(Effect &effect, const InterceptorContext &context, int &value) {
         if(!evaluateConditions(effect)) return;
         resolveParams(effect);
         switch(effect.effectType) {

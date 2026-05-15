@@ -45,7 +45,9 @@ namespace SpireSim {
             auto& moveAcidGoop = retrieveForCreation(EnemyMoveId::AcidGoop);
             auto& moveInhale = retrieveForCreation(EnemyMoveId::Inhale);
             
-            moveShrinker.debuffsToApply.push_back(buffPool.createBuffFromTemplate(BuffId::Shrink));
+            auto buffShrink = buffPool.createBuffFromTemplate(BuffId::Shrink);
+            moveShrinker.debuffsToApply.push_back(buffShrink);
+
             moveChomp.addAttack( 7 + 1 * isDifficult);
             moveStomp.addAttack(13 + 1 * isDifficult);
             

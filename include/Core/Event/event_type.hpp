@@ -11,6 +11,7 @@ namespace SpireSim {
         OnTurnStart,
         OnTurnEnd,
         OnKill,
+        OnDealDamageForInterception,
         Count
     };
 

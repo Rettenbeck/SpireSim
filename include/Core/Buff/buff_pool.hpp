@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Core/Buff/buff_template.hpp>
+#include <Core/constants.hpp>
 
 
 namespace SpireSim {
@@ -8,7 +9,9 @@ namespace SpireSim {
     struct BuffPool {
         BuffTemplates buffTemplates;
         
-        BuffPool() {}
+        BuffPool() {
+            createBuffPool();
+        }
         
         void createBlankArray(int index) {
             while(index >= buffTemplates.size()) {
@@ -58,6 +61,9 @@ namespace SpireSim {
             buffGainStrengthPerTurn.amountParams = 1;
 
             buffShrink.buffCategory = BuffCategory::Debuff;
+            buffShrink.eventList.push_back({EventType::OnDealDamageForInterception, EventListener(
+                    Effect(EffectType::ModifyParentDamagePerc, {Param(ParamType::FixedValue, BUFF_SHRINKER_PERCENTAGE)}
+            ))});
             buffShrink.dependentOnCreator = true;
         }
         

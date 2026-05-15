@@ -56,14 +56,14 @@ namespace SpireSim {
         void unregisterEventsFromEntity(Id entityId);
         void registerEvent(int eventType, const EventListener &eventListener);
         void triggerEvent(EventType eventType);
-        void triggerInterceptor(EventType eventType, InterceptorContext &context, int &value);
+        void triggerInterceptor(EventType eventType, const InterceptorContext &context, int &value);
         
 
 
         // Stack handling
         void putEffectOntoStack(const Effect &effect, int position = 0);
         void putCardOntoStack(Id cardEntityId, Id targetEntityId = TARGET_RANDOM);
-        void resolveInterceptor(Effect &effect, InterceptorContext &context, int &value);
+        void resolveInterceptor(Effect &effect, const InterceptorContext &context, int &value);
         void resolve(Effect &effect);
         
 
@@ -95,9 +95,7 @@ namespace SpireSim {
         inline void gainBlockEnemy(Id &enemyEntityId, int block);
         void gainBlock(Id entityId, int block);
 
-        void applyBuff(Buff &buff, Id sourceEntityId, Id targetEntityId) {
-            //
-        }
+        void applyBuff(Buff &buff, Id sourceEntityId, Id targetEntityId);
 
         inline void dealDamageToEnemy(Id sourceEntityId, CharacterData &sourceData, Id targetEntityId, int damage);
         inline void gainStrength(CharacterData &targetData, int value);
@@ -145,7 +143,7 @@ namespace SpireSim {
 
 
         // Executions interceptors
-        void executeModifyParentDamagePerc(Effect &effect, InterceptorContext &context, int &value);
+        void executeModifyParentDamagePerc(Effect &effect, const InterceptorContext &context, int &value);
         
 
 

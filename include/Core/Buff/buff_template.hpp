@@ -12,6 +12,8 @@ namespace SpireSim {
         int amountParams;
         bool dependentOnCreator;
 
+        EventList eventList;
+
         BuffTemplate(int amountParams_ = 0, bool dependentOnCreator_ = false)
             : amountParams(amountParams_), dependentOnCreator(dependentOnCreator_) {}
 

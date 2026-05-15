@@ -19,11 +19,19 @@ namespace SpireSim {
     
     void CombatState::registerEventsFromEntity(Id entityId) {
         if(ecs.isCard(entityId)) {
-            CardTemplate& CardTemplate = cardPool.retrieve(ecs.getCard(entityId).cardId);
-            registerEventsFromEntity(CardTemplate, entityId);
+            auto& cardTemplate = cardPool.retrieve(ecs.getCard(entityId).cardId);
+            registerEventsFromEntity(cardTemplate, entityId);
+            return;
         }
-        if(ecs.isBuff (entityId)) registerEventsFromEntity(ecs.getBuff (entityId), entityId);
-        if(ecs.isEnemy(entityId)) registerEventsFromEntity(ecs.getEnemy(entityId), entityId);
+        if(ecs.isBuff(entityId)) {
+            auto& buffTemplate = buffPool.retrieve(ecs.getBuff(entityId).buffId);
+            registerEventsFromEntity(buffTemplate, entityId);
+            return;
+        }
+        if(ecs.isEnemy(entityId)) {
+            registerEventsFromEntity(ecs.getEnemy(entityId), entityId);
+            return;
+        }
         //if(ecs.isPlayer(entityId)) registerEventsFromList(ecs.getPlayer(        ), entityId);
     }
 
@@ -54,7 +62,7 @@ namespace SpireSim {
         }
     }
 
-    void CombatState::triggerInterceptor(EventType eventType, InterceptorContext &context, int &value) {
+    void CombatState::triggerInterceptor(EventType eventType, const InterceptorContext &context, int &value) {
         auto& listeners = eventRegistry[int(eventType)];
         for(auto& listener : listeners) {
             if(listener.inactive) continue;

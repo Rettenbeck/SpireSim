@@ -46,6 +46,7 @@ namespace SpireSim {
                                     int damage)
     {
         int damageCalculated = calculateDamage(sourceEntityId, sourceData, targetEntityId, targetData, damage);
+        triggerInterceptor(EventType::OnDealDamageForInterception, InterceptorContext(sourceEntityId), damageCalculated);
         if(targetData.block >= damageCalculated) {
             targetData.block -= damageCalculated;
         } else {
@@ -66,6 +67,14 @@ namespace SpireSim {
     }
 
 
+
+    void CombatState::applyBuff(Buff &buff, Id sourceEntityId, Id targetEntityId) {
+        buff.createdBy = sourceEntityId;
+        auto id = ecs.addObject(buff, targetEntityId);
+        registerEventsFromEntity(buffPool.retrieve(buff.buffId), id);
+    }
+
+    
 
     inline void CombatState::gainBlock(CharacterData &data, int block) {
         data.block += block;

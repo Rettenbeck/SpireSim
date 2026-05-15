@@ -29,6 +29,12 @@ namespace SpireSim {
         if(move.applyWeak       > 0) { applyWeakToPlayer(move.applyWeak); }
         if(move.applyFrail      > 0) { applyFrailToPlayer(move.applyFrail); }
 
+        for(auto& buff : move.buffsToGain) {
+            applyBuff(buff, enemyEntityId, enemyEntityId);
+        }
+        for(auto& debuff : move.debuffsToApply) {
+            applyBuff(debuff, enemyEntityId, ecs.playerEntityId);
+        }
     }
 
     void CombatState::executeMove(Id enemyEntityId) {
