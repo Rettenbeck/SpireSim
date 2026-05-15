@@ -62,6 +62,12 @@ namespace SpireSim {
             damageCalculated -= targetData.block;
             targetData.block = 0;
             targetData.hp -= damageCalculated;
+            if(damageCalculated > 0) {
+                if(targetEntityId == ecs.playerEntityId) {
+                    if(variables.hasTakenDamage == 0) triggerEvent(EventType::OnFirstDamageTaken);
+                    variables.hasTakenDamage = 1;
+                }
+            }
             if(targetData.hp <= 0) entityDies(targetEntityId);
         }
     }

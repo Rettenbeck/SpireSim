@@ -20,19 +20,6 @@ namespace SpireSim {
         playCard(cardEntityId, targetEntityId, true);
     }
     
-    void CombatState::resolveStackSingle() {
-        if(stack.size() == 0) return;
-        auto effect = stack[0];
-        stack.erase(stack.begin());
-        resolve(effect);
-    }
-    
-    void CombatState::resolveStackFully() {
-        while(stack.size() > 0 && waitingForActionOnStack == false && stopStack == false) {
-            resolveStackSingle();
-        }
-    }
-
     bool CombatState::isCardPlayable(Card &card) {
         switch (card.data.playableType) {
             case PlayableType::Playable:

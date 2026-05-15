@@ -6,12 +6,15 @@ void test() {
     int difficultyMoreDmg = 0;  // Ascension 9
     
     SpireSim::EffectPool        effectPool;
+    SpireSim::RelicPool         relicPool;
     SpireSim::CardPool          cardPool(effectPool);
     SpireSim::BuffPool          buffPool;
     SpireSim::EnemyMovePool     movePool (buffPool, difficultyMoreDmg);
     SpireSim::EnemyPool         enemyPool(movePool, difficultyMoreHp );
+    
     SpireSim::EncounterFactory  encounterFactory(enemyPool);
     SpireSim::PlayerFactory     playerFactory;
+    SpireSim::RelicFactory      relicFactory(relicPool);
 
     SpireSim::Cards deck;
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
@@ -28,18 +31,20 @@ void test() {
     
     auto state = std::make_unique<SpireSim::CombatState>(
         effectPool,
+        relicPool,
         cardPool,
         buffPool,
         movePool,
         enemyPool,
         playerFactory.get(SpireSim::PlayerId::IronClad),
         encounterFactory.get(SpireSim::EncounterId::SF_Test),
+        relicFactory.get({SpireSim::RelicId::BagOfPreparation, SpireSim::RelicId::CentennialPuzzle}),
         deck);
     
     state->setSeeds(42);
+    state->initialize();
     state->startCombat();
 
-    // SpireSim::MCTS mcts(state.get());
     SpireSim::MCTS_Parallel mcts(state.get());
     mcts.heuristic = std::make_unique<SpireSim::MCTS_Heuristic_Random>(0);
     mcts.optionIterations = 14000;

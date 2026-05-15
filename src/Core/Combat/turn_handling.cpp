@@ -24,25 +24,35 @@ namespace SpireSim {
 
     void CombatState::advancePhase() {
         switch (turnId) {
-            case TurnId::None        : turnId = TurnId::PlayerDraw  ; return;
+            case TurnId::None        : turnId = TurnId::CombatStart ; return;
+            case TurnId::CombatStart : turnId = TurnId::PlayerPre   ; return;
+            case TurnId::PlayerPre   : turnId = TurnId::PlayerDraw  ; return;
             case TurnId::PlayerDraw  : turnId = TurnId::PlayerUpkeep; return;
             case TurnId::PlayerUpkeep: turnId = TurnId::Player      ; return;
             case TurnId::Player      : turnId = TurnId::PlayerEnd   ; return;
             case TurnId::PlayerEnd   : turnId = TurnId::EnemyUpkeep ; return;
             case TurnId::EnemyUpkeep : turnId = TurnId::Enemy       ; return;
             case TurnId::Enemy       : turnId = TurnId::EnemyEnd    ; return;
-            case TurnId::EnemyEnd    : turnId = TurnId::PlayerDraw  ; return;
-            case TurnId::Count       : turnId = TurnId::PlayerDraw  ; return;
+            case TurnId::EnemyEnd    : turnId = TurnId::PlayerPre   ; return;
+            case TurnId::Count       : turnId = TurnId::PlayerPre   ; return;
             default: assert(false);
         }
     }
 
+    void CombatState::handlePhase_CombatStart() {
+        //
+    }
+    
+    void CombatState::handlePhase_PlayerPre() {
+        variables.turn++;
+    }
+    
     void CombatState::handlePhase_PlayerDraw() {
         drawCards(variables.cardDrawOnTurn);
+        if(variables.turn == 1) triggerEvent(EventType::AfterFirstDrawPhase);
     }
     
     void CombatState::handlePhase_PlayerUpkeep() {
-        variables.turn++;
         variables.energy = variables.energyPerTurn;
         onCharacterBeginTurn(ecs.getPlayer().data);
     }
@@ -73,6 +83,8 @@ namespace SpireSim {
     
     void CombatState::doPhaseActions() {
         switch (turnId) {
+            case TurnId::CombatStart : handlePhase_CombatStart (); return;
+            case TurnId::PlayerPre   : handlePhase_PlayerPre   (); return;
             case TurnId::PlayerDraw  : handlePhase_PlayerDraw  (); return;
             case TurnId::PlayerUpkeep: handlePhase_PlayerUpkeep(); return;
             case TurnId::Player      : handlePhase_Player      (); return;

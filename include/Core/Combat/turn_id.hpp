@@ -7,7 +7,8 @@ namespace SpireSim {
 
     enum class TurnId {
         None,
-        PlayerDraw, PlayerUpkeep, Player, PlayerEnd,
+        CombatStart,
+        PlayerPre, PlayerDraw, PlayerUpkeep, Player, PlayerEnd,
         EnemyUpkeep, Enemy, EnemyEnd,
         Count
     };

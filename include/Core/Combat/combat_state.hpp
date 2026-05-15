@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Core/Relic/relic_factory.hpp>
 #include <Core/Card/card_pool.hpp>
 #include <Core/Buff/buff_pool.hpp>
 #include <Core/Character/Move/enemy_move_pool.hpp>
@@ -21,6 +22,7 @@ namespace SpireSim {
         PileHandler pileHandler;
         
         EffectPool& effectPool;
+        RelicPool& relicPool;
         CardPool& cardPool;
         BuffPool& buffPool;
         EnemyMovePool& movePool;
@@ -32,6 +34,7 @@ namespace SpireSim {
 
         TurnId turnId = TurnId::None;
 
+        bool isStackRunning = false;
         bool waitingForActionOnStack = false;
         bool waitingForAction = false;
         bool stopStack = false;
@@ -46,6 +49,7 @@ namespace SpireSim {
         // Initializing
         void initializeCards(Cards &cards);
         void registerEnemies(const Enemies &enemies);
+        void registerRelics(const Relics &relics);
         
 
 
@@ -135,6 +139,7 @@ namespace SpireSim {
         // Executions
         void executeUnpackCard(Effect &effect);
         void executeFinishCardPlayed(Effect &effect);
+        void executeDrawCards(Effect &effect);
         void executeCardDealDamage(Effect &effect);
         void executeCardGainBlock(Effect &effect);
         void executeCardApplyVulnerable(Effect &effect);
@@ -152,6 +157,8 @@ namespace SpireSim {
         void onCharacterBeginTurn(CharacterData &data);
         void onCharacterEndTurn(CharacterData &data);
         void advancePhase();
+        void handlePhase_PlayerPre();
+        void handlePhase_CombatStart();
         void handlePhase_PlayerDraw();
         void handlePhase_PlayerUpkeep();
         void handlePhase_Player();
@@ -189,16 +196,19 @@ namespace SpireSim {
 
     public:
         CombatState(EffectPool &effectPool_,
+                    RelicPool &relicPool_,
                     CardPool &cardPool_,
                     BuffPool &buffPool,
                     EnemyMovePool &movePool_,
                     EnemyPool &enemyPool_,
                     const Player &player_,
                     const Enemies &enemies_,
+                    const Relics &relics_,
                     Cards &cards);
         
         CombatState(const CombatState &other):
                     effectPool(other.effectPool),
+                    relicPool(other.relicPool),
                     cardPool(other.cardPool),
                     buffPool(other.buffPool),
                     enemyPool(other.enemyPool),
@@ -209,6 +219,7 @@ namespace SpireSim {
                     eventRegistry(other.eventRegistry),
                     stack(other.stack),
                     turnId(other.turnId),
+                    isStackRunning(other.isStackRunning),
                     waitingForActionOnStack(other.waitingForActionOnStack),
                     waitingForAction(other.waitingForAction),
                     stopStack(other.stopStack),
@@ -217,6 +228,8 @@ namespace SpireSim {
                     seedDeck(other.seedDeck),
                     genDeck(other.genDeck)
                     {}
+
+        void initialize(bool shuffleDeck = true);
 
         void setSeeds(unsigned int seedDeck_);
         void increaseSeeds(unsigned int value);
@@ -234,7 +247,7 @@ namespace SpireSim {
         // Actions
         void generateActions();
         void executeAction(int actionIndex);
-        void startCombat(bool shuffleDeck = true);
+        void startCombat(bool shuffleDeck = false);
         void reshuffleDeck();
 
         // ToString methods

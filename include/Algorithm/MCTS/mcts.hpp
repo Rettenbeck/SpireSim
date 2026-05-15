@@ -34,7 +34,7 @@ namespace SpireSim {
             CombatState internalState = *initialState;
 
             internalState.increaseSeeds(optionAddedSeed);
-            internalState.startCombat();
+            internalState.startCombat(true);
             MCTSNode root(internalState);
 
             for(int i = 0; i < optionIterations; ++i) {

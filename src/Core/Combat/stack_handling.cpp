@@ -7,6 +7,7 @@ namespace SpireSim {
 
     void CombatState::putEffectOntoStack(const Effect &effect, int position) {
         stack.insert(stack.begin() + position, effect);
+        resolveStackFully();
     }
 
     void CombatState::putCardOntoStack(Id cardEntityId, int targetEntityId) {
@@ -28,12 +29,29 @@ namespace SpireSim {
         switch(effect.effectType) {
             case EffectType::UnpackCard:            executeUnpackCard           (effect); return;
             case EffectType::FinishCardPlayed:      executeFinishCardPlayed     (effect); return;
+            case EffectType::DrawCards:             executeDrawCards            (effect); return;
             case EffectType::CardDealDamage:        executeCardDealDamage       (effect); return;
-            case EffectType::CardGainBlock :        executeCardGainBlock        (effect); return;
+            case EffectType::CardGainBlock:         executeCardGainBlock        (effect); return;
             case EffectType::CardApplyVulnerable:   executeCardApplyVulnerable  (effect); return;
             case EffectType::MoveCard:              executeMoveCard             (effect); return;
             default: assert(false);
         }
     }
     
+    void CombatState::resolveStackSingle() {
+        if(stack.size() == 0) return;
+        auto effect = stack[0];
+        stack.erase(stack.begin());
+        resolve(effect);
+    }
+    
+    void CombatState::resolveStackFully() {
+        if(isStackRunning) return;
+        isStackRunning = true;
+        while(stack.size() > 0 && waitingForActionOnStack == false && stopStack == false) {
+            resolveStackSingle();
+        }
+        isStackRunning = false;
+    }
+
 }

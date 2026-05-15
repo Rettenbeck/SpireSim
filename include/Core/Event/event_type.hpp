@@ -6,7 +6,9 @@
 namespace SpireSim {
 
     enum class EventType {
+        AfterFirstDrawPhase,
         OnCardPlayed,
+        OnFirstDamageTaken,
         OnDamageTaken,
         OnTurnStart,
         OnTurnEnd,

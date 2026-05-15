@@ -62,7 +62,7 @@ namespace SpireSim {
 
             buffShrink.buffCategory = BuffCategory::Debuff;
             buffShrink.eventList.push_back({EventType::OnDealDamageForInterception, EventListener(
-                    Effect(EffectType::ModifyParentDamagePerc, {Param(ParamType::FixedValue, BUFF_SHRINKER_PERCENTAGE)}
+                Effect(EffectType::ModifyParentDamagePerc, {Param(ParamType::FixedValue, BUFF_SHRINKER_PERCENTAGE)}
             ))});
             buffShrink.dependentOnCreator = true;
         }

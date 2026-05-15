@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Core/Combat/entity.hpp>
+#include <Core/Relic/relic.hpp>
 #include <Core/Card/card.hpp>
 #include <Core/Character/player.hpp>
 #include <Core/Character/enemy.hpp>
@@ -13,6 +14,7 @@ namespace SpireSim {
     struct ECS {
         Entities entities;
 
+        Relics      cRelics;
         Cards       cCards;
         Players     cPlayers;
         Enemies     cEnemies;
@@ -30,6 +32,7 @@ namespace SpireSim {
         Id createEntity(Id ownerId = ENTITY_NONE) {
             auto id = entities.size();
             entities.push_back(Entity(id, ownerId));
+            fillVector(cRelics , id);
             fillVector(cCards  , id);
             fillVector(cPlayers, id);
             fillVector(cEnemies, id);
@@ -60,6 +63,7 @@ namespace SpireSim {
             return entities[entityId].ownerId;
         }
 
+        inline Id addObject(const Relic  &relic ) { return addObject(cRelics , relic ); }
         inline Id addObject(const Card   &card  ) { return addObject(cCards  , card  ); }
         inline Id addObject(const Player &player) { return addObject(cPlayers, player); }
         inline Id addObject(const Enemy  &enemy ) { return addObject(cEnemies, enemy ); }
@@ -77,6 +81,14 @@ namespace SpireSim {
         inline CharacterData& getCharacterData(Id entityId) {
             if(isPlayer(entityId)) return getPlayer().data;
             return getEnemy(entityId).data;
+        }
+
+        inline Relic& getRelic(Id entityId) {
+            assert(entities.size() > entityId);
+            assert(cRelics .size() > entityId);
+            auto& relic = cRelics[entityId];
+            assert(relic.relicId != RelicId::None);
+            return cRelics[entityId];
         }
 
         inline Card& getCard(Id entityId) {
@@ -129,12 +141,14 @@ namespace SpireSim {
             ss << "  Entities: { ";
             for(auto e : entities) {
                 ss << "\n[ " << e.toString() << "] \n";
+                auto& relic  = cRelics [e.id];
                 auto& card   = cCards  [e.id];
                 auto& player = cPlayers[e.id];
                 auto& enemy  = cEnemies[e.id];
                 auto& buff   = cBuffs  [e.id];
                 auto& refs   = cRefs   [e.id];
 
+                if(relic .relicId  != RelicId ::None) ss << "[ " << relic .toString() << "] \n";
                 if(card  .cardId   != CardId  ::None) ss << "[ " << card  .toString() << "] \n";
                 if(player.playerId != PlayerId::None) ss << "[ " << player.toString() << "] \n";
                 if(enemy .enemyId  != EnemyId ::None) ss << "[ " << enemy .toString() << "] \n";

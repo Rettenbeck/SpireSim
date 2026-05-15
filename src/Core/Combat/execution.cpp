@@ -23,6 +23,11 @@ namespace SpireSim {
         variables.cardsPlayedThisCombat++;
         triggerEvent(EventType::OnCardPlayed);
     }
+
+    void CombatState::executeDrawCards(Effect &effect) {
+        assert(effect.resolutionParams.size() > 0);
+        drawCards(effect.resolutionParams[0]);
+    }
     
     void CombatState::executeCardDealDamage(Effect &effect) {
         assert(effect.resolutionParams.size() > 0);
