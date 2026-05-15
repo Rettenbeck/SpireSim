@@ -43,6 +43,20 @@ namespace SpireSim {
 
 
         // Initializing
+        void unregisterEventsFromEntity(Id entityId) {
+            auto& refList = ecs.cRefs[entityId].list;
+            for(auto& entry : refList) {
+                eventRegistry[entry.eventType][entry.eventIndex].inactive = true;
+            }
+        }
+        void registerEvent(int eventType, const EventListener &eventListener) {
+            if(eventListener.entityId >= 0) {
+                assert(ecs.cRefs.size() > eventListener.entityId);
+                auto& refList = ecs.cRefs[eventListener.entityId].list;
+                refList.push_back(EventRef(eventType, eventRegistry[eventType].size()));
+            }
+            eventRegistry[eventType].push_back(eventListener);
+        }
         void registerCardEvents(Id id, CardId cardId);
         void initializeCards(Cards &cards);
         void registerEnemies(const Enemies &enemies);

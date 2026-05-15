@@ -4,6 +4,7 @@
 #include <Core/Card/card.hpp>
 #include <Core/Character/player.hpp>
 #include <Core/Character/enemy.hpp>
+#include <Core/Event/event_refs.hpp>
 
 
 namespace SpireSim {
@@ -14,10 +15,11 @@ namespace SpireSim {
         Cards cCards;
         Players cPlayers;
         Enemies cEnemies;
+        EventRefs cRefs;
 
         Id playerEntityId = ENTITY_NONE;
         Ids enemyEntityIds;
-        
+
         template<typename T>
         void fillVector(std::vector<T> &vec, int size) {
             while(vec.size() <= size) vec.push_back(T());
@@ -29,6 +31,7 @@ namespace SpireSim {
             fillVector(cCards  , id);
             fillVector(cPlayers, id);
             fillVector(cEnemies, id);
+            fillVector(cRefs   , id);
             return id;
         }
         
@@ -108,10 +111,12 @@ namespace SpireSim {
                 auto& card   = cCards  [e.id];
                 auto& player = cPlayers[e.id];
                 auto& enemy  = cEnemies[e.id];
+                auto& refs   = cRefs   [e.id];
 
                 if(card  .cardId   != CardId  ::None) ss << "[ " << card  .toString() << "] \n";
                 if(player.playerId != PlayerId::None) ss << "[ " << player.toString() << "] \n";
                 if(enemy .enemyId  != EnemyId ::None) ss << "[ " << enemy .toString() << "] \n";
+                if(refs.list.size() > 0) ss << "[ " << refs.toString() << "] \n";
             }
             ss << "} \n\n";
             

@@ -16,6 +16,7 @@ namespace SpireSim {
     void CombatState::triggerEvent(EventType eventType) {
         auto& listeners = eventRegistry[int(eventType)];
         for(auto& listener : listeners) {
+            if(listener.inactive) continue;
             auto id = listener.entityId;
             if(!evaluateConditions(listener.effect)) continue;
             auto& e = listener.effect;

@@ -32,7 +32,7 @@ namespace SpireSim {
         for(int i = 0; i < int(EventType::Count); i++) {
             for(auto& event : cardTemplate.eventList[i]) {
                 event.effect.sourceEntityId = id;
-                eventRegistry[i].push_back(EventListener(id, event.effect));
+                registerEvent(i, EventListener(id, event.effect));
             }
         }
     }

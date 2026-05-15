@@ -6,11 +6,11 @@
 namespace SpireSim {
 
     enum class EventType {
-        OnCardPlayed,
         OnDamageTaken,
         OnTurnStart,
         OnTurnEnd,
         OnKill,
+        OnCardPlayed,
         Count
     };
 
