@@ -13,6 +13,8 @@ namespace SpireSim {
         int params[BUFF_MAX_AMOUNT_PARAMS];
         Id createdBy = ENTITY_NONE;
 
+        EventList eventList;
+
         Buff() : buffId(BuffId::None) {}
         Buff(BuffId buffId_) : buffId(buffId_) {}
         Buff(BuffId buffId_, int param) : buffId(buffId_) {

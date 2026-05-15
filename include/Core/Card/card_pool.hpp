@@ -118,13 +118,13 @@ namespace SpireSim {
             cardMakeItSo.normalData.gainEffect(effectPool, EffectId::CardDealDamage);
             cardMakeItSo.copyUpgradedDataFromNormal();
             cardMakeItSo.upgradedData.damage = 9;
-            cardMakeItSo.eventList[int(EventType::OnCardPlayed)].push_back(EventListener(
+            cardMakeItSo.eventList.push_back({EventType::OnCardPlayed, EventListener(
                 Effect( EffectType::MoveCard,
                         {Param(ParamType::FixedValue, int(CardLocation::Hand))},
                         {Condition( ConditionType::DivisibleBy,
                                     Param(ParamType::CardsPlayedThisCombat),
                                     Param(ParamType::FixedValue, 3))}
-                        )));
+                        ))});
         }
         
         std::string toString() {

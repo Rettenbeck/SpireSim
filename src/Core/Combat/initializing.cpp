@@ -27,16 +27,6 @@ namespace SpireSim {
         stack.clear();
     }
 
-    void CombatState::registerCardEvents(Id id, CardId cardId) {
-        auto& cardTemplate = cardPool.retrieve(cardId);
-        for(int i = 0; i < int(EventType::Count); i++) {
-            for(auto& event : cardTemplate.eventList[i]) {
-                event.effect.sourceEntityId = id;
-                registerEvent(i, EventListener(id, event.effect));
-            }
-        }
-    }
-
     void CombatState::initializeCards(Cards &cards) {
         pileHandler.clearAllPiles();
         for(auto& card : cards) {
@@ -45,7 +35,7 @@ namespace SpireSim {
             cardCreated.location = CardLocation::Deck;
             cardCreated.locationIndex = pileHandler.deck.size();
             pileHandler.deck.push_back(id);
-            registerCardEvents(id, cardCreated.cardId);
+            registerEventsFromEntity(cardPool.retrieve(cardCreated.cardId), id);
         }
     }
 

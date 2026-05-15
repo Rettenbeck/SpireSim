@@ -14,6 +14,7 @@ namespace SpireSim {
         int initialMoveCount = 0;
         int potentialAdditionalMaxHp = 0;
         bool isMinion = false;
+        EventList eventList;
 
         Enemy() {}
         Enemy(EnemyId enemyId_) : enemyId(enemyId_) {}

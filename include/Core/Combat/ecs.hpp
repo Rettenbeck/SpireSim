@@ -4,6 +4,7 @@
 #include <Core/Card/card.hpp>
 #include <Core/Character/player.hpp>
 #include <Core/Character/enemy.hpp>
+#include <Core/Buff/buff.hpp>
 #include <Core/Event/event_refs.hpp>
 
 
@@ -12,10 +13,11 @@ namespace SpireSim {
     struct ECS {
         Entities entities;
 
-        Cards cCards;
-        Players cPlayers;
-        Enemies cEnemies;
-        EventRefs cRefs;
+        Cards       cCards;
+        Players     cPlayers;
+        Enemies     cEnemies;
+        Buffs       cBuffs;
+        EventRefs   cRefs;
 
         Id playerEntityId = ENTITY_NONE;
         Ids enemyEntityIds;
@@ -31,6 +33,7 @@ namespace SpireSim {
             fillVector(cCards  , id);
             fillVector(cPlayers, id);
             fillVector(cEnemies, id);
+            fillVector(cBuffs  , id);
             fillVector(cRefs   , id);
             return id;
         }
@@ -52,9 +55,15 @@ namespace SpireSim {
             }
         }
 
+        inline Id getParent(Id entityId) {
+            assert(entityId < entities.size());
+            return entities[entityId].ownerId;
+        }
+
         inline Id addObject(const Card   &card  ) { return addObject(cCards  , card  ); }
         inline Id addObject(const Player &player) { return addObject(cPlayers, player); }
         inline Id addObject(const Enemy  &enemy ) { return addObject(cEnemies, enemy ); }
+        inline Id addObject(const Buff &buff, Id ownerId) { return addObject(cBuffs, buff, ownerId); }
 
         void registerPlayer(const Player &player_) {
             playerEntityId = addObject(player_);
@@ -65,6 +74,11 @@ namespace SpireSim {
             buildEnemyEntityIds();
         }
         
+        inline CharacterData& getCharacterData(Id entityId) {
+            if(isPlayer(entityId)) return getPlayer().data;
+            return getEnemy(entityId).data;
+        }
+
         inline Card& getCard(Id entityId) {
             assert(entities.size() > entityId);
             assert(cCards  .size() > entityId);
@@ -85,12 +99,19 @@ namespace SpireSim {
             return cEnemies[entityId];
         }
 
+        inline Buff& getBuff(Id entityId) {
+            assert(entities.size() > entityId);
+            assert(cBuffs  .size() > entityId);
+            return cBuffs[entityId];
+        }
+
         inline bool isCard  (Id entityId) { return cCards  [entityId].cardId   != CardId  ::None; }
         inline bool isPlayer(Id entityId) { return cPlayers[entityId].playerId != PlayerId::None; }
         inline bool isEnemy (Id entityId) { return cEnemies[entityId].enemyId  != EnemyId ::None; }
+        inline bool isBuff  (Id entityId) { return cBuffs  [entityId].buffId   != BuffId  ::None; }
 
         inline isValidEntity(Id entityId) {
-            return (isCard(entityId) || isPlayer(entityId) || isEnemy(entityId));
+            return (isCard(entityId) || isPlayer(entityId) || isEnemy(entityId) || isBuff(entityId));
         }
 
         template<typename T>
@@ -111,11 +132,13 @@ namespace SpireSim {
                 auto& card   = cCards  [e.id];
                 auto& player = cPlayers[e.id];
                 auto& enemy  = cEnemies[e.id];
+                auto& buff   = cBuffs  [e.id];
                 auto& refs   = cRefs   [e.id];
 
                 if(card  .cardId   != CardId  ::None) ss << "[ " << card  .toString() << "] \n";
                 if(player.playerId != PlayerId::None) ss << "[ " << player.toString() << "] \n";
                 if(enemy .enemyId  != EnemyId ::None) ss << "[ " << enemy .toString() << "] \n";
+                if(buff  .buffId   != BuffId  ::None) ss << "[ " << buff  .toString() << "] \n";
                 if(refs.list.size() > 0) ss << "[ " << refs.toString() << "] \n";
             }
             ss << "} \n\n";

@@ -15,6 +15,7 @@ namespace SpireSim {
         Conditions conditions;
         ResolutionParams resolutionParams;
         Id sourceEntityId = ENTITY_NONE;
+        // Id affectedEntityId = ENTITY_NONE;
         
         void addParams(const Params &params_) {
             for(auto param : params_) params.push_back(param);
@@ -48,7 +49,10 @@ namespace SpireSim {
         
         std::string toString() {
             std::stringstream ss;
-            ss << "effectType: " << ToString(effectType) << "; sourceEntityId: " << sourceEntityId << "; ";
+            ss << "effectType: " << ToString(effectType)
+                << "; sourceEntityId: " << sourceEntityId
+                // << "; affectedEntityId: " << affectedEntityId
+                << "; ";
             if(params.size() > 0) {
                 ss << "; Params: { ";
                 for(auto param : params) {

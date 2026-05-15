@@ -8,6 +8,7 @@
 #include <Core/Combat/pile_handler.hpp>
 #include <Core/Combat/turn_id.hpp>
 #include <Core/Combat/Action/action.hpp>
+#include <Core/Event/interceptor_context.hpp>
 
 
 namespace SpireSim {
@@ -43,30 +44,26 @@ namespace SpireSim {
 
 
         // Initializing
-        void unregisterEventsFromEntity(Id entityId) {
-            auto& refList = ecs.cRefs[entityId].list;
-            for(auto& entry : refList) {
-                eventRegistry[entry.eventType][entry.eventIndex].inactive = true;
-            }
-        }
-        void registerEvent(int eventType, const EventListener &eventListener) {
-            if(eventListener.entityId >= 0) {
-                assert(ecs.cRefs.size() > eventListener.entityId);
-                auto& refList = ecs.cRefs[eventListener.entityId].list;
-                refList.push_back(EventRef(eventType, eventRegistry[eventType].size()));
-            }
-            eventRegistry[eventType].push_back(eventListener);
-        }
-        void registerCardEvents(Id id, CardId cardId);
         void initializeCards(Cards &cards);
         void registerEnemies(const Enemies &enemies);
+        
+
+
+        // Event handling
+        void registerEventsFromList(EventList& eventList, Id entityId);
+        template<typename T> void registerEventsFromEntity(T &t, Id entityId);
+        void registerEventsFromEntity(Id entityId);
+        void unregisterEventsFromEntity(Id entityId);
+        void registerEvent(int eventType, const EventListener &eventListener);
+        void triggerEvent(EventType eventType);
+        void triggerInterceptor(EventType eventType, InterceptorContext &context, int &value);
         
 
 
         // Stack handling
         void putEffectOntoStack(const Effect &effect, int position = 0);
         void putCardOntoStack(Id cardEntityId, Id targetEntityId = TARGET_RANDOM);
-        void triggerEvent(EventType eventType);
+        void resolveInterceptor(Effect &effect, InterceptorContext &context, int &value);
         void resolve(Effect &effect);
         
 
@@ -97,6 +94,10 @@ namespace SpireSim {
         inline void gainBlockEnemy(Enemy &enemy, int block);
         inline void gainBlockEnemy(Id &enemyEntityId, int block);
         void gainBlock(Id entityId, int block);
+
+        void applyBuff(Buff &buff, Id sourceEntityId, Id targetEntityId) {
+            //
+        }
 
         inline void dealDamageToEnemy(Id sourceEntityId, CharacterData &sourceData, Id targetEntityId, int damage);
         inline void gainStrength(CharacterData &targetData, int value);
@@ -140,27 +141,18 @@ namespace SpireSim {
         void executeCardGainBlock(Effect &effect);
         void executeCardApplyVulnerable(Effect &effect);
         void executeMoveCard(Effect &effect);
+
+
+
+        // Executions interceptors
+        void executeModifyParentDamagePerc(Effect &effect, InterceptorContext &context, int &value);
         
 
 
         // Turn handling
-        void reduceValue(int &value, int amount = 1) {
-            value -= amount;
-            if(value < 0) value = 0;
-        }
-
-        void onCharacterBeginTurn(CharacterData &data) {
-            data.block = 0;
-        }
-
-        void onCharacterEndTurn(CharacterData &data) {
-            data.tmpStrength = 0;
-            data.tmpDex = 0;
-            reduceValue(data.weak);
-            reduceValue(data.vulnerable);
-            reduceValue(data.frail);
-        }
-
+        void reduceValue(int &value, int amount = 1);
+        void onCharacterBeginTurn(CharacterData &data);
+        void onCharacterEndTurn(CharacterData &data);
         void advancePhase();
         void handlePhase_PlayerDraw();
         void handlePhase_PlayerUpkeep();

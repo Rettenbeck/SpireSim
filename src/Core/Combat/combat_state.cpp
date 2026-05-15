@@ -3,8 +3,10 @@
 #include <Core/Combat/combat_state.cpp>
 #include <Core/Combat/initializing.cpp>
 #include <Core/Combat/stack_handling.cpp>
+#include <Core/Combat/event_handling.cpp>
 #include <Core/Combat/param_cond.cpp>
 #include <Core/Combat/execution.cpp>
+#include <Core/Combat/execution_interceptor.cpp>
 #include <Core/Combat/interface.cpp>
 #include <Core/Combat/move.cpp>
 #include <Core/Combat/fight.cpp>

@@ -10,7 +10,7 @@ namespace SpireSim {
     struct CardTemplate {
         CardId cardId;
         CardData normalData, upgradedData;
-        EventRegistry eventList;
+        EventList eventList;
         
         CardTemplate() {}
         

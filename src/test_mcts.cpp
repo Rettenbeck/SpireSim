@@ -18,7 +18,7 @@ void test() {
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
+    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::MakeItSo, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Defend, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Defend, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Defend, true));

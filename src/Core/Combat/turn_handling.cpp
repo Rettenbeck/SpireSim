@@ -5,6 +5,23 @@
 
 namespace SpireSim {
 
+    void CombatState::reduceValue(int &value, int amount) {
+        value -= amount;
+        if(value < 0) value = 0;
+    }
+
+    void CombatState::onCharacterBeginTurn(CharacterData &data) {
+        data.block = 0;
+    }
+
+    void CombatState::onCharacterEndTurn(CharacterData &data) {
+        data.tmpStrength = 0;
+        data.tmpDex = 0;
+        reduceValue(data.weak);
+        reduceValue(data.vulnerable);
+        reduceValue(data.frail);
+    }
+
     void CombatState::advancePhase() {
         switch (turnId) {
             case TurnId::None        : turnId = TurnId::PlayerDraw  ; return;
