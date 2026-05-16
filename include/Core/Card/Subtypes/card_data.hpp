@@ -20,7 +20,7 @@ namespace SpireSim {
         int vulnerable = 0, weak = 0, fragile = 0;
         int cardsToChoose = 0;
         
-        void gainEffect(EffectPool &effectPool, EffectId effectId) {
+        void addEffect(EffectPool &effectPool, EffectId effectId) {
             effects.push_back(effectPool.retrieve(effectId));
         }
         

@@ -17,7 +17,8 @@ namespace SpireSim {
 
     using EventListeners = std::vector<EventListener>;
     using EventRegistry = EventListeners[int(EventType::Count)];
-    using EventList = std::vector<std::pair<EventType, EventListener>>;
+    using EventListEntry = std::pair<EventType, EventListener>;
+    using EventList = std::vector<EventListEntry>;
 
     std::string ToString(EventRegistry &registry) {
         std::stringstream ss;

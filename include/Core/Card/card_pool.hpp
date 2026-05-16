@@ -16,7 +16,7 @@ namespace SpireSim {
         
         void createBlankArray(int index) {
             while(index >= cardTemplates.size()) {
-                cardTemplates.push_back(CardTemplate());
+                cardTemplates.push_back(CardTemplate(effectPool));
             }
         }
         
@@ -37,7 +37,7 @@ namespace SpireSim {
             card.normalData.targetingType = targetingType;
             card.normalData.energyCost = energyCost;
             card.normalData.damage = damage;
-            card.normalData.gainEffect(effectPool, EffectId::CardDealDamage);
+            card.addEffect(EffectId::CardDealDamage);
             card.copyUpgradedDataFromNormal();
             card.upgradedData.damage = damageUpgraded;
             return card;
@@ -52,7 +52,7 @@ namespace SpireSim {
             card.normalData.targetingType = TargetingType::None;
             card.normalData.energyCost = energyCost;
             card.normalData.block = block;
-            card.normalData.gainEffect(effectPool, EffectId::CardGainBlock);
+            card.addEffect(EffectId::CardGainBlock);
             card.copyUpgradedDataFromNormal();
             card.upgradedData.block = blockUpgraded;
             return card;
@@ -108,7 +108,6 @@ namespace SpireSim {
         void applyModifiers(Card &card) {
             derive(card, card.cardId);
             // apply modifiers...
-            std::cout << "applyModifiers: " << int(card.cardId) << "\n";
         }
         
         void createCardPool() {
@@ -116,22 +115,17 @@ namespace SpireSim {
 
             retrieveForCreationSingleAttack(CardId::Strike, 1, 6, 9);
             retrieveForCreationBlock(CardId::Defend, 1, 5, 8);
-            retrieveForCreationSingleAttack(CardId::Bash, 2, 8, 11).applyVulnerable(effectPool, 2, 3);
-            retrieveForCreationAOEAttack(CardId::Thunderclap, 1, 4, 7).applyVulnerable(effectPool, 1, 1);
-            
-            retrieveForCreationSingleAttack(CardId::MakeItSo, 0, 6, 9)
-                .eventList.push_back({EventType::OnCardPlayed, EventListener(
-                    Effect( EffectType::MoveCard,
-                            {Param(ParamType::FixedValue, int(CardLocation::Hand))},
-                            {Condition( ConditionType::DivisibleBy,
-                                        Param(ParamType::CardsPlayedThisCombat),
-                                        Param(ParamType::FixedValue, 3))}
-                            ))});
+            retrieveForCreationSingleAttack(CardId::Bash, 2, 8, 11).applyVulnerable(2, 3);
+            retrieveForCreationAOEAttack(CardId::Thunderclap, 1, 4, 7).applyVulnerable(1, 1);
+            retrieveForCreationSingleAttack(CardId::MakeItSo, 0, 6, 9).returnToHandAfterXCards(3);
             
             retrieveForCreationBlock(CardId::CosmicIndifference, 1, 6, 9)
-                .moveCardsFromDiscardToDeck(effectPool, 1, 2);
+                .chooseCards(1, 2, CardLocation::Discard)
+                .moveChosenCardsToTarget(CardLocation::Deck);
             
-            retrieveForCreationBlock(CardId::Hologram, 1, 3, 5).returnCardsToHand(effectPool, 1, 1);
+            retrieveForCreationBlock(CardId::Hologram, 1, 3, 5)
+                .chooseCards(1, 1, CardLocation::Discard)
+                .moveChosenCardsToTarget(CardLocation::Hand);
         }
         
         std::string toString() {
