@@ -43,7 +43,6 @@ namespace SpireSim {
     
     void Combat::resolveStackSingle() {
         if(state.stack.size() == 0) return;
-        std::cout << stackToString() << "\n";
         auto effect = state.stack[0];
         state.stack.erase(state.stack.begin());
         resolve(effect);

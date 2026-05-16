@@ -7,7 +7,7 @@ namespace SpireSim {
 
     enum class CardId {
         None, Strike, Defend, Bash, Thunderclap, MakeItSo,
-        CosmicIndifference,
+        CosmicIndifference, Hologram,
         Count
     };
     std::string ToString(CardId e) { return ToString(int(e)); }
@@ -20,6 +20,7 @@ namespace SpireSim {
             case CardId::Thunderclap        : return "Thunderclap";
             case CardId::MakeItSo           : return "Make It So";
             case CardId::CosmicIndifference : return "Cosmic Indifference";
+            case CardId::Hologram           : return "Hologram";
             default: assert(false);
         }
     }

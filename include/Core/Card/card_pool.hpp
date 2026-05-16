@@ -113,33 +113,25 @@ namespace SpireSim {
         
         void createCardPool() {
             createBlankArray(int(CardId::Count));
-            auto& cardStrike = retrieveForCreationSingleAttack(CardId::Strike, 1, 6, 9);
-            auto& cardDefend = retrieveForCreationBlock(CardId::Defend, 1, 5, 8);
-            auto& cardBash = retrieveForCreationSingleAttack(CardId::Bash, 2, 8, 11);
-            auto& cardThunderclap = retrieveForCreationAOEAttack(CardId::Thunderclap, 1, 4, 7);
-            auto& cardMakeItSo = retrieveForCreationSingleAttack(CardId::MakeItSo, 0, 6, 9);
-            auto& cardCosmicIndifference = retrieveForCreationBlock(CardId::CosmicIndifference, 1, 6, 9);
+
+            retrieveForCreationSingleAttack(CardId::Strike, 1, 6, 9);
+            retrieveForCreationBlock(CardId::Defend, 1, 5, 8);
+            retrieveForCreationSingleAttack(CardId::Bash, 2, 8, 11).applyVulnerable(effectPool, 2, 3);
+            retrieveForCreationAOEAttack(CardId::Thunderclap, 1, 4, 7).applyVulnerable(effectPool, 1, 1);
             
-            cardBash.normalData.vulnerable = 2;
-            cardBash.upgradedData.vulnerable = 3;
-            cardBash.gainEffect(effectPool, EffectId::CardApplyVulnerable);
+            retrieveForCreationSingleAttack(CardId::MakeItSo, 0, 6, 9)
+                .eventList.push_back({EventType::OnCardPlayed, EventListener(
+                    Effect( EffectType::MoveCard,
+                            {Param(ParamType::FixedValue, int(CardLocation::Hand))},
+                            {Condition( ConditionType::DivisibleBy,
+                                        Param(ParamType::CardsPlayedThisCombat),
+                                        Param(ParamType::FixedValue, 3))}
+                            ))});
             
-            cardThunderclap.normalData.vulnerable = 1;
-            cardThunderclap.upgradedData.vulnerable = 1;
-            cardThunderclap.gainEffect(effectPool, EffectId::CardApplyVulnerable);
+            retrieveForCreationBlock(CardId::CosmicIndifference, 1, 6, 9)
+                .moveCardsFromDiscardToDeck(effectPool, 1, 2);
             
-            cardMakeItSo.eventList.push_back({EventType::OnCardPlayed, EventListener(
-                Effect( EffectType::MoveCard,
-                        {Param(ParamType::FixedValue, int(CardLocation::Hand))},
-                        {Condition( ConditionType::DivisibleBy,
-                                    Param(ParamType::CardsPlayedThisCombat),
-                                    Param(ParamType::FixedValue, 3))}
-                        ))});
-            
-            cardCosmicIndifference.gainEffect(effectPool, EffectId::ChooseCardsFromDiscard);
-            cardCosmicIndifference.gainEffect(effectPool, EffectId::MoveChosenCardsToDeck);
-            cardCosmicIndifference.normalData.cardsToChoose = 1;
-            cardCosmicIndifference.upgradedData.cardsToChoose = 2;
+            retrieveForCreationBlock(CardId::Hologram, 1, 3, 5).returnCardsToHand(effectPool, 1, 1);
         }
         
         std::string toString() {

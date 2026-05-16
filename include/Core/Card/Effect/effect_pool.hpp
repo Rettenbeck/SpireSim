@@ -50,6 +50,9 @@ namespace SpireSim {
 
             retrieveForCreation(EffectId::MoveChosenCardsToDeck)
             .fill(EffectType::MoveChosenCards, {Param(ParamType::FixedValue, int(CardLocation::Deck))}, {});
+
+            retrieveForCreation(EffectId::MoveChosenCardsToHand)
+            .fill(EffectType::MoveChosenCards, {Param(ParamType::FixedValue, int(CardLocation::Hand))}, {});
         }
         
         EffectPool() {

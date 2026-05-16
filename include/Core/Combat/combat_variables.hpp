@@ -12,7 +12,7 @@ namespace SpireSim {
         int turn = 0;
         int cardDrawOnTurn = 5;
         int maxHandSize = 10;
-        int energyPerTurn = 5;
+        int energyPerTurn = 3;
         int energy = 0;
         int stars = 0;
         int hasTakenDamage = 0;

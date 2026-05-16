@@ -27,6 +27,26 @@ namespace SpireSim {
             normalData.gainEffect(effectPool, effectId);
             upgradedData.gainEffect(effectPool, effectId);
         }
+
+        void applyVulnerable(EffectPool &effectPool, int value, int valueUpgraded) {
+            normalData.vulnerable = value;
+            upgradedData.vulnerable = valueUpgraded;
+            gainEffect(effectPool, EffectId::CardApplyVulnerable);
+        }
+
+        void moveCardsFromDiscardToDeck(EffectPool &effectPool, int value, int valueUpgraded) {
+            normalData.cardsToChoose = value;
+            upgradedData.cardsToChoose = valueUpgraded;
+            gainEffect(effectPool, EffectId::ChooseCardsFromDiscard);
+            gainEffect(effectPool, EffectId::MoveChosenCardsToDeck);
+        }
+        
+        void returnCardsToHand(EffectPool &effectPool, int value, int valueUpgraded) {
+            normalData.cardsToChoose = value;
+            upgradedData.cardsToChoose = valueUpgraded;
+            gainEffect(effectPool, EffectId::ChooseCardsFromDiscard);
+            gainEffect(effectPool, EffectId::MoveChosenCardsToHand);
+        }
         
         void copyUpgradedDataFromNormal() {
             upgradedData = normalData;
