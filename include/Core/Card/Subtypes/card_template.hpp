@@ -23,6 +23,11 @@ namespace SpireSim {
             }
         }
         
+        void gainEffect(EffectPool &effectPool, EffectId effectId) {
+            normalData.gainEffect(effectPool, effectId);
+            upgradedData.gainEffect(effectPool, effectId);
+        }
+        
         void copyUpgradedDataFromNormal() {
             upgradedData = normalData;
         }

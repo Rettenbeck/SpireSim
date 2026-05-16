@@ -12,7 +12,7 @@ namespace SpireSim {
         int turn = 0;
         int cardDrawOnTurn = 5;
         int maxHandSize = 10;
-        int energyPerTurn = 3;
+        int energyPerTurn = 5;
         int energy = 0;
         int stars = 0;
         int hasTakenDamage = 0;
@@ -20,7 +20,7 @@ namespace SpireSim {
         int xValue = 0;
         int enemies = 0;
         
-        Ids chosenCards;
+        Ids chosenCards, choosableCards;
 
         std::string toString() {
             std::stringstream ss;

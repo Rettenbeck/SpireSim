@@ -18,6 +18,7 @@ namespace SpireSim {
         CardLocation pileAfterPlay = CardLocation::Discard;
         int damage = 0, block = 0, replay = 0;
         int vulnerable = 0, weak = 0, fragile = 0;
+        int cardsToChoose = 0;
         
         void gainEffect(EffectPool &effectPool, EffectId effectId) {
             effects.push_back(effectPool.retrieve(effectId));

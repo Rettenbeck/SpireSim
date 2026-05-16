@@ -30,16 +30,20 @@ namespace SpireSim {
             case EffectType::UnpackCard:            executeUnpackCard           (effect); return;
             case EffectType::FinishCardPlayed:      executeFinishCardPlayed     (effect); return;
             case EffectType::DrawCards:             executeDrawCards            (effect); return;
+            case EffectType::ChooseSingleCard:      executeChooseSingleCard     (effect); return;
+            case EffectType::ChooseCards:           executeChooseCards          (effect); return;
             case EffectType::CardDealDamage:        executeCardDealDamage       (effect); return;
             case EffectType::CardGainBlock:         executeCardGainBlock        (effect); return;
             case EffectType::CardApplyVulnerable:   executeCardApplyVulnerable  (effect); return;
             case EffectType::MoveCard:              executeMoveCard             (effect); return;
+            case EffectType::MoveChosenCards:       executeMoveChosenCards      (effect); return;
             default: assert(false);
         }
     }
     
     void Combat::resolveStackSingle() {
         if(state.stack.size() == 0) return;
+        std::cout << stackToString() << "\n";
         auto effect = state.stack[0];
         state.stack.erase(state.stack.begin());
         resolve(effect);

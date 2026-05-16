@@ -73,6 +73,10 @@ namespace SpireSim {
         void checkForFightEnd();
         void entityDies(Id entityId);
 
+        inline void onDamageDealt(Id sourceEntityId, CharacterData &sourceData,
+                                  Id targetEntityId, CharacterData &targetData,
+                                  int damage);
+
         inline int calculateDamage( Id sourceEntityId, CharacterData &sourceData,
                                     Id targetEntityId, CharacterData &targetData,
                                     int damage);
@@ -128,9 +132,12 @@ namespace SpireSim {
         void executeUnpackCard(Effect &effect);
         void executeFinishCardPlayed(Effect &effect);
         void executeDrawCards(Effect &effect);
+        void executeChooseSingleCard(Effect &effect);
+        void executeChooseCards(Effect &effect);
         void executeCardDealDamage(Effect &effect);
         void executeCardGainBlock(Effect &effect);
         void executeCardApplyVulnerable(Effect &effect);
+        void executeMoveChosenCards(Effect &effect);
         void executeMoveCard(Effect &effect);
 
 
@@ -170,13 +177,15 @@ namespace SpireSim {
 
 
 
-        // Mics
+        // Card handling
         void moveCard(Id cardEntityId, CardLocation targetLocation);
         void drawCard();
         void drawCards(int amount);
         void discardById(Id cardEntityId);
         void discardByIndex(int index);
         void discardHand();
+        void determineChoosableCards(CardLocation from);
+        void chooseCard();
         int getRandomNumber(int max);
 
 

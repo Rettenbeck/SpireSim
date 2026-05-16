@@ -24,7 +24,7 @@ void test() {
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Defend, true));
+    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::CosmicIndifference, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Defend, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Defend, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Defend, true));
@@ -51,7 +51,7 @@ void test() {
 
     SpireSim::MCTS_Parallel mcts(state.get());
     mcts.heuristic = std::make_unique<SpireSim::MCTS_Heuristic_Random>(0);
-    mcts.optionIterations = 14000;
+    mcts.optionIterations = 1400;
 
     std::cout << "Threads: " << std::thread::hardware_concurrency() << "\n";
 
@@ -60,7 +60,7 @@ void test() {
         std::cout << state->actionsToString() << "\n\n";
 
         std::cout << "Calculating... \n";
-        mcts.run();
+        // mcts.run();
         int bestActionIndex = mcts.bestActionIndex;
         std::cout << "Best action found: " << bestActionIndex << "\n";
         std::cout << mcts.resultsToString();

@@ -8,9 +8,10 @@ namespace SpireSim {
 
     struct CardPool {
         CardTemplates cardTemplates;
+        EffectPool& effectPool;
         
-        CardPool(EffectPool &effectPool) {
-            createCardPool(effectPool);
+        CardPool(EffectPool &effectPool_) : effectPool(effectPool_) {
+            createCardPool();
         }
         
         void createBlankArray(int index) {
@@ -24,6 +25,45 @@ namespace SpireSim {
             createBlankArray(index);
             cardTemplates[index].cardId = cardId;
             return cardTemplates[index];
+        }
+        
+        CardTemplate& retrieveForCreationAttack(CardId cardId,
+                                                TargetingType targetingType,
+                                                int energyCost,
+                                                int damage,
+                                                int damageUpgraded)
+        {
+            auto& card = retrieveForCreation(cardId);
+            card.normalData.targetingType = targetingType;
+            card.normalData.energyCost = energyCost;
+            card.normalData.damage = damage;
+            card.normalData.gainEffect(effectPool, EffectId::CardDealDamage);
+            card.copyUpgradedDataFromNormal();
+            card.upgradedData.damage = damageUpgraded;
+            return card;
+        }
+        
+        CardTemplate& retrieveForCreationBlock( CardId cardId,
+                                                int energyCost,
+                                                int block,
+                                                int blockUpgraded)
+        {
+            auto& card = retrieveForCreation(cardId);
+            card.normalData.targetingType = TargetingType::None;
+            card.normalData.energyCost = energyCost;
+            card.normalData.block = block;
+            card.normalData.gainEffect(effectPool, EffectId::CardGainBlock);
+            card.copyUpgradedDataFromNormal();
+            card.upgradedData.block = blockUpgraded;
+            return card;
+        }
+        
+        CardTemplate& retrieveForCreationSingleAttack(CardId cardId, int energyCost, int damage, int damageUpgraded) {
+            return retrieveForCreationAttack(cardId, TargetingType::Single, energyCost, damage, damageUpgraded);
+        }
+        
+        CardTemplate& retrieveForCreationAOEAttack(CardId cardId, int energyCost, int damage, int damageUpgraded) {
+            return retrieveForCreationAttack(cardId, TargetingType::All, energyCost, damage, damageUpgraded);
         }
         
         CardTemplate& retrieve(CardId cardId) {
@@ -71,53 +111,23 @@ namespace SpireSim {
             std::cout << "applyModifiers: " << int(card.cardId) << "\n";
         }
         
-        void createCardPool(EffectPool &effectPool) {
+        void createCardPool() {
             createBlankArray(int(CardId::Count));
-            auto& cardStrike = retrieveForCreation(CardId::Strike);
-            auto& cardDefend = retrieveForCreation(CardId::Defend);
-            auto& cardBash = retrieveForCreation(CardId::Bash);
-            auto& cardThunderclap = retrieveForCreation(CardId::Thunderclap);
-            auto& cardMakeItSo = retrieveForCreation(CardId::MakeItSo);
+            auto& cardStrike = retrieveForCreationSingleAttack(CardId::Strike, 1, 6, 9);
+            auto& cardDefend = retrieveForCreationBlock(CardId::Defend, 1, 5, 8);
+            auto& cardBash = retrieveForCreationSingleAttack(CardId::Bash, 2, 8, 11);
+            auto& cardThunderclap = retrieveForCreationAOEAttack(CardId::Thunderclap, 1, 4, 7);
+            auto& cardMakeItSo = retrieveForCreationSingleAttack(CardId::MakeItSo, 0, 6, 9);
+            auto& cardCosmicIndifference = retrieveForCreationBlock(CardId::CosmicIndifference, 1, 6, 9);
             
-            cardStrike.normalData.targetingType = TargetingType::Single;
-            cardStrike.normalData.energyCost = 1;
-            cardStrike.normalData.damage = 6;
-            cardStrike.normalData.gainEffect(effectPool, EffectId::CardDealDamage);
-            cardStrike.copyUpgradedDataFromNormal();
-            cardStrike.upgradedData.damage = 9;
-            
-            cardDefend.normalData.targetingType = TargetingType::None;
-            cardDefend.normalData.energyCost = 1;
-            cardDefend.normalData.block = 5;
-            cardDefend.normalData.gainEffect(effectPool, EffectId::CardGainBlock);
-            cardDefend.copyUpgradedDataFromNormal();
-            cardDefend.upgradedData.block = 8;
-            
-            cardBash.normalData.targetingType = TargetingType::Single;
-            cardBash.normalData.energyCost = 2;
-            cardBash.normalData.damage = 8;
             cardBash.normalData.vulnerable = 2;
-            cardBash.normalData.gainEffect(effectPool, EffectId::CardDealDamage);
-            cardBash.normalData.gainEffect(effectPool, EffectId::CardApplyVulnerable);
-            cardBash.copyUpgradedDataFromNormal();
-            cardBash.upgradedData.damage = 11;
             cardBash.upgradedData.vulnerable = 3;
+            cardBash.gainEffect(effectPool, EffectId::CardApplyVulnerable);
             
-            cardThunderclap.normalData.targetingType = TargetingType::All;
-            cardThunderclap.normalData.energyCost = 1;
-            cardThunderclap.normalData.damage = 4;
             cardThunderclap.normalData.vulnerable = 1;
-            cardThunderclap.normalData.gainEffect(effectPool, EffectId::CardDealDamage);
-            cardThunderclap.normalData.gainEffect(effectPool, EffectId::CardApplyVulnerable);
-            cardThunderclap.copyUpgradedDataFromNormal();
-            cardThunderclap.upgradedData.damage = 7;
+            cardThunderclap.upgradedData.vulnerable = 1;
+            cardThunderclap.gainEffect(effectPool, EffectId::CardApplyVulnerable);
             
-            cardMakeItSo.normalData.targetingType = TargetingType::Single;
-            cardMakeItSo.normalData.energyCost = 0;
-            cardMakeItSo.normalData.damage = 6;
-            cardMakeItSo.normalData.gainEffect(effectPool, EffectId::CardDealDamage);
-            cardMakeItSo.copyUpgradedDataFromNormal();
-            cardMakeItSo.upgradedData.damage = 9;
             cardMakeItSo.eventList.push_back({EventType::OnCardPlayed, EventListener(
                 Effect( EffectType::MoveCard,
                         {Param(ParamType::FixedValue, int(CardLocation::Hand))},
@@ -125,6 +135,11 @@ namespace SpireSim {
                                     Param(ParamType::CardsPlayedThisCombat),
                                     Param(ParamType::FixedValue, 3))}
                         ))});
+            
+            cardCosmicIndifference.gainEffect(effectPool, EffectId::ChooseCardsFromDiscard);
+            cardCosmicIndifference.gainEffect(effectPool, EffectId::MoveChosenCardsToDeck);
+            cardCosmicIndifference.normalData.cardsToChoose = 1;
+            cardCosmicIndifference.upgradedData.cardsToChoose = 2;
         }
         
         std::string toString() {

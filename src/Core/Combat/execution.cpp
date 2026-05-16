@@ -29,6 +29,36 @@ namespace SpireSim {
         drawCards(effect.resolutionParams[0]);
     }
     
+    void Combat::executeChooseSingleCard(Effect &effect) {
+        assert(effect.resolutionParams.size() > 0);
+        auto cardLocation = static_cast<CardLocation>(effect.resolutionParams[0]);
+
+        state.waitingForActionOnStack = true;
+        determineChoosableCards(cardLocation);
+        chooseCard();
+    }
+
+    void Combat::executeChooseCards(Effect &effect) {
+        assert(effect.resolutionParams.size() > 1);
+        auto& cardsToChoose = effect.resolutionParams[0];
+        auto& cardLocation = effect.resolutionParams[1];
+        assert(cardsToChoose > 0);
+        assert(cardLocation >= 0);
+
+        variables.chosenCards.clear();
+        determineChoosableCards(static_cast<CardLocation>(cardLocation));
+        if(variables.choosableCards.size() > cardsToChoose) {
+            for(int i = 0; i < cardsToChoose; i++) {
+                putEffectOntoStack(Effect(  EffectType::ChooseSingleCard,
+                                            {Param(ParamType::FixedValue, cardLocation)},
+                                            effect.sourceEntityId),
+                                    i);
+            }
+        } else {
+            variables.chosenCards = variables.choosableCards;
+        }
+    }
+
     void Combat::executeCardDealDamage(Effect &effect) {
         assert(effect.resolutionParams.size() > 0);
         auto& card = ecs.getCard(effect.sourceEntityId);
@@ -74,6 +104,14 @@ namespace SpireSim {
                 break;
             default:
                 assert(false);
+        }
+    }
+    
+    void Combat::executeMoveChosenCards(Effect &effect) {
+        assert(effect.resolutionParams.size() > 0);
+        auto location = static_cast<CardLocation>(effect.resolutionParams[0]);
+        for(auto cardEntityId : variables.chosenCards) {
+            moveCard(cardEntityId, location);
         }
     }
     

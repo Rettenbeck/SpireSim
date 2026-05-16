@@ -12,6 +12,7 @@ namespace SpireSim {
             case ParamType::CardBlockValue:         return ecs.getCard(sourceEntityId).data.block;
             case ParamType::CardApplyVulnerable:    return ecs.getCard(sourceEntityId).data.vulnerable;
             case ParamType::CardsPlayedThisCombat:  return variables.cardsPlayedThisCombat;
+            case ParamType::CardToChoose:           return ecs.getCard(sourceEntityId).data.cardsToChoose;
             case ParamType::XValue:                 return variables.xValue;
             default: assert(false);
         }

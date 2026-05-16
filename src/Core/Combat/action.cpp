@@ -34,12 +34,19 @@ namespace SpireSim {
                 break;
             case ActionType::PlayCard:
                 playCard(action.entityToPlay, action.targetEntityId);
+                break;
+            case ActionType::ChooseCard:
+                variables.chosenCards.push_back(action.entityToPlay);
+                state.waitingForActionOnStack = false;
                 resolveStackFully();
                 break;
             default:
                 break;
         }
-        if(state.waitingForAction) {
+
+        if(state.waitingForActionOnStack) {
+            // nothing to do here, as actions should already have been created
+        } else if(state.waitingForAction) {
             generateActions();
         } else {
             proceedPhases();

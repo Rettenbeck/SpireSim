@@ -41,18 +41,28 @@ namespace SpireSim {
         ecs.cCards[entityId].cardId = CardId::None;
     }
 
-    inline int Combat::calculateDamage(Id sourceEntityId, CharacterData &sourceData,
-                                            Id targetEntityId, CharacterData &targetData,
-                                            int damage)
+    inline void Combat::onDamageDealt(  Id sourceEntityId, CharacterData &sourceData,
+                                        Id targetEntityId, CharacterData &targetData,
+                                        int damage)
+    {
+        if(targetEntityId == ecs.playerEntityId) {
+            if(variables.hasTakenDamage == 0) triggerEvent(EventType::OnFirstDamageTaken);
+            variables.hasTakenDamage = 1;
+        }
+    }
+
+    inline int Combat::calculateDamage( Id sourceEntityId, CharacterData &sourceData,
+                                        Id targetEntityId, CharacterData &targetData,
+                                        int damage)
     {
         float wFactor = (sourceData.weak       > 0) ? sourceData.weakFactor       : 1.0f;
         float vFactor = (targetData.vulnerable > 0) ? targetData.vulnerableFactor : 1.0f;
         return (int) (wFactor * vFactor * ((float) (damage + sourceData.strength + sourceData.tmpStrength + sourceData.vigor)));
     }
 
-    void Combat::dealDamage(   Id sourceEntityId, CharacterData &sourceData,
-                                    Id targetEntityId, CharacterData &targetData,
-                                    int damage)
+    void Combat::dealDamage(Id sourceEntityId, CharacterData &sourceData,
+                            Id targetEntityId, CharacterData &targetData,
+                            int damage)
     {
         int damageCalculated = calculateDamage(sourceEntityId, sourceData, targetEntityId, targetData, damage);
         triggerInterceptor(EventType::OnDealDamageForInterception, InterceptorContext(sourceEntityId), damageCalculated);
@@ -62,12 +72,7 @@ namespace SpireSim {
             damageCalculated -= targetData.block;
             targetData.block = 0;
             targetData.hp -= damageCalculated;
-            if(damageCalculated > 0) {
-                if(targetEntityId == ecs.playerEntityId) {
-                    if(variables.hasTakenDamage == 0) triggerEvent(EventType::OnFirstDamageTaken);
-                    variables.hasTakenDamage = 1;
-                }
-            }
+            if(damageCalculated > 0) onDamageDealt(sourceEntityId, sourceData, targetEntityId, targetData, damageCalculated);
             if(targetData.hp <= 0) entityDies(targetEntityId);
         }
     }
