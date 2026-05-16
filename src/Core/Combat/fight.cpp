@@ -1,23 +1,23 @@
 #pragma once
 
-#include <Core/Combat/combat_state.hpp>
+#include <Core/Combat/combat.hpp>
 
 
 namespace SpireSim {
 
-    void CombatState::endFight(bool won) {
-        waitingForActionOnStack = false;
-        waitingForAction = false;
-        stopStack = true;
-        combatOver = true;
+    void Combat::endFight(bool won) {
+        state.waitingForActionOnStack = false;
+        state.waitingForAction = false;
+        state.stopStack = true;
+        state.combatOver = true;
     }
 
-    void CombatState::checkForFightEnd() {
+    void Combat::checkForFightEnd() {
         if(variables.enemies == 0) endFight(true);
         if(ecs.getPlayer().playerId == PlayerId::None) endFight(false);
     }
 
-    void CombatState::entityDies(Id entityId) {
+    void Combat::entityDies(Id entityId) {
         if(ecs.cEnemies[entityId].enemyId != EnemyId ::None) {
             if(!ecs.cEnemies[entityId].isMinion) variables.enemies--;
             ecs.cEnemies[entityId].enemyId = EnemyId ::None;
@@ -41,7 +41,7 @@ namespace SpireSim {
         ecs.cCards[entityId].cardId = CardId::None;
     }
 
-    inline int CombatState::calculateDamage(Id sourceEntityId, CharacterData &sourceData,
+    inline int Combat::calculateDamage(Id sourceEntityId, CharacterData &sourceData,
                                             Id targetEntityId, CharacterData &targetData,
                                             int damage)
     {
@@ -50,7 +50,7 @@ namespace SpireSim {
         return (int) (wFactor * vFactor * ((float) (damage + sourceData.strength + sourceData.tmpStrength + sourceData.vigor)));
     }
 
-    void CombatState::dealDamage(   Id sourceEntityId, CharacterData &sourceData,
+    void Combat::dealDamage(   Id sourceEntityId, CharacterData &sourceData,
                                     Id targetEntityId, CharacterData &targetData,
                                     int damage)
     {
@@ -72,7 +72,7 @@ namespace SpireSim {
         }
     }
 
-    inline void CombatState::dealDamageToEnemy(Id sourceEntityId, CharacterData &sourceData, Id targetEntityId, int damage) {
+    inline void Combat::dealDamageToEnemy(Id sourceEntityId, CharacterData &sourceData, Id targetEntityId, int damage) {
         auto& enemy = ecs.getEnemy(targetEntityId);
         if(enemy.enemyId == EnemyId::None) {
             // fizzle...
@@ -83,7 +83,7 @@ namespace SpireSim {
 
 
 
-    void CombatState::applyBuff(Buff &buff, Id sourceEntityId, Id targetEntityId) {
+    void Combat::applyBuff(Buff &buff, Id sourceEntityId, Id targetEntityId) {
         buff.createdBy = sourceEntityId;
         auto id = ecs.addObject(buff, targetEntityId);
         registerEventsFromEntity(buffPool.retrieve(buff.buffId), id);
@@ -91,23 +91,23 @@ namespace SpireSim {
 
     
 
-    inline void CombatState::gainBlock(CharacterData &data, int block) {
+    inline void Combat::gainBlock(CharacterData &data, int block) {
         data.block += block;
     }
 
-    inline void CombatState::gainBlockPlayer(int block) {
+    inline void Combat::gainBlockPlayer(int block) {
         gainBlock(ecs.getPlayer().data, block);
     }
 
-    inline void CombatState::gainBlockEnemy(Enemy &enemy, int block) {
+    inline void Combat::gainBlockEnemy(Enemy &enemy, int block) {
         gainBlock(enemy.data, block);
     }
 
-    inline void CombatState::gainBlockEnemy(Id &enemyEntityId, int block) {
+    inline void Combat::gainBlockEnemy(Id &enemyEntityId, int block) {
         gainBlock(ecs.getEnemy(enemyEntityId).data, block);
     }
 
-    void CombatState::gainBlock(Id entityId, int block) {
+    void Combat::gainBlock(Id entityId, int block) {
         if(entityId == ecs.playerEntityId) {
             gainBlockPlayer(block);
         } else {
@@ -117,95 +117,95 @@ namespace SpireSim {
 
 
 
-    inline void CombatState::gainStrength(CharacterData &targetData, int value) {
+    inline void Combat::gainStrength(CharacterData &targetData, int value) {
         targetData.strength += value;
     }
 
-    inline void CombatState::gainStrengthEnemy(Id targetEntityId, int value) {
+    inline void Combat::gainStrengthEnemy(Id targetEntityId, int value) {
         gainStrength(ecs.getEnemy(targetEntityId).data, value);
     }
 
-    inline void CombatState::gainStrengthPlayer(int value) {
+    inline void Combat::gainStrengthPlayer(int value) {
         gainStrength(ecs.getPlayer().data, value);
     }
 
 
 
-    inline void CombatState::gainDexterity(CharacterData &targetData, int value) {
+    inline void Combat::gainDexterity(CharacterData &targetData, int value) {
         targetData.dex += value;
     }
 
-    inline void CombatState::gainDexterityPlayer(int value) {
+    inline void Combat::gainDexterityPlayer(int value) {
         gainDexterity(ecs.getPlayer().data, value);
     }
 
 
 
-    inline void CombatState::applyVulnerable(CharacterData &targetData, int value) {
+    inline void Combat::applyVulnerable(CharacterData &targetData, int value) {
         targetData.vulnerable += value;
     }
 
-    inline void CombatState::applyVulnerableToEnemy(Id targetEntityId, int value) {
+    inline void Combat::applyVulnerableToEnemy(Id targetEntityId, int value) {
         applyVulnerable(ecs.getEnemy(targetEntityId).data, value);
     }
 
-    inline void CombatState::applyVulnerableToPlayer(int value) {
+    inline void Combat::applyVulnerableToPlayer(int value) {
         applyVulnerable(ecs.getPlayer().data, value);
     }
     
 
 
-    inline void CombatState::applyWeak(CharacterData &targetData, int value) {
+    inline void Combat::applyWeak(CharacterData &targetData, int value) {
         targetData.weak += value;
     }
 
-    inline void CombatState::applyWeakToEnemy(Id targetEntityId, int value) {
+    inline void Combat::applyWeakToEnemy(Id targetEntityId, int value) {
         applyWeak(ecs.getEnemy(targetEntityId).data, value);
     }
 
-    inline void CombatState::applyWeakToPlayer(int value) {
+    inline void Combat::applyWeakToPlayer(int value) {
         applyWeak(ecs.getPlayer().data, value);
     }
     
 
 
-    inline void CombatState::applyFrail(CharacterData &targetData, int value) {
+    inline void Combat::applyFrail(CharacterData &targetData, int value) {
         targetData.frail += value;
     }
 
-    inline void CombatState::applyFrailToPlayer(int value) {
+    inline void Combat::applyFrailToPlayer(int value) {
         applyFrail(ecs.getPlayer().data, value);
     }
     
 
 
-    inline void CombatState::gainVigor(CharacterData &targetData, int value) {
+    inline void Combat::gainVigor(CharacterData &targetData, int value) {
         targetData.vigor += value;
     }
 
-    inline void CombatState::gainVigorEnemy(Id targetEntityId, int value) {
+    inline void Combat::gainVigorEnemy(Id targetEntityId, int value) {
         gainVigor(ecs.getEnemy(targetEntityId).data, value);
     }
 
-    inline void CombatState::gainVigorPlayer(int value) {
+    inline void Combat::gainVigorPlayer(int value) {
         gainVigor(ecs.getPlayer().data, value);
     }
 
 
 
-    inline void CombatState::gainTempStrength(CharacterData &targetData, int value) {
+    inline void Combat::gainTempStrength(CharacterData &targetData, int value) {
         targetData.tmpStrength += value;
     }
 
-    inline void CombatState::gainTempStrengthPlayer(int value) {
+    inline void Combat::gainTempStrengthPlayer(int value) {
         gainTempStrength(ecs.getPlayer().data, value);
     }
 
-    inline void CombatState::gainTempDexterity(CharacterData &targetData, int value) {
+    inline void Combat::gainTempDexterity(CharacterData &targetData, int value) {
         targetData.tmpDex += value;
     }
 
-    inline void CombatState::gainTempDexterityPlayer(int value) {
+    inline void Combat::gainTempDexterityPlayer(int value) {
         gainTempDexterity(ecs.getPlayer().data, value);
     }
 

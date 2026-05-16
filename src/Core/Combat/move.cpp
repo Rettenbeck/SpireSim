@@ -1,22 +1,22 @@
 #pragma once
 
-#include <Core/Combat/combat_state.hpp>
+#include <Core/Combat/combat.hpp>
 
 
 namespace SpireSim {
 
-    EnemyMoveId CombatState::getNextMove(EnemyMoveId move) {
+    EnemyMoveId Combat::getNextMove(EnemyMoveId move) {
         auto& nextMoves = NextEnemyMoveList[move];
         assert(!nextMoves.empty());
         if(nextMoves.size() == 1) return nextMoves[0];
         return nextMoves[getRandomNumber(nextMoves.size() - 1)];
     }
 
-    void CombatState::advanceMove(EnemyMoveId &move) {
+    void Combat::advanceMove(EnemyMoveId &move) {
         move = getNextMove(move);
     }
 
-    void CombatState::resolveMove(Id enemyEntityId, Enemy &enemy, EnemyMove &move) {
+    void Combat::resolveMove(Id enemyEntityId, Enemy &enemy, EnemyMove &move) {
         if(move.attacks > 0) {
             for(int i = 0; i < move.attacks; i++)
                 dealDamage(enemyEntityId, enemy.data, ecs.playerEntityId, ecs.getPlayer().data, move.damage);
@@ -37,7 +37,7 @@ namespace SpireSim {
         }
     }
 
-    void CombatState::executeMove(Id enemyEntityId) {
+    void Combat::executeMove(Id enemyEntityId) {
         auto& enemy = ecs.getEnemy(enemyEntityId);
         if(enemy.currentMove == EnemyMoveId::None) {
             assert(enemy.initialMoveCount < enemy.initialMoves.size());
@@ -51,7 +51,7 @@ namespace SpireSim {
         resolveMove(enemyEntityId, enemy, move);
     }
 
-    void CombatState::executeMoves() {
+    void Combat::executeMoves() {
         for(auto& id : ecs.enemyEntityIds) executeMove(id);
     }
 

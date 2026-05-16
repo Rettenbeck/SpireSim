@@ -1,20 +1,20 @@
 #pragma once
 
-#include <Core/Combat/combat_state.hpp>
+#include <Core/Combat/combat.hpp>
 
 
 namespace SpireSim {
 
-    void CombatState::reduceValue(int &value, int amount) {
+    void Combat::reduceValue(int &value, int amount) {
         value -= amount;
         if(value < 0) value = 0;
     }
 
-    void CombatState::onCharacterBeginTurn(CharacterData &data) {
+    void Combat::onCharacterBeginTurn(CharacterData &data) {
         data.block = 0;
     }
 
-    void CombatState::onCharacterEndTurn(CharacterData &data) {
+    void Combat::onCharacterEndTurn(CharacterData &data) {
         data.tmpStrength = 0;
         data.tmpDex = 0;
         reduceValue(data.weak);
@@ -22,67 +22,68 @@ namespace SpireSim {
         reduceValue(data.frail);
     }
 
-    void CombatState::advancePhase() {
-        switch (turnId) {
-            case TurnId::None        : turnId = TurnId::CombatStart ; return;
-            case TurnId::CombatStart : turnId = TurnId::PlayerPre   ; return;
-            case TurnId::PlayerPre   : turnId = TurnId::PlayerDraw  ; return;
-            case TurnId::PlayerDraw  : turnId = TurnId::PlayerUpkeep; return;
-            case TurnId::PlayerUpkeep: turnId = TurnId::Player      ; return;
-            case TurnId::Player      : turnId = TurnId::PlayerEnd   ; return;
-            case TurnId::PlayerEnd   : turnId = TurnId::EnemyUpkeep ; return;
-            case TurnId::EnemyUpkeep : turnId = TurnId::Enemy       ; return;
-            case TurnId::Enemy       : turnId = TurnId::EnemyEnd    ; return;
-            case TurnId::EnemyEnd    : turnId = TurnId::PlayerPre   ; return;
-            case TurnId::Count       : turnId = TurnId::PlayerPre   ; return;
+    void Combat::advancePhase() {
+        auto& tId = state.turnId;
+        switch (tId) {
+            case TurnId::None        : tId = TurnId::CombatStart ; return;
+            case TurnId::CombatStart : tId = TurnId::PlayerPre   ; return;
+            case TurnId::PlayerPre   : tId = TurnId::PlayerDraw  ; return;
+            case TurnId::PlayerDraw  : tId = TurnId::PlayerUpkeep; return;
+            case TurnId::PlayerUpkeep: tId = TurnId::Player      ; return;
+            case TurnId::Player      : tId = TurnId::PlayerEnd   ; return;
+            case TurnId::PlayerEnd   : tId = TurnId::EnemyUpkeep ; return;
+            case TurnId::EnemyUpkeep : tId = TurnId::Enemy       ; return;
+            case TurnId::Enemy       : tId = TurnId::EnemyEnd    ; return;
+            case TurnId::EnemyEnd    : tId = TurnId::PlayerPre   ; return;
+            case TurnId::Count       : tId = TurnId::PlayerPre   ; return;
             default: assert(false);
         }
     }
 
-    void CombatState::handlePhase_CombatStart() {
+    void Combat::handlePhase_CombatStart() {
         //
     }
     
-    void CombatState::handlePhase_PlayerPre() {
+    void Combat::handlePhase_PlayerPre() {
         variables.turn++;
     }
     
-    void CombatState::handlePhase_PlayerDraw() {
+    void Combat::handlePhase_PlayerDraw() {
         drawCards(variables.cardDrawOnTurn);
         if(variables.turn == 1) triggerEvent(EventType::AfterFirstDrawPhase);
     }
     
-    void CombatState::handlePhase_PlayerUpkeep() {
+    void Combat::handlePhase_PlayerUpkeep() {
         variables.energy = variables.energyPerTurn;
         onCharacterBeginTurn(ecs.getPlayer().data);
     }
     
-    void CombatState::handlePhase_Player() {
+    void Combat::handlePhase_Player() {
         generateActions();
-        waitingForAction = true;
+        state.waitingForAction = true;
     }
     
-    void CombatState::handlePhase_PlayerEnd() {
+    void Combat::handlePhase_PlayerEnd() {
         discardHand();
         onCharacterEndTurn(ecs.getPlayer().data);
     }
     
-    void CombatState::handlePhase_EnemyUpkeep() {
+    void Combat::handlePhase_EnemyUpkeep() {
         for(auto enemyId : ecs.enemyEntityIds)
             onCharacterBeginTurn(ecs.getEnemy(enemyId).data);
     }
     
-    void CombatState::handlePhase_Enemy() {
+    void Combat::handlePhase_Enemy() {
         executeMoves();
     }
     
-    void CombatState::handlePhase_EnemyEnd() {
+    void Combat::handlePhase_EnemyEnd() {
         for(auto enemyId : ecs.enemyEntityIds)
             onCharacterEndTurn(ecs.getEnemy(enemyId).data);
     }
     
-    void CombatState::doPhaseActions() {
-        switch (turnId) {
+    void Combat::doPhaseActions() {
+        switch (state.turnId) {
             case TurnId::CombatStart : handlePhase_CombatStart (); return;
             case TurnId::PlayerPre   : handlePhase_PlayerPre   (); return;
             case TurnId::PlayerDraw  : handlePhase_PlayerDraw  (); return;
@@ -96,13 +97,13 @@ namespace SpireSim {
         }
     }
 
-    void CombatState::endPhase() {
+    void Combat::endPhase() {
         advancePhase();
         doPhaseActions();
     }
 
-    void CombatState::proceedPhases() {
-        while(!waitingForAction) {
+    void Combat::proceedPhases() {
+        while(!state.waitingForAction) {
             endPhase();
         }
     }

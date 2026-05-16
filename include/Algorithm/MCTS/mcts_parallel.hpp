@@ -9,7 +9,7 @@ namespace SpireSim {
     public:
     
         std::unique_ptr<MCTS_Heuristic> heuristic = nullptr;
-        CombatState *initialState = nullptr;
+        Combat *initialState = nullptr;
         int bestActionIndex = -1;
 
         std::map<int, double> results;
@@ -18,7 +18,7 @@ namespace SpireSim {
         double optionExplorationConstant = 1.414;
 
         MCTS_Parallel() {}
-        MCTS_Parallel(CombatState *initialState_) : initialState(initialState_) {}
+        MCTS_Parallel(Combat *initialState_) : initialState(initialState_) {}
 
         void run() {
             int numThreads = std::thread::hardware_concurrency();

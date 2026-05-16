@@ -1,11 +1,11 @@
 #pragma once
 
-#include <Core/Combat/combat_state.hpp>
+#include <Core/Combat/combat.hpp>
 
 
 namespace SpireSim {
 
-    void CombatState::registerEventsFromList(EventList& eventList, Id entityId) {
+    void Combat::registerEventsFromList(EventList& eventList, Id entityId) {
         for(auto& [type, listener] : eventList) {
             listener.effect.sourceEntityId = entityId;
             registerEvent(int (type), EventListener(entityId, listener.effect));
@@ -13,11 +13,11 @@ namespace SpireSim {
     }
 
     template<typename T>
-    void CombatState::registerEventsFromEntity(T &t, Id entityId) {
+    void Combat::registerEventsFromEntity(T &t, Id entityId) {
         registerEventsFromList(t.eventList, entityId);
     }
     
-    void CombatState::registerEventsFromEntity(Id entityId) {
+    void Combat::registerEventsFromEntity(Id entityId) {
         if(ecs.isCard(entityId)) {
             auto& cardTemplate = cardPool.retrieve(ecs.getCard(entityId).cardId);
             registerEventsFromEntity(cardTemplate, entityId);
@@ -35,24 +35,24 @@ namespace SpireSim {
         //if(ecs.isPlayer(entityId)) registerEventsFromList(ecs.getPlayer(        ), entityId);
     }
 
-    void CombatState::unregisterEventsFromEntity(Id entityId) {
+    void Combat::unregisterEventsFromEntity(Id entityId) {
         auto& refList = ecs.cRefs[entityId].list;
         for(auto& entry : refList) {
-            eventRegistry[entry.eventType][entry.eventIndex].inactive = true;
+            state.eventRegistry[entry.eventType][entry.eventIndex].inactive = true;
         }
     }
 
-    void CombatState::registerEvent(int eventType, const EventListener &eventListener) {
+    void Combat::registerEvent(int eventType, const EventListener &eventListener) {
         if(eventListener.entityId >= 0) {
             assert(ecs.cRefs.size() > eventListener.entityId);
             auto& refList = ecs.cRefs[eventListener.entityId].list;
-            refList.push_back(EventRef(eventType, eventRegistry[eventType].size()));
+            refList.push_back(EventRef(eventType, state.eventRegistry[eventType].size()));
         }
-        eventRegistry[eventType].push_back(eventListener);
+        state.eventRegistry[eventType].push_back(eventListener);
     }
     
-    void CombatState::triggerEvent(EventType eventType) {
-        auto& listeners = eventRegistry[int(eventType)];
+    void Combat::triggerEvent(EventType eventType) {
+        auto& listeners = state.eventRegistry[int(eventType)];
         for(auto& listener : listeners) {
             if(listener.inactive) continue;
             auto id = listener.entityId;
@@ -62,8 +62,8 @@ namespace SpireSim {
         }
     }
 
-    void CombatState::triggerInterceptor(EventType eventType, const InterceptorContext &context, int &value) {
-        auto& listeners = eventRegistry[int(eventType)];
+    void Combat::triggerInterceptor(EventType eventType, const InterceptorContext &context, int &value) {
+        auto& listeners = state.eventRegistry[int(eventType)];
         for(auto& listener : listeners) {
             if(listener.inactive) continue;
             auto id = listener.entityId;

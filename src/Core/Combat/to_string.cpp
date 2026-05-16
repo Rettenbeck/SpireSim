@@ -1,26 +1,26 @@
 #pragma once
 
-#include <Core/Combat/combat_state.hpp>
+#include <Core/Combat/combat.hpp>
 
 
 namespace SpireSim {
 
-    std::string CombatState::stackToString() {
+    std::string Combat::stackToString() {
         std::stringstream ss;
         ss << "Stack: " << "\n";
         int counter = 0;
-        for(auto& effect : stack) {
+        for(auto& effect : state.stack) {
             ss << "  Pos " << counter << ": " << effect.toString() << "\n";
             counter++;
         }
         return ss.str();
     }
     
-    std::string CombatState::actionsToString() {
+    std::string Combat::actionsToString() {
         std::stringstream ss;
         ss << "Actions: " << "\n";
         int counter = 0;
-        for(auto& action : actions) {
+        for(auto& action : state.actions) {
 
             ss << counter << "  ";
             if(counter < 10) ss << " ";
@@ -44,16 +44,16 @@ namespace SpireSim {
         return ss.str();
     }
     
-    std::string CombatState::toString() {
+    std::string Combat::toString() {
         std::stringstream ss;
         ss << "Ecs: " << ecs.toString() << "\n";
         ss << "PileHandler: " << pileHandler.toString() << "\n";
         ss << "CombatVariables: " << variables.toString() << "\n";
-        ss << "EventRegistry: " << ToString(eventRegistry) << "\n";
+        ss << "EventRegistry: " << ToString(state.eventRegistry) << "\n";
         return ss.str();
     }
     
-    std::string CombatState::basicDataToString() {
+    std::string Combat::basicDataToString() {
         std::stringstream ss;
         ss << "Turn #" << variables.turn;
         ss << "; actions: " << getActions().size();

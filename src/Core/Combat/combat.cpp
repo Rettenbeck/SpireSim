@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Core/Combat/combat_state.cpp>
 #include <Core/Combat/initializing.cpp>
 #include <Core/Combat/stack_handling.cpp>
 #include <Core/Combat/event_handling.cpp>

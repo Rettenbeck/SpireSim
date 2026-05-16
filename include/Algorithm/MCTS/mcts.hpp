@@ -11,7 +11,7 @@ namespace SpireSim {
         const float MAX_SCORE = 1000.0f;
 
         std::unique_ptr<MCTS_Heuristic> heuristic = nullptr;
-        CombatState *initialState = nullptr;
+        Combat *initialState = nullptr;
         int bestActionIndex = -1;
 
         std::map<int, double> results;
@@ -23,7 +23,7 @@ namespace SpireSim {
         int seedBuffer = 0;
 
         MCTS() {}
-        MCTS(CombatState *initialState_) : initialState(initialState_) {}
+        MCTS(Combat *initialState_) : initialState(initialState_) {}
 
         void run() {
             assert(heuristic);
@@ -31,7 +31,7 @@ namespace SpireSim {
 
             results.clear();
             bestActionIndex = -1;
-            CombatState internalState = *initialState;
+            Combat internalState = *initialState;
 
             internalState.increaseSeeds(optionAddedSeed);
             internalState.startCombat(true);
@@ -58,7 +58,7 @@ namespace SpireSim {
             bestActionIndex = getBestActionIndex(root);
         }
 
-        float evaluateState(CombatState& state) {
+        float evaluateState(Combat& state) {
             if(state.isCombatOver()) {
                 if(state.isCombatVictorious()) {
                     float loss = ((float) state.getHpLoss()) / ((float) state.getPlayerMaxHealth());
@@ -112,8 +112,8 @@ namespace SpireSim {
             int actionIndex = node->untriedActionIndices.back();
             node->untriedActionIndices.pop_back();
 
-            // 2. Erzeuge einen neuen CombatState durch Kopie und führe die Aktion aus
-            CombatState nextState = node->state; // Kopier-Konstruktor/Klonen
+            // 2. Erzeuge einen neuen Combat durch Kopie und führe die Aktion aus
+            Combat nextState = node->state; // Kopier-Konstruktor/Klonen
             nextState.executeAction(actionIndex);
 
             // 3. Erstelle den neuen Kind-Knoten

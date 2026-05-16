@@ -6,7 +6,7 @@
 namespace SpireSim {
 
     struct MCTSNode {
-        CombatState state;
+        Combat state;
         int parentActionIndex = -1;
         MCTSNode* parent = nullptr;
         std::vector<std::unique_ptr<MCTSNode>> children;
@@ -17,7 +17,7 @@ namespace SpireSim {
         double visits = 0;
         double totalScore = 0;
 
-        MCTSNode(const CombatState &state_) : state(state_) {
+        MCTSNode(const Combat &state_) : state(state_) {
             for(int i = 0; i < state.getActions().size(); ++i) {
                 untriedActionIndices.push_back(i);
             }

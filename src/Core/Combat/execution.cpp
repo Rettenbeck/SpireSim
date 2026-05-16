@@ -1,11 +1,11 @@
 #pragma once
 
-#include <Core/Combat/combat_state.hpp>
+#include <Core/Combat/combat.hpp>
 
 
 namespace SpireSim {
 
-    void CombatState::executeUnpackCard(Effect &effect) {
+    void Combat::executeUnpackCard(Effect &effect) {
         auto& card = ecs.getCard(effect.sourceEntityId);
         int i = 0;
         for(int j = 0; j < card.data.replay + 1; j++) {
@@ -14,22 +14,22 @@ namespace SpireSim {
                 putEffectOntoStack(effect_, i++);
             }
         }
-        stack.insert(stack.begin() + i, Effect(EffectType::FinishCardPlayed, {}, effect.sourceEntityId));
+        state.stack.insert(state.stack.begin() + i, Effect(EffectType::FinishCardPlayed, {}, effect.sourceEntityId));
     }
     
-    void CombatState::executeFinishCardPlayed(Effect &effect) {
+    void Combat::executeFinishCardPlayed(Effect &effect) {
         auto& card = ecs.getCard(effect.sourceEntityId);
         moveCard(effect.sourceEntityId, card.data.pileAfterPlay);
         variables.cardsPlayedThisCombat++;
         triggerEvent(EventType::OnCardPlayed);
     }
 
-    void CombatState::executeDrawCards(Effect &effect) {
+    void Combat::executeDrawCards(Effect &effect) {
         assert(effect.resolutionParams.size() > 0);
         drawCards(effect.resolutionParams[0]);
     }
     
-    void CombatState::executeCardDealDamage(Effect &effect) {
+    void Combat::executeCardDealDamage(Effect &effect) {
         assert(effect.resolutionParams.size() > 0);
         auto& card = ecs.getCard(effect.sourceEntityId);
         auto& cardData = cardPool.retrieveData(card);
@@ -49,7 +49,7 @@ namespace SpireSim {
         }
     }
     
-    void CombatState::executeCardGainBlock(Effect &effect) {
+    void Combat::executeCardGainBlock(Effect &effect) {
         assert(effect.resolutionParams.size() > 0);
         auto& card = ecs.getCard(effect.sourceEntityId);
         auto& cardData = cardPool.retrieveData(card);
@@ -57,7 +57,7 @@ namespace SpireSim {
         gainBlock(ecs.playerEntityId, blockToGain);
     }
     
-    void CombatState::executeCardApplyVulnerable(Effect &effect) {
+    void Combat::executeCardApplyVulnerable(Effect &effect) {
         assert(effect.resolutionParams.size() > 0);
         auto& card = ecs.getCard(effect.sourceEntityId);
         auto& cardData = cardPool.retrieveData(card);
@@ -77,7 +77,7 @@ namespace SpireSim {
         }
     }
     
-    void CombatState::executeMoveCard(Effect &effect) {
+    void Combat::executeMoveCard(Effect &effect) {
         assert(effect.resolutionParams.size() > 0);
         auto& card = ecs.getCard(effect.sourceEntityId);
         moveCard(effect.sourceEntityId, static_cast<CardLocation>(effect.resolutionParams[0]));

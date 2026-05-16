@@ -1,11 +1,11 @@
 #pragma once
 
-#include <Core/Combat/combat_state.hpp>
+#include <Core/Combat/combat.hpp>
 
 
 namespace SpireSim {
 
-    void CombatState::playCard(Id cardEntityId, Id targetEntityId, bool force) {
+    void Combat::playCard(Id cardEntityId, Id targetEntityId, bool force) {
         auto& card = ecs.getCard(cardEntityId);
         variables.xValue = variables.energy;
         if(!force) {
@@ -16,11 +16,11 @@ namespace SpireSim {
         putCardOntoStack(cardEntityId, targetEntityId);
     }
     
-    void CombatState::forcePlayCard(Id cardEntityId, Id targetEntityId) {
+    void Combat::forcePlayCard(Id cardEntityId, Id targetEntityId) {
         playCard(cardEntityId, targetEntityId, true);
     }
     
-    bool CombatState::isCardPlayable(Card &card) {
+    bool Combat::isCardPlayable(Card &card) {
         switch (card.data.playableType) {
             case PlayableType::Playable:
                 return (card.data.energyCost <= variables.energy && card.data.starCost <= variables.stars);
@@ -33,7 +33,7 @@ namespace SpireSim {
         }
     }
 
-    bool CombatState::isCardPlayable(Id cardEntityId) {
+    bool Combat::isCardPlayable(Id cardEntityId) {
         return isCardPlayable(ecs.getCard(cardEntityId));
     }
 

@@ -1,31 +1,31 @@
 #pragma once
 
-#include <Core/Combat/combat_state.hpp>
+#include <Core/Combat/combat.hpp>
 
 
 namespace SpireSim {
 
-    CombatState::CombatState(  
-                                EffectPool &effectPool_,
-                                RelicPool &relicPool_,
-                                PotionPool &potionPool_,
-                                CardPool &cardPool_,
-                                BuffPool &buffPool_,
-                                EnemyMovePool &movePool_,
-                                EnemyPool &enemyPool_,
-                                const Player &player_,
-                                const Enemies &enemies_,
-                                const Relics &relics_,
-                                const Potions &potions_,
-                                Cards &cards
-                            ) :
-                                effectPool(effectPool_),
-                                relicPool(relicPool_),
-                                potionPool(potionPool_),
-                                cardPool(cardPool_),
-                                buffPool(buffPool_),
-                                movePool(movePool_),
-                                enemyPool(enemyPool_)
+    Combat::Combat(  
+                    EffectPool &effectPool_,
+                    RelicPool &relicPool_,
+                    PotionPool &potionPool_,
+                    CardPool &cardPool_,
+                    BuffPool &buffPool_,
+                    EnemyMovePool &movePool_,
+                    EnemyPool &enemyPool_,
+                    const Player &player_,
+                    const Enemies &enemies_,
+                    const Relics &relics_,
+                    const Potions &potions_,
+                    Cards &cards
+                  ) :
+                    effectPool(effectPool_),
+                    relicPool(relicPool_),
+                    potionPool(potionPool_),
+                    cardPool(cardPool_),
+                    buffPool(buffPool_),
+                    movePool(movePool_),
+                    enemyPool(enemyPool_)
     {
         initializeCards(cards);
         ecs.registerPlayer(player_);
@@ -34,13 +34,13 @@ namespace SpireSim {
         registerPotions(potions_);
     }
 
-    void CombatState::initialize(bool shuffleDeck) {
+    void Combat::initialize(bool shuffleDeck) {
         if(shuffleDeck) pileHandler.reshuffleDeck(ecs);
         variables.initialHp = ecs.getPlayer().data.hp;
-        stack.clear();
+        state.stack.clear();
     }
 
-    void CombatState::initializeCards(Cards &cards) {
+    void Combat::initializeCards(Cards &cards) {
         pileHandler.clearAllPiles();
         for(auto& card : cards) {
             auto id = ecs.addObject(card);
@@ -52,12 +52,12 @@ namespace SpireSim {
         }
     }
 
-    void CombatState::registerEnemies(const Enemies &enemies) {
+    void Combat::registerEnemies(const Enemies &enemies) {
         ecs.registerEnemies(enemies);
         for(auto& enemy : enemies) if(!enemy.isMinion) variables.enemies++;
     }
 
-    void CombatState::registerRelics(const Relics &relics) {
+    void Combat::registerRelics(const Relics &relics) {
         for(auto& relic : relics) {
             auto id = ecs.addObject(relic);
             auto relicCopy = relic;
@@ -66,22 +66,22 @@ namespace SpireSim {
         }
     }
 
-    void CombatState::registerPotions(const Potions &potions) {
+    void Combat::registerPotions(const Potions &potions) {
         for(auto& potion : potions) {
             auto id = ecs.addObject(potion);
         }
     }
 
-    void CombatState::setSeeds(unsigned int seedDeck_) {
-        seedDeck = seedDeck_;
-        genDeck.seed(seedDeck);
+    void Combat::setSeeds(unsigned int seedDeck_) {
+        state.seedDeck = seedDeck_;
+        state.genDeck.seed(state.seedDeck);
 
         pileHandler.seedDeck = seedDeck_;
         pileHandler.genDeck.seed(pileHandler.seedDeck);
     }
 
-    void CombatState::increaseSeeds(unsigned int value) {
-        setSeeds(seedDeck + value);
+    void Combat::increaseSeeds(unsigned int value) {
+        setSeeds(state.seedDeck + value);
     }
 
 }

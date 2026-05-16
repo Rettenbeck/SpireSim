@@ -1,11 +1,11 @@
 #pragma once
 
-#include <Core/Combat/combat_state.hpp>
+#include <Core/Combat/combat.hpp>
 
 
 namespace SpireSim {
 
-    void CombatState::executeModifyParentDamagePerc(Effect &effect, const InterceptorContext &context, int &value) {
+    void Combat::executeModifyParentDamagePerc(Effect &effect, const InterceptorContext &context, int &value) {
         // effect.sourceEntityId        -> Source of effect (typically the entity Id of a buff)
         // effect.sourceEntityId parent -> Entity Id that owns the effect source (typically the character owning the buff)
         // context.sourceEntityId       -> Source of interceptor event

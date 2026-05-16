@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Util/util.hpp>
+#include <Core/Combat/entity.hpp>
 
 
 namespace SpireSim {
@@ -20,6 +20,8 @@ namespace SpireSim {
         int xValue = 0;
         int enemies = 0;
         
+        Ids chosenCards;
+
         std::string toString() {
             std::stringstream ss;
             ss << "energy: " << energy;

@@ -7,7 +7,7 @@ namespace SpireSim {
 
     class MCTS_Heuristic {
     public:
-        virtual int getAction(CombatState &state) = 0;
+        virtual int getAction(Combat &state) = 0;
         virtual std::unique_ptr<MCTS_Heuristic> clone() = 0;
         
         void setSeed(unsigned int seed) {
@@ -33,7 +33,7 @@ namespace SpireSim {
     public:
         MCTS_Heuristic_Random(unsigned int seed) : MCTS_Heuristic(seed) {}
 
-        int getAction(CombatState &state) {
+        int getAction(Combat &state) {
             return getRandomNumber(state.getActions().size() - 1);
         }
 

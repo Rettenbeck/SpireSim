@@ -1,20 +1,20 @@
 #pragma once
 
-#include <Core/Combat/combat_state.hpp>
+#include <Core/Combat/combat.hpp>
 
 
 namespace SpireSim {
 
-    void CombatState::putEffectOntoStack(const Effect &effect, int position) {
-        stack.insert(stack.begin() + position, effect);
+    void Combat::putEffectOntoStack(const Effect &effect, int position) {
+        state.stack.insert(state.stack.begin() + position, effect);
         resolveStackFully();
     }
 
-    void CombatState::putCardOntoStack(Id cardEntityId, int targetEntityId) {
+    void Combat::putCardOntoStack(Id cardEntityId, int targetEntityId) {
         putEffectOntoStack(Effect(EffectType::UnpackCard, {}, cardEntityId));
     }
     
-    void CombatState::resolveInterceptor(Effect &effect, const InterceptorContext &context, int &value) {
+    void Combat::resolveInterceptor(Effect &effect, const InterceptorContext &context, int &value) {
         if(!evaluateConditions(effect)) return;
         resolveParams(effect);
         switch(effect.effectType) {
@@ -23,7 +23,7 @@ namespace SpireSim {
         }
     }
 
-    void CombatState::resolve(Effect &effect) {
+    void Combat::resolve(Effect &effect) {
         if(!evaluateConditions(effect)) return;
         resolveParams(effect);
         switch(effect.effectType) {
@@ -38,20 +38,20 @@ namespace SpireSim {
         }
     }
     
-    void CombatState::resolveStackSingle() {
-        if(stack.size() == 0) return;
-        auto effect = stack[0];
-        stack.erase(stack.begin());
+    void Combat::resolveStackSingle() {
+        if(state.stack.size() == 0) return;
+        auto effect = state.stack[0];
+        state.stack.erase(state.stack.begin());
         resolve(effect);
     }
     
-    void CombatState::resolveStackFully() {
-        if(isStackRunning) return;
-        isStackRunning = true;
-        while(stack.size() > 0 && waitingForActionOnStack == false && stopStack == false) {
+    void Combat::resolveStackFully() {
+        if(state.isStackRunning) return;
+        state.isStackRunning = true;
+        while(state.stack.size() > 0 && state.waitingForActionOnStack == false && state.stopStack == false) {
             resolveStackSingle();
         }
-        isStackRunning = false;
+        state.isStackRunning = false;
     }
 
 }

@@ -1,36 +1,36 @@
 #pragma once
 
-#include <Core/Combat/combat_state.hpp>
+#include <Core/Combat/combat.hpp>
 
 
 namespace SpireSim {
 
-    void CombatState::generateActions() {
-        actions.clear();
-        if(combatOver) return;
-        actions.push_back(Action(ActionType::EndTurn));
+    void Combat::generateActions() {
+        state.actions.clear();
+        if(state.combatOver) return;
+        state.actions.push_back(Action(ActionType::EndTurn));
         for(auto& cardId : pileHandler.hand) {
             auto& card = ecs.getCard(cardId);
             if(!isCardPlayable(card)) continue;
             switch(card.data.targetingType) {
                 case TargetingType::Single:
                     for(auto& enemyId : ecs.enemyEntityIds) {
-                        actions.push_back(Action(ActionType::PlayCard, cardId, enemyId));
+                        state.actions.push_back(Action(ActionType::PlayCard, cardId, enemyId));
                     }
                     break;
                 default:
-                    actions.push_back(Action(ActionType::PlayCard, cardId));
+                    state.actions.push_back(Action(ActionType::PlayCard, cardId));
                     break;
             }
         }
     }
 
-    void CombatState::executeAction(int actionIndex) {
-        assert(actionIndex < actions.size());
-        auto& action = actions[actionIndex];
+    void Combat::executeAction(int actionIndex) {
+        assert(actionIndex < state.actions.size());
+        auto& action = state.actions[actionIndex];
         switch (action.actionType) {
             case ActionType::EndTurn:
-                waitingForAction = false;
+                state.waitingForAction = false;
                 break;
             case ActionType::PlayCard:
                 playCard(action.entityToPlay, action.targetEntityId);
@@ -39,21 +39,21 @@ namespace SpireSim {
             default:
                 break;
         }
-        if(waitingForAction) {
+        if(state.waitingForAction) {
             generateActions();
         } else {
             proceedPhases();
         }
     }
 
-    void CombatState::startCombat(bool shuffleDeck) {
-        if(turnId == TurnId::None) {
+    void Combat::startCombat(bool shuffleDeck) {
+        if(state.turnId == TurnId::None) {
             if(shuffleDeck) pileHandler.reshuffleDeck(ecs);
             proceedPhases();
         }
     }
 
-    void CombatState::reshuffleDeck() {
+    void Combat::reshuffleDeck() {
         pileHandler.reshuffleDeck(ecs);
     }
 

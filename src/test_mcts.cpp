@@ -31,7 +31,7 @@ void test() {
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Bash  , true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Thunderclap, true));
     
-    auto state = std::make_unique<SpireSim::CombatState>(
+    auto state = std::make_unique<SpireSim::Combat>(
         effectPool,
         relicPool,
         potionPool,

@@ -1,35 +1,35 @@
 #pragma once
 
-#include <Core/Combat/combat_state.hpp>
+#include <Core/Combat/combat.hpp>
 
 
 namespace SpireSim {
 
-    Actions& CombatState::getActions() {
-        return actions;
+    Actions& Combat::getActions() {
+        return state.actions;
     }
 
-    bool CombatState::isCombatOver() {
-        return combatOver;
+    bool Combat::isCombatOver() {
+        return state.combatOver;
     }
 
-    bool CombatState::isCombatVictorious() {
+    bool Combat::isCombatVictorious() {
         return (variables.enemies == 0 ? true : false);
     }
 
-    int CombatState::getPlayerMaxHealth() {
+    int Combat::getPlayerMaxHealth() {
         return ecs.getPlayer().data.maxHp;
     }
 
-    int CombatState::getPlayerHealth() {
+    int Combat::getPlayerHealth() {
         return ecs.getPlayer().data.hp;
     }
 
-    int CombatState::getPlayerBlock() {
+    int Combat::getPlayerBlock() {
         return ecs.getPlayer().data.block;
     }
 
-    int CombatState::getTotalEnemyHp() {
+    int Combat::getTotalEnemyHp() {
         int sum = 0;
         for(auto enemyId : ecs.enemyEntityIds) {
             sum += ecs.getEnemy(enemyId).data.hp;
@@ -37,7 +37,7 @@ namespace SpireSim {
         return sum;
     }
 
-    int CombatState::getHpLoss() {
+    int Combat::getHpLoss() {
         return variables.initialHp - ecs.getPlayer().data.hp;
     }
 
