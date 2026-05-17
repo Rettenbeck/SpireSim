@@ -27,6 +27,17 @@ namespace SpireSim {
             return cardTemplates[index];
         }
         
+        CardTemplate& retrieveForCreation(CardId cardId, int energyCostNormal, int energyCostUpgraded) {
+            auto& cardTemplate = retrieveForCreation(cardId);
+            cardTemplate.normalData.energyCost = energyCostNormal;
+            cardTemplate.upgradedData.energyCost = energyCostUpgraded;
+            return cardTemplate;
+        }
+        
+        CardTemplate& retrieveForCreation(CardId cardId, int energyCost) {
+            return retrieveForCreation(cardId, energyCost, energyCost);
+        }
+        
         CardTemplate& retrieveForCreationAttack(CardId cardId,
                                                 TargetingType targetingType,
                                                 int energyCost,
@@ -115,8 +126,14 @@ namespace SpireSim {
 
             retrieveForCreationSingleAttack(CardId::Strike, 1, 6, 9);
             retrieveForCreationBlock(CardId::Defend, 1, 5, 8);
+
             retrieveForCreationSingleAttack(CardId::Bash, 2, 8, 11).applyVulnerable(2, 3);
             retrieveForCreationAOEAttack(CardId::Thunderclap, 1, 4, 7).applyVulnerable(1, 1);
+            retrieveForCreation(CardId::BloodLetting, 0).loseLifeSelf(3).gainEnergy(2, 3);
+
+            retrieveForCreation(CardId::Venerate, 1).gainStars(2, 3);
+            retrieveForCreationSingleAttack(CardId::FallingStar, 0, 8, 12)
+                .addStarCost(2).applyWeak(1).applyVulnerable(1);
             retrieveForCreationSingleAttack(CardId::MakeItSo, 0, 6, 9).returnToHandAfterXCards(3);
             
             retrieveForCreationBlock(CardId::CosmicIndifference, 1, 6, 9)

@@ -28,23 +28,26 @@ namespace SpireSim {
             effects.clear();
             
             retrieveForCreation(EffectId::CardDealDamage)
-            .fill(EffectType::CardDealDamage, {Param(ParamType::CardAttackDamage, 0)}, {});
+            .fill(EffectType::CardDealDamage, {Param(ParamType::CardAttackDamage)}, {});
             
             retrieveForCreation(EffectId::CardGainBlock)
-            .fill(EffectType::CardGainBlock, {Param(ParamType::CardBlockValue, 0)}, {});
+            .fill(EffectType::CardGainBlock, {Param(ParamType::CardBlockValue)}, {});
             
             retrieveForCreation(EffectId::CardApplyVulnerable)
-            .fill(EffectType::CardApplyVulnerable, {Param(ParamType::CardApplyVulnerable, 0)}, {});
+            .fill(EffectType::CardApplyVulnerable, {Param(ParamType::CardApplyVulnerable)}, {});
+            
+            retrieveForCreation(EffectId::CardApplyWeak)
+            .fill(EffectType::CardApplyWeak, {Param(ParamType::CardApplyWeak)}, {});
             
             retrieveForCreation(EffectId::ChooseCardsFromDeck)
             .fill(EffectType::ChooseCards,
-                    {   Param(ParamType::CardToChoose, 0),
+                    {   Param(ParamType::CardAnyParam1),
                         Param(ParamType::FixedValue, int(CardLocation::Deck))
                     }, {});
             
             retrieveForCreation(EffectId::ChooseCardsFromDiscard)
             .fill(EffectType::ChooseCards,
-                    {   Param(ParamType::CardToChoose, 0),
+                    {   Param(ParamType::CardAnyParam1),
                         Param(ParamType::FixedValue, int(CardLocation::Discard))
                     }, {});
 
@@ -53,6 +56,19 @@ namespace SpireSim {
 
             retrieveForCreation(EffectId::MoveChosenCardsToHand)
             .fill(EffectType::MoveChosenCards, {Param(ParamType::FixedValue, int(CardLocation::Hand))}, {});
+            
+            retrieveForCreation(EffectId::CardDrawCards)
+            .fill(EffectType::DrawCards, {Param(ParamType::CardAnyParam1)}, {});
+            
+            retrieveForCreation(EffectId::CardGainEnergy)
+            .fill(EffectType::GainEnergy, {Param(ParamType::CardAnyParam2)}, {});
+            
+            retrieveForCreation(EffectId::CardGainStars)
+            .fill(EffectType::GainStars, {Param(ParamType::CardAnyParam2)}, {});
+            
+            retrieveForCreation(EffectId::CardLoseLifeSelf)
+            .fill(EffectType::LoseLifeSelf, {Param(ParamType::CardAnyParam3)}, {});
+            
         }
         
         EffectPool() {

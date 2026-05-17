@@ -20,7 +20,7 @@ void test() {
     SpireSim::PotionFactory     potionFactory(potionPool);
 
     SpireSim::Cards deck;
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Hologram, true));
+    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::BloodLetting, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
@@ -29,8 +29,8 @@ void test() {
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Defend, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Defend, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Defend, true));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Bash  , true));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Thunderclap, true));
+    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::FallingStar  , true));
+    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Venerate, true));
     
     auto state = std::make_unique<SpireSim::Combat>(
         effectPool,

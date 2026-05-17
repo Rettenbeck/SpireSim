@@ -14,11 +14,11 @@ namespace SpireSim {
         Effects effects;
         PlayableType playableType = PlayableType::Playable;
         TargetingType targetingType = TargetingType::None;
-        int energyCost = 0, starCost = 0;
         CardLocation pileAfterPlay = CardLocation::Discard;
+        int energyCost = 0, starCost = 0;
         int damage = 0, block = 0, replay = 0;
         int vulnerable = 0, weak = 0, fragile = 0;
-        int cardsToChoose = 0;
+        int cardAnyParam1 = 0, cardAnyParam2 = 0, cardAnyParam3 = 0;
         
         void addEffect(EffectPool &effectPool, EffectId effectId) {
             effects.push_back(effectPool.retrieve(effectId));

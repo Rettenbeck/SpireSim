@@ -7,9 +7,10 @@ namespace SpireSim {
 
     enum class EffectType {
         None, UnpackCard, FinishCardPlayed,
-        DrawCards,
         ChooseCards, ChooseSingleCard,
-        CardDealDamage, CardGainBlock, CardApplyVulnerable,
+        DrawCards, GainEnergy, GainStars,
+        CardDealDamage, CardGainBlock, CardApplyVulnerable, CardApplyWeak,
+        LoseLifeSelf,
         MoveCard, MoveChosenCards,
         ModifyParentDamagePerc
     };

@@ -6,9 +6,12 @@
 namespace SpireSim {
 
     enum class EffectId {
+        CardDrawCards,
         ChooseCardsFromDeck, ChooseCardsFromDiscard,
         MoveChosenCardsToDeck, MoveChosenCardsToHand,
-        CardDealDamage, CardGainBlock, CardApplyVulnerable,
+        CardGainEnergy, CardGainStars,
+        CardDealDamage, CardGainBlock, CardApplyVulnerable, CardApplyWeak,
+        CardLoseLifeSelf
     };
     std::string ToString(EffectId e) { return ToString(int(e)); }
 

@@ -8,8 +8,10 @@ namespace SpireSim {
     enum class ParamType {
         None, FixedValue,
         CardProperty, CardAttackDamage, CardBlockValue,
-        CardApplyVulnerable, CardsPlayedThisCombat,
-        CardToChoose,
+        CardLoseLive,
+        CardApplyVulnerable, CardApplyWeak,
+        CardsPlayedThisCombat,
+        CardAnyParam1, CardAnyParam2, CardAnyParam3,
         XValue
     };
     std::string ToString(ParamType e) { return ToString(int(e)); }

@@ -30,11 +30,15 @@ namespace SpireSim {
             case EffectType::UnpackCard:            executeUnpackCard           (effect); return;
             case EffectType::FinishCardPlayed:      executeFinishCardPlayed     (effect); return;
             case EffectType::DrawCards:             executeDrawCards            (effect); return;
+            case EffectType::GainEnergy:            executeGainEnergy           (effect); return;
+            case EffectType::GainStars:             executeGainStars            (effect); return;
+            case EffectType::LoseLifeSelf:          executeLoseLifeSelf         (effect); return;
             case EffectType::ChooseSingleCard:      executeChooseSingleCard     (effect); return;
             case EffectType::ChooseCards:           executeChooseCards          (effect); return;
             case EffectType::CardDealDamage:        executeCardDealDamage       (effect); return;
             case EffectType::CardGainBlock:         executeCardGainBlock        (effect); return;
             case EffectType::CardApplyVulnerable:   executeCardApplyVulnerable  (effect); return;
+            case EffectType::CardApplyWeak:         executeCardApplyWeak        (effect); return;
             case EffectType::MoveCard:              executeMoveCard             (effect); return;
             case EffectType::MoveChosenCards:       executeMoveChosenCards      (effect); return;
             default: assert(false);

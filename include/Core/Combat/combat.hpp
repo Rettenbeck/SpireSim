@@ -73,6 +73,10 @@ namespace SpireSim {
         void checkForFightEnd();
         void entityDies(Id entityId);
 
+        void gainEnergy(int value);
+        void gainStars(int value);
+        void loseLifeSelf(int value);
+
         inline void onDamageDealt(Id sourceEntityId, CharacterData &sourceData,
                                   Id targetEntityId, CharacterData &targetData,
                                   int damage);
@@ -132,11 +136,15 @@ namespace SpireSim {
         void executeUnpackCard(Effect &effect);
         void executeFinishCardPlayed(Effect &effect);
         void executeDrawCards(Effect &effect);
+        void executeGainEnergy(Effect &effect);
+        void executeGainStars(Effect &effect);
+        void executeLoseLifeSelf(Effect &effect);
         void executeChooseSingleCard(Effect &effect);
         void executeChooseCards(Effect &effect);
         void executeCardDealDamage(Effect &effect);
         void executeCardGainBlock(Effect &effect);
         void executeCardApplyVulnerable(Effect &effect);
+        void executeCardApplyWeak(Effect &effect);
         void executeMoveChosenCards(Effect &effect);
         void executeMoveCard(Effect &effect);
 

@@ -41,6 +41,20 @@ namespace SpireSim {
         ecs.cCards[entityId].cardId = CardId::None;
     }
 
+    void Combat::gainEnergy(int value) {
+        variables.energy += value;
+    }
+
+    void Combat::gainStars(int value) {
+        variables.stars += value;
+    }
+
+    void Combat::loseLifeSelf(int value) {
+        auto& characterData = ecs.getPlayer().data;
+        characterData.hp -= value;
+        if(characterData.hp <= 0) entityDies(ecs.playerEntityId);
+    }
+
     inline void Combat::onDamageDealt(  Id sourceEntityId, CharacterData &sourceData,
                                         Id targetEntityId, CharacterData &targetData,
                                         int damage)

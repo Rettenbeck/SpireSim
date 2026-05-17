@@ -29,6 +29,21 @@ namespace SpireSim {
         drawCards(effect.resolutionParams[0]);
     }
     
+    void Combat::executeGainEnergy(Effect &effect) {
+        assert(effect.resolutionParams.size() > 0);
+        gainEnergy(effect.resolutionParams[0]);
+    }
+
+    void Combat::executeGainStars(Effect &effect) {
+        assert(effect.resolutionParams.size() > 0);
+        gainStars(effect.resolutionParams[0]);
+    }
+
+    void Combat::executeLoseLifeSelf(Effect &effect) {
+        assert(effect.resolutionParams.size() > 0);
+        loseLifeSelf(effect.resolutionParams[0]);
+    }
+
     void Combat::executeChooseSingleCard(Effect &effect) {
         assert(effect.resolutionParams.size() > 0);
         auto cardLocation = static_cast<CardLocation>(effect.resolutionParams[0]);
@@ -100,6 +115,26 @@ namespace SpireSim {
             case TargetingType::All:
                 for(auto id : ecs.enemyEntityIds) {
                     applyVulnerableToEnemy(id, vulnerableToApply);
+                }
+                break;
+            default:
+                assert(false);
+        }
+    }
+    
+    void Combat::executeCardApplyWeak(Effect &effect) {
+        assert(effect.resolutionParams.size() > 0);
+        auto& card = ecs.getCard(effect.sourceEntityId);
+        auto& cardData = cardPool.retrieveData(card);
+        int& weakToApply = effect.resolutionParams[0];
+
+        switch(cardData.targetingType) {
+            case TargetingType::Single:
+                applyWeakToEnemy(card.targetEntityId, weakToApply);
+                break;
+            case TargetingType::All:
+                for(auto id : ecs.enemyEntityIds) {
+                    applyWeakToEnemy(id, weakToApply);
                 }
                 break;
             default:

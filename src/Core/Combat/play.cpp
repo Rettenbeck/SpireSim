@@ -10,6 +10,7 @@ namespace SpireSim {
         variables.xValue = variables.energy;
         if(!force) {
             variables.energy -= card.data.energyCost;
+            variables.stars -= card.data.starCost;
         }
         card.targetEntityId = targetEntityId;
         moveCard(cardEntityId, CardLocation::Stack);

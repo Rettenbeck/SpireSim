@@ -43,6 +43,16 @@ namespace SpireSim {
             return addEvent({eventType, eventListener});
         }
 
+        CardTemplate& addStarCost(int starCostNormal, int starCostUpgraded) {
+            normalData.starCost = starCostNormal;
+            upgradedData.starCost = starCostUpgraded;
+            return *this;
+        }
+
+        CardTemplate& addStarCost(int starCost) {
+            return addStarCost(starCost, starCost);
+        }
+
         CardTemplate& applyVulnerable(int value, int valueUpgraded) {
             normalData.vulnerable = value;
             upgradedData.vulnerable = valueUpgraded;
@@ -50,9 +60,45 @@ namespace SpireSim {
             return *this;
         }
 
+        CardTemplate& applyVulnerable(int value) {
+            return applyVulnerable(value, value);
+        }
+
+        CardTemplate& applyWeak(int value, int valueUpgraded) {
+            normalData.weak = value;
+            upgradedData.weak = valueUpgraded;
+            addEffect(EffectId::CardApplyWeak);
+            return *this;
+        }
+
+        CardTemplate& applyWeak(int value) {
+            return applyWeak(value, value);
+        }
+
+        CardTemplate& drawCards(int value, int valueUpgraded) {
+            normalData.cardAnyParam1 = value;
+            upgradedData.cardAnyParam1 = value;
+            addEffect(EffectId::CardDrawCards);
+            return *this;
+        }
+        
+        CardTemplate& gainEnergy(int value, int valueUpgraded) {
+            normalData.cardAnyParam2 = value;
+            upgradedData.cardAnyParam2 = valueUpgraded;
+            addEffect(EffectId::CardGainEnergy);
+            return *this;
+        }
+        
+        CardTemplate& gainStars(int value, int valueUpgraded) {
+            normalData.cardAnyParam2 = value;
+            upgradedData.cardAnyParam2 = valueUpgraded;
+            addEffect(EffectId::CardGainStars);
+            return *this;
+        }
+        
         CardTemplate& chooseCards(int value, int valueUpgraded, CardLocation cardLocation) {
-            normalData.cardsToChoose = value;
-            upgradedData.cardsToChoose = valueUpgraded;
+            normalData.cardAnyParam1 = value;
+            upgradedData.cardAnyParam1 = valueUpgraded;
             EffectId effectId;
             switch (cardLocation) {
                 case CardLocation::Deck   : effectId = EffectId::ChooseCardsFromDeck   ; break;
@@ -75,8 +121,8 @@ namespace SpireSim {
         }
         
         CardTemplate& returnCardsToHand(int value, int valueUpgraded) {
-            normalData.cardsToChoose = value;
-            upgradedData.cardsToChoose = valueUpgraded;
+            normalData.cardAnyParam1 = value;
+            upgradedData.cardAnyParam1 = valueUpgraded;
             addEffect(EffectId::ChooseCardsFromDiscard);
             addEffect(EffectId::MoveChosenCardsToHand);
             return *this;
@@ -90,6 +136,13 @@ namespace SpireSim {
                                         Param(ParamType::CardsPlayedThisCombat),
                                         Param(ParamType::FixedValue, value))}
                             )));
+        }
+        
+        CardTemplate& loseLifeSelf(int value) {
+            normalData.cardAnyParam3 = value;
+            upgradedData.cardAnyParam3 = value;
+            addEffect(EffectId::CardLoseLifeSelf);
+            return *this;
         }
         
         std::string toString() {
