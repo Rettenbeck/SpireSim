@@ -20,9 +20,9 @@ void test() {
 
     SpireSim::Cards deck;
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Hologram, true));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
+    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, false));
+    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, false));
+    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, false));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Defend, true));
@@ -49,7 +49,8 @@ void test() {
     state->initialize();
     state->startCombat();
 
-    SpireSim::MCTS_Parallel mcts(state.get());
+    SpireSim::MCTS mcts(state.get());
+    // SpireSim::MCTS_Parallel mcts(state.get());
     mcts.heuristic = std::make_unique<SpireSim::MCTS_Heuristic_Random>(0);
     mcts.optionIterations = 14000;
 
@@ -64,6 +65,7 @@ void test() {
         int bestActionIndex = mcts.bestActionIndex;
         std::cout << "Best action found: " << bestActionIndex << "\n";
         std::cout << mcts.resultsToString();
+        std::cout << mcts.statsToString();
 
         std::string s;
         std::cin >> s;

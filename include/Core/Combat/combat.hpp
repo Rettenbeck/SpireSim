@@ -233,6 +233,7 @@ namespace SpireSim {
         int getPlayerBlock();
         int getTotalEnemyHp();
         int getHpLoss();
+        CardId getCardIdFromEntityId(Id cardEntityId);
         
         // Actions
         void generateActions();

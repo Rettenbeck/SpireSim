@@ -41,4 +41,8 @@ namespace SpireSim {
         return variables.initialHp - ecs.getPlayer().data.hp;
     }
 
+    CardId Combat::getCardIdFromEntityId(Id cardEntityId) {
+        return ecs.getCard(cardEntityId).cardId;
+    }
+
 }

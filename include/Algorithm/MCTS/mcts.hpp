@@ -2,6 +2,7 @@
 
 #include <Algorithm/MCTS/mcts_node.hpp>
 #include <Algorithm/MCTS/heuristics.hpp>
+#include <Algorithm/MCTS/mcts_result.hpp>
 
 
 namespace SpireSim {
@@ -14,7 +15,8 @@ namespace SpireSim {
         Combat *initialState = nullptr;
         int bestActionIndex = -1;
 
-        std::map<int, double> results;
+        std::map<int, MCTS_Result> results;
+        std::map<Id, Stats> mapStats;
 
         int optionIterations = 1000;
         double optionExplorationConstant = 1.414;
@@ -33,26 +35,26 @@ namespace SpireSim {
             bestActionIndex = -1;
             Combat internalState = *initialState;
 
+            mapStats.clear();
+
             internalState.increaseSeeds(optionAddedSeed);
             internalState.startCombat(true);
             MCTSNode root(internalState);
 
             for(int i = 0; i < optionIterations; ++i) {
                 MCTSNode* selected = select(&root);
-                // std::cout << "[MCTS] Selected: " << selected << "\n";
 
                 MCTSNode* expanded = selected;
                 if(!expanded->state.isCombatOver()) expand(selected);
-                // std::cout << "[MCTS] Expanded: " << expanded << "\n";
 
                 float score = rollout(expanded);
-                // std::cout << "[MCTS] Rollout score: " << score << "\n";
                 backpropagate(expanded, score);
             }
 
-            //std::cout << root.toString() << "\n";
             for(auto& child : root.children) {
-                results[child->parentActionIndex] = child->visits;
+                auto& result = results[child->parentActionIndex];
+                result.visits = child->visits;
+                result.totalScore = child->totalScore;
             }
 
             bestActionIndex = getBestActionIndex(root);
@@ -69,15 +71,6 @@ namespace SpireSim {
             }
             
             float loss = ((float) state.getHpLoss()) / ((float) state.getPlayerMaxHealth());
-
-            // float score = 0;
-            // score += state.getPlayerHealth() * 2.0f;
-            // score += state.getPlayerBlock () * 1.0f;
-            // score -= state.getTotalEnemyHp() * 1.5f;
-
-            // if(score > (MAX_SCORE - 1)) score = MAX_SCORE - 1;
-            // if(score < (1 - MAX_SCORE)) score = 1 - MAX_SCORE;
-
             return -loss;
         }
 
@@ -89,6 +82,7 @@ namespace SpireSim {
                 double bestUCB1 = -std::numeric_limits<double>::infinity();
 
                 for (auto& child : current->children) {
+                    if(child->parentActionCardId != ENTITY_NONE) mapStats[child->parentActionCardId].countPlayable++;
                     double ucb1 = calculateUCB1(*child, current->visits, optionExplorationConstant);
                     if (ucb1 > bestUCB1) {
                         bestUCB1 = ucb1;
@@ -98,6 +92,12 @@ namespace SpireSim {
 
                 if (bestChild == nullptr) break; 
                 current = bestChild;
+
+                if(current->parentActionCardId != ENTITY_NONE) {
+                    auto& stats = mapStats[current->parentActionCardId];
+                    stats.countPlayed++;
+                    if(current->visits > 0) stats.countPlayedWeighted += (current->totalScore) / (current->visits);
+                }
             }
 
             return current;
@@ -109,7 +109,8 @@ namespace SpireSim {
             }
 
             // 1. Wähle eine unversuchte Aktion (meistens die letzte, da effizienter beim Löschen)
-            int actionIndex = node->untriedActionIndices.back();
+            int actionCardEntityId = node->untriedActionIndices.back();
+            int actionIndex = node->untriedActionIndices.size() - 1;
             node->untriedActionIndices.pop_back();
 
             // 2. Erzeuge einen neuen Combat durch Kopie und führe die Aktion aus
@@ -120,6 +121,7 @@ namespace SpireSim {
             auto child = std::make_unique<MCTSNode>(nextState);
             child->parent = node;
             child->parentActionIndex = actionIndex;
+            child->parentActionCardId = actionCardEntityId;
 
             // 4. Füge das Kind der Liste hinzu und gib einen Pointer darauf zurück
             node->children.push_back(std::move(child));
@@ -176,8 +178,34 @@ namespace SpireSim {
             std::stringstream ss;
             ss << "Results:\n";
 
-            for(auto [action, visits] : results) {
-                ss << "  Action " << action << " has score: " << (visits / (double) optionIterations) << "\n";
+            for(auto [action, result] : results) {
+                float score_per_visit = (result.visits > 0) ? (result.totalScore / result.visits) : -1;
+                float visits_per_iteration = (optionIterations > 0) ? (result.visits / (double) optionIterations) : -1;
+
+                ss << "  Action " << action << " has visited% : " << visits_per_iteration
+                    << "; expected score: " << score_per_visit
+                    << "\n";
+            }
+            return ss.str();
+        }
+
+        std::string statsToString() {
+            if(mapStats.empty()) return "No stats\n";
+            
+            std::stringstream ss;
+            ss << "Stats:\n";
+
+            for(auto& [cardEntityId, stats] : mapStats) {
+                float played_perc = (stats.countPlayable > 0) ? (((double) stats.countPlayed) / ((double) stats.countPlayable)) : -1;
+                float played_weighted_perc = (stats.countPlayable > 0) ?
+                    (((double) stats.countPlayedWeighted) / ((double) stats.countPlayable)) : -1;
+
+                ss << "  Card " << cardEntityId
+                    << " (" << CardIdToString(initialState->getCardIdFromEntityId(cardEntityId)) << ")"
+                    << " seen: " << stats.countPlayable
+                    << "; played: " << stats.countPlayed << " (" << played_perc << ")"
+                    << "; played weighted: " << stats.countPlayedWeighted << " (" << played_weighted_perc << ")"
+                    << "\n";
             }
             return ss.str();
         }

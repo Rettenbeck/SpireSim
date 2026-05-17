@@ -9,17 +9,17 @@ namespace SpireSim {
         state.actions.clear();
         if(state.combatOver) return;
         state.actions.push_back(Action(ActionType::EndTurn));
-        for(auto& cardId : pileHandler.hand) {
-            auto& card = ecs.getCard(cardId);
+        for(auto& cardEntityId : pileHandler.hand) {
+            auto& card = ecs.getCard(cardEntityId);
             if(!isCardPlayable(card)) continue;
             switch(card.data.targetingType) {
                 case TargetingType::Single:
                     for(auto& enemyId : ecs.enemyEntityIds) {
-                        state.actions.push_back(Action(ActionType::PlayCard, cardId, enemyId));
+                        state.actions.push_back(Action(ActionType::PlayCard, cardEntityId, enemyId));
                     }
                     break;
                 default:
-                    state.actions.push_back(Action(ActionType::PlayCard, cardId));
+                    state.actions.push_back(Action(ActionType::PlayCard, cardEntityId));
                     break;
             }
         }
