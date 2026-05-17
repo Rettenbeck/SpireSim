@@ -2,6 +2,7 @@
 #include <include.hpp>
 
 void test() {
+
     int difficultyMoreHp  = 0;  // Ascension 7
     int difficultyMoreDmg = 0;  // Ascension 9
     
@@ -20,9 +21,9 @@ void test() {
 
     SpireSim::Cards deck;
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Hologram, true));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, false));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, false));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, false));
+    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
+    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
+    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
     deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Defend, true));
@@ -50,11 +51,10 @@ void test() {
     state->startCombat();
 
     SpireSim::MCTS mcts(state.get());
-    // SpireSim::MCTS_Parallel mcts(state.get());
     mcts.heuristic = std::make_unique<SpireSim::MCTS_Heuristic_Random>(0);
     mcts.optionIterations = 14000;
-
-    std::cout << "Threads: " << std::thread::hardware_concurrency() << "\n";
+    mcts.optionCombats = 1;
+    mcts.optionNumberThreads = -1;
 
     for(int i = 0; i < 20; i++) {
         std::cout << state->toString() << "\n\n";
@@ -62,10 +62,10 @@ void test() {
 
         std::cout << "Calculating... \n";
         mcts.run();
-        int bestActionIndex = mcts.bestActionIndex;
-        std::cout << "Best action found: " << bestActionIndex << "\n";
-        std::cout << mcts.resultsToString();
-        std::cout << mcts.statsToString();
+        // int bestActionIndex = mcts.bestActionIndex;
+        // std::cout << "Best action found: " << bestActionIndex << "\n";
+        // std::cout << mcts.resultsToString();
+        std::cout << mcts.toString();
 
         std::string s;
         std::cin >> s;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Core/Combat/include.hpp>
-#include <Algorithm/stats.hpp>
+#include <Algorithm/card_stats.hpp>
 
 
 namespace SpireSim {
@@ -18,6 +18,7 @@ namespace SpireSim {
 
         double visits = 0;
         double totalScore = 0;
+        double totalHpLoss = 0;
 
         Id cardEntityIdToPlay = ENTITY_NONE;
 

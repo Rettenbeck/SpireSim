@@ -1,3 +1,3 @@
 #pragma once
 
-#include <Algorithm/MCTS/mcts_parallel.hpp>
+#include <Algorithm/MCTS/mcts.hpp>
