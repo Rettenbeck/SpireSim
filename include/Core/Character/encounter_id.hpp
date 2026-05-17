@@ -6,7 +6,7 @@
 namespace SpireSim {
 
     enum class EncounterId {
-        None, ShrinkerBeetleWeak, FuzzyWormCrawlerWeak, SF_Test,
+        None, ShrinkerBeetleWeak, FuzzyWormCrawlerWeak, SF_Test, Nibbits,
         Count
     };
     std::string ToString(EncounterId e) { return ToString(int(e)); }

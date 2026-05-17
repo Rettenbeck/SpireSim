@@ -7,17 +7,18 @@
 namespace SpireSim {
 
     struct EnemyMovePool {
+        BuffPool &buffPool;
         int isDifficult;
         EnemyMoves enemyMoves;
         
-        EnemyMovePool(BuffPool &buffPool, int isDifficult_ = 0) : isDifficult(isDifficult_) {
+        EnemyMovePool(BuffPool &buffPool_, int isDifficult_ = 0) : buffPool(buffPool_), isDifficult(isDifficult_) {
             fillNextEnemyMoveList();
-            createEnemyMovePool(buffPool);
+            createEnemyMovePool();
         }
         
         void createBlankArray(int index) {
             while(index >= enemyMoves.size()) {
-                enemyMoves.push_back(EnemyMove());
+                enemyMoves.push_back(EnemyMove(buffPool));
             }
         }
         
@@ -35,24 +36,19 @@ namespace SpireSim {
         }
 
         
-        void createEnemyMovePool(BuffPool &buffPool) {
+        void createEnemyMovePool() {
             createBlankArray(int(EnemyMoveId::Count));
             
-            auto& moveShrinker = retrieveForCreation(EnemyMoveId::Shrinker);
-            auto& moveChomp = retrieveForCreation(EnemyMoveId::Chomp);
-            auto& moveStomp = retrieveForCreation(EnemyMoveId::Stomp);
-            
-            auto& moveAcidGoop = retrieveForCreation(EnemyMoveId::AcidGoop);
-            auto& moveInhale = retrieveForCreation(EnemyMoveId::Inhale);
-            
-            auto buffShrink = buffPool.createBuffFromTemplate(BuffId::Shrink);
-            moveShrinker.debuffsToApply.push_back(buffShrink);
+            retrieveForCreation(EnemyMoveId::Shrinker).addDebuff(BuffId::Shrink);
+            retrieveForCreation(EnemyMoveId::Chomp).addAttack( 7 + 1 * isDifficult);
+            retrieveForCreation(EnemyMoveId::Stomp).addAttack(13 + 1 * isDifficult);
 
-            moveChomp.addAttack( 7 + 1 * isDifficult);
-            moveStomp.addAttack(13 + 1 * isDifficult);
-            
-            moveAcidGoop.addAttack(4 + 2 * isDifficult);
-            moveInhale.strengthGain = 7;
+            retrieveForCreation(EnemyMoveId::AcidGoop).addAttack(4 + 2 * isDifficult);
+            retrieveForCreation(EnemyMoveId::Inhale).gainStrength(7);
+
+            retrieveForCreation(EnemyMoveId::Butt ).addAttack(12 + 1 * isDifficult);
+            retrieveForCreation(EnemyMoveId::Slice).addAttack(6).addBlock(5);
+            retrieveForCreation(EnemyMoveId::Hiss ).gainStrength(2);
         }
         
         std::string toString() {

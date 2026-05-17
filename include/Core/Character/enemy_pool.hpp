@@ -19,12 +19,19 @@ namespace SpireSim {
                 enemies.push_back(Enemy());
             }
         }
-        
+        // 
         Enemy& retrieveForCreation(EnemyId enemyId) {
             int index = int(enemyId);
             createBlankArray(index);
             enemies[index].enemyId = enemyId;
             return enemies[index];
+        }
+        
+        Enemy& retrieveForCreation(EnemyId enemyId, EnemyMoveId initialMove, int maxHp, int potentialAdditionalMaxHp = 0) {
+            auto& enemy = retrieveForCreation(enemyId);
+            enemy.initialMoves.push_back(initialMove);
+            enemy.setMaxHp(maxHp, potentialAdditionalMaxHp);
+            return enemy;
         }
         
         inline Enemy& retrieve(EnemyId enemyId) {
@@ -35,14 +42,10 @@ namespace SpireSim {
         
         void createEnemyPool(EnemyMovePool &enemyMovePool) {
             createBlankArray(int(EnemyId::Count));
-            auto& enemyShrinkerBeetle = retrieveForCreation(EnemyId::ShrinkerBeetle);
-            auto& enemyFuzzyWormCrawler = retrieveForCreation(EnemyId::FuzzyWormCrawler);
             
-            enemyShrinkerBeetle.initialMoves.push_back(EnemyMoveId::Shrinker);
-            enemyShrinkerBeetle.setMaxHp(38 + 2 * isDifficult, 2);
-            
-            enemyFuzzyWormCrawler.initialMoves.push_back(EnemyMoveId::AcidGoop);
-            enemyFuzzyWormCrawler.setMaxHp(55 + 2 * isDifficult, 2);
+            retrieveForCreation(EnemyId::ShrinkerBeetle, EnemyMoveId::Shrinker, 38 + 2 * isDifficult, 2);
+            retrieveForCreation(EnemyId::FuzzyWormCrawler, EnemyMoveId::AcidGoop, 55 + 2 * isDifficult, 2);
+            retrieveForCreation(EnemyId::Nibbit, EnemyMoveId::Butt, 42 + 2 * isDifficult, 4);
         }
         
         std::string toString() {

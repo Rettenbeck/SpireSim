@@ -1,24 +1,41 @@
 #pragma once
 
-#include <Core/Buff/buff.hpp>
+#include <Core/Buff/buff_pool.hpp>
 #include <Core/Character/Move/next_move_list.hpp>
 
 namespace SpireSim {
 
     struct EnemyMove {
-        EnemyMoveId enemyMoveId;
+        BuffPool &buffPool;
+        EnemyMoveId enemyMoveId = EnemyMoveId::None;
         int damage = 0, attacks = 0, block = 0;
         int strengthGain = 0, vigor = 0;
         int applyWeak = 0, applyFrail = 0, applyVulnerable = 0;
         Buffs buffsToGain;
         Buffs debuffsToApply;
 
-        EnemyMove() : enemyMoveId(EnemyMoveId::None) {}
-        EnemyMove(EnemyMoveId enemyMoveId_) : enemyMoveId(enemyMoveId_) {}
+        EnemyMove(BuffPool &buffPool_) : buffPool(buffPool_) {}
 
-        inline void addAttack(int damage_, int attacks_ = 1) {
+        EnemyMove& addAttack(int damage_, int attacks_ = 1) {
             damage = damage_;
             attacks = attacks_;
+            return *this;
+        }
+
+        EnemyMove& addBlock(int block_) {
+            block = block_; return *this;
+        }
+
+        EnemyMove& gainStrength(int value) {
+            strengthGain = value; return *this;
+        }
+
+        EnemyMove& addDebuff(const Buff &buff) {
+            debuffsToApply.push_back(buff); return *this;
+        }
+
+        EnemyMove& addDebuff(BuffId buffId) {
+            addDebuff(buffPool.createBuffFromTemplate(buffId)); return *this;
         }
 
         std::string toString() {

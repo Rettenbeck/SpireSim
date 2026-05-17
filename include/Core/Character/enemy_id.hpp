@@ -6,7 +6,13 @@
 namespace SpireSim {
 
     enum class EnemyId {
-        None, ShrinkerBeetle, FuzzyWormCrawler,
+        None,
+
+        // Overgrowth
+        
+        // Overgrowth - Normal
+        ShrinkerBeetle, FuzzyWormCrawler, Nibbit,
+
         Count
     };
     std::string ToString(EnemyId e) { return ToString(int(e)); }

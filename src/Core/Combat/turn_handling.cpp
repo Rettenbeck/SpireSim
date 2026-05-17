@@ -90,8 +90,8 @@ namespace SpireSim {
             case TurnId::PlayerUpkeep: handlePhase_PlayerUpkeep(); return;
             case TurnId::Player      : handlePhase_Player      (); return;
             case TurnId::PlayerEnd   : handlePhase_PlayerEnd   (); return;
-            case TurnId::EnemyUpkeep : handlePhase_Enemy       (); return;
-            case TurnId::Enemy       : handlePhase_EnemyUpkeep (); return;
+            case TurnId::EnemyUpkeep : handlePhase_EnemyUpkeep (); return;
+            case TurnId::Enemy       : handlePhase_Enemy       (); return;
             case TurnId::EnemyEnd    : handlePhase_EnemyEnd    (); return;
             default: assert(false);
         }

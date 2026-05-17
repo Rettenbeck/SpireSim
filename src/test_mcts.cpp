@@ -41,7 +41,7 @@ void test() {
         movePool,
         enemyPool,
         playerFactory.get(SpireSim::PlayerId::IronClad),
-        encounterFactory.get(SpireSim::EncounterId::SF_Test),
+        encounterFactory.get(SpireSim::EncounterId::Nibbits),
         relicFactory.get({SpireSim::RelicId::BagOfPreparation, SpireSim::RelicId::CentennialPuzzle}),
         potionFactory.get({SpireSim::PotionId::FirePotion, SpireSim::PotionId::FlexPotion}),
         deck);
@@ -60,12 +60,9 @@ void test() {
         std::cout << state->toString() << "\n\n";
         std::cout << state->actionsToString() << "\n\n";
 
-        std::cout << "Calculating... \n";
-        mcts.run();
-        // int bestActionIndex = mcts.bestActionIndex;
-        // std::cout << "Best action found: " << bestActionIndex << "\n";
-        // std::cout << mcts.resultsToString();
-        std::cout << mcts.toString();
+        // std::cout << "Calculating... \n";
+        // mcts.run();
+        // std::cout << mcts.toString();
 
         std::string s;
         std::cin >> s;
