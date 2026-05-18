@@ -17,12 +17,9 @@ namespace SpireSim {
         BuffTemplate(int amountParams_ = 0, bool dependentOnCreator_ = false)
             : amountParams(amountParams_), dependentOnCreator(dependentOnCreator_) {}
 
-        std::string toString() {
-            std::stringstream ss;
-            ss << "BuffId: " << ToString(buffId) << "BuffCat: " << ToString(buffCategory) << "; amountParams: " << amountParams
-                 << "; dependentOnCreator: " << dependentOnCreator;
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(BuffTemplate, buffId, buffCategory, amountParams, dependentOnCreator, eventList);
+        TO_STRING_METHOD
+    
     };
     using BuffTemplates = std::vector<BuffTemplate>;
 

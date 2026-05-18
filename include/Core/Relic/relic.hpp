@@ -16,12 +16,15 @@ namespace SpireSim {
 
         Relic() {}
 
-        std::string toString() {
-            std::stringstream ss;
-            ss << "RelicId: " << ToString(relicId) << "; param1: " << params[0] << "; param1: " << params[1]
-                << "; Events: " << eventList.size();
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Relic, relicId, params, eventList);
+        TO_STRING_METHOD
+    
+        // std::string toString() {
+        //     std::stringstream ss;
+        //     ss << "RelicId: " << ToString(relicId) << "; param1: " << params[0] << "; param1: " << params[1]
+        //         << "; Events: " << eventList.size();
+        //     return ss.str();
+        // }
     };
     using Relics = std::vector<Relic>;
 

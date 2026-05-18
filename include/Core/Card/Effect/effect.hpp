@@ -47,28 +47,31 @@ namespace SpireSim {
             addConditions(conditions_);
         }
         
-        std::string toString() {
-            std::stringstream ss;
-            ss << "effectType: " << ToString(effectType)
-                << "; sourceEntityId: " << sourceEntityId
-                // << "; affectedEntityId: " << affectedEntityId
-                << "; ";
-            if(params.size() > 0) {
-                ss << "; Params: { ";
-                for(auto param : params) {
-                    ss << param.toString() << "; ";
-                }
-                ss << "} ";
-            }
-            if(params.size() > 0) {
-                ss << "; Conditions: { ";
-                for(auto condition : conditions) {
-                    ss << condition.toString() << "; ";
-                }
-                ss << "} ";
-            }
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Effect, effectType, params, conditions, resolutionParams, sourceEntityId);
+        TO_STRING_METHOD
+    
+        // std::string toString() {
+        //     std::stringstream ss;
+        //     ss << "effectType: " << ToString(effectType)
+        //         << "; sourceEntityId: " << sourceEntityId
+        //         // << "; affectedEntityId: " << affectedEntityId
+        //         << "; ";
+        //     if(params.size() > 0) {
+        //         ss << "; Params: { ";
+        //         for(auto param : params) {
+        //             ss << param.toString() << "; ";
+        //         }
+        //         ss << "} ";
+        //     }
+        //     if(params.size() > 0) {
+        //         ss << "; Conditions: { ";
+        //         for(auto condition : conditions) {
+        //             ss << condition.toString() << "; ";
+        //         }
+        //         ss << "} ";
+        //     }
+        //     return ss.str();
+        // }
     };
     using Effects = std::vector<Effect>;
 

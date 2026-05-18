@@ -51,7 +51,7 @@ namespace SpireSim {
     
     std::string Combat::toString() {
         std::stringstream ss;
-        ss << "Ecs: " << ecs.toString() << "\n";
+        ss << "Ecs: " << ecs.toStringReadable() << "\n";
         ss << "PileHandler: " << pileHandler.toString() << "\n";
         ss << "CombatVariables: " << variables.toString() << "\n";
         ss << "EventRegistry: " << ToString(state.eventRegistry) << "\n";

@@ -1,0 +1,96 @@
+#pragma once
+
+#include <Algorithm/algorithm.hpp>
+
+
+namespace SpireSim {
+
+    class Implementor : public Algorithm {
+    public:
+    
+        std::unique_ptr<Algorithm> algorithm = nullptr;
+        Combat *initialState = nullptr;
+
+        int optionIterations = 100;
+        int optionAddedSeed = 0;
+        int optionNumberThreads = 1;
+
+        Implementor() {}
+        Implementor(Combat *initialState_) : initialState(initialState_) {}
+        Implementor(Combat *initialState_, std::unique_ptr<Algorithm> algorithm_)
+            : initialState(initialState_), algorithm(std::move(algorithm_)) {}
+
+        void run() {
+            assert(initialState);
+            assert(algorithm);
+            cardStatsMap.clear();
+            result.clear();
+
+            for(int i = 0; i < optionIterations; i++) {
+                CardStatsMap sc_CardStatsMap;
+                Result sc_Result;
+                int addedSeed = optionAddedSeed + i * optionIterations;
+
+                runSingleCombat(sc_CardStatsMap, sc_Result, addedSeed);
+
+                Merge(cardStatsMap, sc_CardStatsMap);
+                Merge(result, sc_Result);
+
+            }
+
+            double bestActionScore = -99999;
+            for(auto& [actionIndex, score] : result.scoreMap) {
+                if(score > bestActionScore) {
+                    bestActionScore = score;
+                    bestActionIndex = actionIndex;
+                }
+            }
+        }
+
+        void runSingleCombat(CardStatsMap &sc_CardStats, Result &sc_ResultMap, int addedSeed = 0) {
+            assert(optionNumberThreads != 0);
+            int numThreads = (optionNumberThreads == -1) ? std::thread::hardware_concurrency() : optionNumberThreads;
+            int iterationsPerThread = optionIterations / numThreads;
+
+            assert(algorithm);
+            assert(initialState);
+
+            sc_ResultMap.clear();
+            std::vector<CardStatsMap> threadCardStats(numThreads);
+            std::vector<Result> threadResults(numThreads);
+            std::vector<std::thread> workers;
+
+            for(int i = 0; i < numThreads; ++i) {
+                workers.emplace_back([&, i]() {
+                    algorithm->initialState = initialState;
+                    algorithm->run();
+                    
+                    for(auto& [cardEntityId, stats] : algorithm->cardStatsMap) {
+                        threadCardStats[i][cardEntityId] = stats;
+                    }
+                    for(auto& [actionIndex, score] : algorithm->result.scoreMap) {
+                        threadResults[i].scoreMap[actionIndex] = score;
+                    }
+                });
+            }
+
+            for(auto& t : workers) t.join();
+
+            Merge(sc_CardStats, threadCardStats);
+            Merge(sc_ResultMap, threadResults);
+        }
+
+        std::unique_ptr<Algorithm> clone() {
+            return std::make_unique<Implementor>(initialState, algorithm->clone());
+        }
+        
+        std::string toString() {
+            std::stringstream ss;
+            ss << resultToString() << "\n";
+            ss << ToString(cardStatsMap) << "\n";
+            return ss.str();
+        }
+
+    };
+
+}

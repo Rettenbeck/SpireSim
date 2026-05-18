@@ -10,15 +10,17 @@ namespace SpireSim {
     const Id ENTITY_NONE = -1;
 
     struct Entity {
-        Id id;
-        Id ownerId;
+        Id id, ownerId;
         
         Entity(Id id_, Id ownerId_ = ENTITY_NONE) : id(id_), ownerId(ownerId_) {}
         
-        std::string toString() {
-            std::stringstream ss; ss << "id: " << id << "; ownerId: " << ownerId;
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Entity, id, ownerId);
+        TO_STRING_METHOD
+    
+        // std::string toString() {
+        //     std::stringstream ss; ss << "id: " << id << "; ownerId: " << ownerId;
+        //     return ss.str();
+        // }
     };
     using Entities = std::vector<Entity>;
 

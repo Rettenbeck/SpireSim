@@ -42,20 +42,23 @@ namespace SpireSim {
             modifications.push_back(modification);
         }
         
-        std::string toString() {
-            std::stringstream ss;
-            ss << "cardId: " << ToString(cardId) << "; Location: " << ToString(location) << "; locationIndex: " << locationIndex << "; isUpgraded: " << isUpgraded;
-            ss << "; Attributes: [ " << data.toString() << " ]";
-            ss << "; Enchantment: " << enchantment.toString();
-            if(modifications.size() > 0) {
-                ss << "; Modifications: { ";
-                for(auto modification : modifications) {
-                    ss << modification.toString() << "; ";
-                }
-            ss << "}";
-            }
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Card, cardId, location, locationIndex, isUpgraded, targetEntityId, data, enchantment, modifications);
+        TO_STRING_METHOD
+    
+        // std::string toString() {
+        //     std::stringstream ss;
+        //     ss << "cardId: " << ToString(cardId) << "; Location: " << ToString(location) << "; locationIndex: " << locationIndex << "; isUpgraded: " << isUpgraded;
+        //     ss << "; Attributes: [ " << data.toString() << " ]";
+        //     ss << "; Enchantment: " << enchantment.toString();
+        //     if(modifications.size() > 0) {
+        //         ss << "; Modifications: { ";
+        //         for(auto modification : modifications) {
+        //             ss << modification.toString() << "; ";
+        //         }
+        //     ss << "}";
+        //     }
+        //     return ss.str();
+        // }
     };
     using Cards = std::vector<Card>;
 

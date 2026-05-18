@@ -50,19 +50,23 @@ void test() {
     state->initialize();
     state->startCombat();
 
-    SpireSim::MCTS mcts(state.get());
-    mcts.heuristic = std::make_unique<SpireSim::MCTS_Heuristic_Random>(0);
-    mcts.optionIterations = 14000;
-    mcts.optionCombats = 1;
-    mcts.optionNumberThreads = -1;
+    auto mcts = std::make_unique<SpireSim::MCTS>(state.get(), std::make_unique<SpireSim::MCTS_Heuristic_Random>(0));
+    mcts->optionIterations = 1400;
+    mcts->optionCombats = 1;
+    mcts->optionNumberThreads = 1;
+
+    SpireSim::Implementor implementor(state.get(), std::move(mcts));
+    implementor.optionIterations = 1;
+    implementor.optionNumberThreads = 1;
 
     for(int i = 0; i < 20; i++) {
         std::cout << state->toString() << "\n\n";
         std::cout << state->actionsToString() << "\n\n";
+        state->exportJsonToFile();
 
-        // std::cout << "Calculating... \n";
-        // mcts.run();
-        // std::cout << mcts.toString();
+        std::cout << "Calculating... \n";
+        implementor.run();
+        std::cout << implementor.toString();
 
         std::string s;
         std::cin >> s;

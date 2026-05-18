@@ -26,11 +26,14 @@ namespace SpireSim {
             }
         }
         
-        std::string toString() {
-            std::stringstream ss;
-            ss << "condition: " << ToString(conditionType) << "; param1: " << param1.toString() << "; param2: " << param2.toString();
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Condition, conditionType, param1, param2);
+        TO_STRING_METHOD
+    
+        // std::string toString() {
+        //     std::stringstream ss;
+        //     ss << "condition: " << ToString(conditionType) << "; param1: " << param1.toString() << "; param2: " << param2.toString();
+        //     return ss.str();
+        // }
     };
     using Conditions = std::vector<Condition>;
 

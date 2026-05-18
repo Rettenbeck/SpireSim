@@ -129,14 +129,21 @@ namespace SpireSim {
             return cBuffs[entityId];
         }
 
-        inline bool isRelic (Id entityId) { return cRelics [entityId].relicId  != RelicId ::None; }
-        inline bool isPotion(Id entityId) { return cPotions[entityId].potionId != PotionId::None; }
-        inline bool isCard  (Id entityId) { return cCards  [entityId].cardId   != CardId  ::None; }
-        inline bool isPlayer(Id entityId) { return cPlayers[entityId].playerId != PlayerId::None; }
-        inline bool isEnemy (Id entityId) { return cEnemies[entityId].enemyId  != EnemyId ::None; }
-        inline bool isBuff  (Id entityId) { return cBuffs  [entityId].buffId   != BuffId  ::None; }
+        inline bool isRelic (Id entityId) const { return cRelics [entityId].relicId  != RelicId ::None; }
+        inline bool isPotion(Id entityId) const { return cPotions[entityId].potionId != PotionId::None; }
+        inline bool isCard  (Id entityId) const { return cCards  [entityId].cardId   != CardId  ::None; }
+        inline bool isPlayer(Id entityId) const { return cPlayers[entityId].playerId != PlayerId::None; }
+        inline bool isEnemy (Id entityId) const { return cEnemies[entityId].enemyId  != EnemyId ::None; }
+        inline bool isBuff  (Id entityId) const { return cBuffs  [entityId].buffId   != BuffId  ::None; }
 
-        inline isValidEntity(Id entityId) {
+        inline bool isValid(const Relic  &ref, Id entityId) const { return isRelic (entityId); }
+        inline bool isValid(const Potion &ref, Id entityId) const { return isPotion(entityId); }
+        inline bool isValid(const Card   &ref, Id entityId) const { return isCard  (entityId); }
+        inline bool isValid(const Player &ref, Id entityId) const { return isPlayer(entityId); }
+        inline bool isValid(const Enemy  &ref, Id entityId) const { return isEnemy (entityId); }
+        inline bool isValid(const Buff   &ref, Id entityId) const { return isBuff  (entityId); }
+
+        inline isValidEntity(Id entityId) const {
             return (isRelic (entityId) ||
                     isPotion(entityId) ||
                     isCard  (entityId) ||
@@ -146,6 +153,28 @@ namespace SpireSim {
         }
 
         template<typename T>
+        friend void vector_to_json(json& j, const std::vector<T> &vec, const std::string vector_name, const ECS& self) {
+            for(int i = 0; i < vec.size(); i++) {
+                const T& ref = vec[i];
+                if(self.isValid(ref, i)) {
+                    j[vector_name].push_back(vec[i]);
+                }
+            }
+        }
+        
+        friend void to_json(json& j, const ECS& self) {
+            vector_to_json(j, self.cRelics , "cRelics" , self);
+            vector_to_json(j, self.cPotions, "cPotions", self);
+            vector_to_json(j, self.cCards  , "cCards"  , self);
+            vector_to_json(j, self.cPlayers, "cPlayers", self);
+            vector_to_json(j, self.cEnemies, "cEnemies", self);
+            vector_to_json(j, self.cBuffs  , "cBuffs"  , self);
+            j["cRefs"] = self.cRefs;
+        }
+
+        TO_STRING_METHOD
+    
+        template<typename T>
         std::string vectorToString(std::string description, std::vector<T> &vec) {
             std::stringstream ss;
             ss << description << ": { ";
@@ -154,7 +183,7 @@ namespace SpireSim {
             return ss.str();
         }
         
-        std::string toString() {
+        std::string toStringReadable() {
             std::stringstream ss;
             ss << "\n";
             ss << "  Entities: { ";
@@ -184,6 +213,7 @@ namespace SpireSim {
         
             return ss.str();
         }
+
     };
 
 }

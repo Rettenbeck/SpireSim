@@ -13,4 +13,5 @@
 #include <Core/Combat/action.cpp>
 #include <Core/Combat/card_handling.cpp>
 #include <Core/Combat/play.cpp>
+#include <Core/Combat/serialization.cpp>
 #include <Core/Combat/to_string.cpp>

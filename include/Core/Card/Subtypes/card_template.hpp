@@ -145,12 +145,15 @@ namespace SpireSim {
             return *this;
         }
         
-        std::string toString() {
-            std::stringstream ss;
-            ss << "cardId: " << ToString(cardId) << "; normal: [" << normalData.toString()
-                << " ]; upgraded: [" << upgradedData.toString() << "]";
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(CardTemplate, cardId, normalData, upgradedData, eventList);
+        TO_STRING_METHOD
+    
+        // std::string toString() {
+        //     std::stringstream ss;
+        //     ss << "cardId: " << ToString(cardId) << "; normal: [" << normalData.toString()
+        //         << " ]; upgraded: [" << upgradedData.toString() << "]";
+        //     return ss.str();
+        // }
     };
     using CardTemplates = std::vector<CardTemplate>;
 

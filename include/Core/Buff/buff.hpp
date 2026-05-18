@@ -23,14 +23,17 @@ namespace SpireSim {
             params[1] = param2;
         }
 
-        std::string toString() {
-            std::stringstream ss;
-            ss << "BuffId: " << ToString(buffId) << "; Params: { ";
-            for(int i = 0; i < BUFF_MAX_AMOUNT_PARAMS; i++) ss << params[i] << "; ";
-            ss << "}";
-            ss << "; createdBy: " << createdBy;
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Buff, buffId, params, createdBy);
+        TO_STRING_METHOD
+    
+        // std::string toString() {
+        //     std::stringstream ss;
+        //     ss << "BuffId: " << ToString(buffId) << "; Params: { ";
+        //     for(int i = 0; i < BUFF_MAX_AMOUNT_PARAMS; i++) ss << params[i] << "; ";
+        //     ss << "}";
+        //     ss << "; createdBy: " << createdBy;
+        //     return ss.str();
+        // }
     };
     using Buffs = std::vector<Buff>;
 

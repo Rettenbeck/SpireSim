@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Core/Combat/ecs.hpp>
-#include <Core/Card/Subtypes/card_location.hpp>
+// #include <Core/Card/card.hpp>
 
 
 namespace SpireSim {
@@ -125,6 +125,21 @@ namespace SpireSim {
             exhaust.clear(); removed.clear(); stack.clear();
         }
         
+        void pile_to_json(json& j, const Pile &pile, const std::string pile_name, const ECS &ecs) const {
+            for(auto cardEntityId : pile) {
+                j[pile_name] = ecs.cCards[cardEntityId];
+            }
+        }
+        
+        void to_json(json& j, const ECS &ecs) const {
+            pile_to_json(j, deck   , "deck"   , ecs);
+            pile_to_json(j, hand   , "hand"   , ecs);
+            pile_to_json(j, discard, "discard", ecs);
+            pile_to_json(j, exhaust, "exhaust", ecs);
+            pile_to_json(j, removed, "removed", ecs);
+            pile_to_json(j, stack  , "stack"  , ecs);
+        }
+
         std::string pileToString(std::string description, Pile &pile) {
             std::stringstream ss;
             ss << description << ": ";

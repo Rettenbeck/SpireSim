@@ -28,4 +28,13 @@ namespace SpireSim {
 
     };
 
+    Result& Merge(Result& left, const Result& right) {
+        return left += right;
+    }
+
+    Result& Merge(Result& target, const std::vector<Result> &vec) {
+        for(auto& map : vec) Merge(target, map);
+        return target;
+    }
+
 }

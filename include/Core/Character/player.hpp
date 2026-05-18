@@ -16,11 +16,14 @@ namespace SpireSim {
             data.maxHp = maxHp_; data.hp = maxHp_;
         }
 
-        std::string toString() {
-            std::stringstream ss;
-            ss << "Data: [ " << data.toString() << " ]";
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Player, playerId, data);
+        TO_STRING_METHOD
+    
+        // std::string toString() {
+        //     std::stringstream ss;
+        //     ss << "Data: [ " << data.toString() << " ]";
+        //     return ss.str();
+        // }
     };
     using Players = std::vector<Player>;
 

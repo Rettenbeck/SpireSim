@@ -30,16 +30,22 @@ namespace SpireSim {
             potentialAdditionalMaxHp = potentialAdditionalMaxHp_;
         }
 
-        std::string toString() {
-            std::stringstream ss;
-            ss << "EnemyId: " << ToString(enemyId);
-            ss << "; Data: [ " << data.toString() << " ]";
-            ss << "; InitialMoves: { ";
-            for(auto& e : initialMoves) ss << ToString(e) << " ";
-            ss << "}";
-            ss << "; InitialMoveCount: " << initialMoveCount;
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Enemy,
+            enemyId, data, initialMoves, currentMove,
+            initialMoveCount, potentialAdditionalMaxHp, isMinion, eventList
+        );
+        TO_STRING_METHOD
+    
+        // std::string toString() {
+        //     std::stringstream ss;
+        //     ss << "EnemyId: " << ToString(enemyId);
+        //     ss << "; Data: [ " << data.toString() << " ]";
+        //     ss << "; InitialMoves: { ";
+        //     for(auto& e : initialMoves) ss << ToString(e) << " ";
+        //     ss << "}";
+        //     ss << "; InitialMoveCount: " << initialMoveCount;
+        //     return ss.str();
+        // }
     };
     using Enemies = std::vector<Enemy>;
 

@@ -14,10 +14,13 @@ namespace SpireSim {
         Enchantment(EnchantmentType enchantmentType_, int value_) : enchantmentType(enchantmentType_), value(value_) {}
         Enchantment(const Enchantment &enchantment_) : enchantmentType(enchantment_.enchantmentType), value(enchantment_.value) {}
 
-        std::string toString() {
-            std::stringstream ss; ss << "[enchantmentType: " << ToString(enchantmentType) << "; value: " << value << "]";
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Enchantment, enchantmentType, value);
+        TO_STRING_METHOD
+    
+        // std::string toString() {
+        //     std::stringstream ss; ss << "[enchantmentType: " << ToString(enchantmentType) << "; value: " << value << "]";
+        //     return ss.str();
+        // }
     };
 
 }

@@ -16,15 +16,18 @@ namespace SpireSim {
         int optionCombats = 100;
         int optionIterations = 1000;
         int optionAddedSeed = 0;
-        int optionNumberThreads = -1;
+        int optionNumberThreads = 1;
         double optionExplorationConstant = 1.414;
 
         MCTS() {}
         MCTS(Combat *initialState_) : initialState(initialState_) {}
+        MCTS(Combat *initialState_, std::unique_ptr<MCTS_Heuristic> heuristic_)
+            : initialState(initialState_), heuristic(std::move(heuristic_)) {}
 
         void run() {
             cardStatsMap.clear();
             mcts_ResultMap.clear();
+            result.clear();
 
             bestActionIndex = -1;
             probabilities.clear();
@@ -42,7 +45,9 @@ namespace SpireSim {
 
             double bestActionScore = -99999;
             for(auto& [actionIndex, mcts_Result] : mcts_ResultMap) {
-                probabilities[actionIndex] = mcts_Result.getVisitsPerIteration();
+                auto score = mcts_Result.getVisitsPerIteration();
+                probabilities[actionIndex] = score;
+                result.scoreMap[actionIndex] = score;
 
                 if(mcts_Result.visits > bestActionScore) {
                     bestActionScore = mcts_Result.visits;
@@ -87,6 +92,10 @@ namespace SpireSim {
 
             Merge(sc_CardStats, threadCardStats);
             Merge(sc_ResultMap, threadResults);
+        }
+
+        std::unique_ptr<Algorithm> clone() {
+            return std::make_unique<MCTS>(initialState);
         }
 
         std::string toString() {

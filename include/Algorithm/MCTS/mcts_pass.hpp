@@ -23,6 +23,8 @@ namespace SpireSim {
 
         MCTS_Pass() {}
         MCTS_Pass(Combat *initialState_) : initialState(initialState_) {}
+        MCTS_Pass(Combat *initialState_, std::unique_ptr<MCTS_Heuristic> heuristic_)
+            : initialState(initialState_), heuristic(std::move(heuristic_)) {}
 
         void run() {
             assert(heuristic);
@@ -161,6 +163,10 @@ namespace SpireSim {
                 explorationConstant * std::sqrt(std::log(parentVisits) / node.visits);
         }
         
+        std::unique_ptr<Algorithm> clone() {
+            return std::make_unique<MCTS_Pass>(initialState);
+        }
+
     };
 
 }

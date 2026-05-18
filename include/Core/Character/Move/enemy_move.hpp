@@ -38,19 +38,28 @@ namespace SpireSim {
             addDebuff(buffPool.createBuffFromTemplate(buffId)); return *this;
         }
 
-        std::string toString() {
-            std::stringstream ss;
-            ss << "enemyMoveId: " << ToString(enemyMoveId) << "; Damage: " << damage << "; Attacks: " << attacks
-                << "; Block: " << block << "; strengthGain: " << strengthGain
-                << "; applyWeak: " << applyWeak << "; applyFrail: " << applyFrail << "; applyVulnerable: " << applyVulnerable;
-            ss << "; BuffsToGain: { ";
-            for(auto& buff : buffsToGain) ss << "[ " << buff.toString() << "] ";
-            ss << "}";
-            ss << "; DebuffsToApply: { ";
-            for(auto& buff : debuffsToApply) ss << "[ " << buff.toString() << "] ";
-            ss << "}";
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(EnemyMove,
+            enemyMoveId,
+            damage, attacks, block,
+            strengthGain, vigor,
+            applyWeak, applyFrail, applyVulnerable,
+            buffsToGain, debuffsToApply
+        );
+        TO_STRING_METHOD
+    
+        // std::string toString() {
+        //     std::stringstream ss;
+        //     ss << "enemyMoveId: " << ToString(enemyMoveId) << "; Damage: " << damage << "; Attacks: " << attacks
+        //         << "; Block: " << block << "; strengthGain: " << strengthGain
+        //         << "; applyWeak: " << applyWeak << "; applyFrail: " << applyFrail << "; applyVulnerable: " << applyVulnerable;
+        //     ss << "; BuffsToGain: { ";
+        //     for(auto& buff : buffsToGain) ss << "[ " << buff.toString() << "] ";
+        //     ss << "}";
+        //     ss << "; DebuffsToApply: { ";
+        //     for(auto& buff : debuffsToApply) ss << "[ " << buff.toString() << "] ";
+        //     ss << "}";
+        //     return ss.str();
+        // }
     };
     using EnemyMoves = std::vector<EnemyMove>;
 

@@ -22,13 +22,20 @@ namespace SpireSim {
         
         Ids chosenCards, choosableCards;
 
-        std::string toString() {
-            std::stringstream ss;
-            ss << "energy: " << energy;
-            ss << "; stars: " << stars;
-            ss << "; cardsPlayedThisCombat: " << cardsPlayedThisCombat;
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(CombatVariables,
+            initialHp, turn, cardDrawOnTurn, maxHandSize, energyPerTurn, energy, stars,
+            hasTakenDamage, cardsPlayedThisCombat, xValue, enemies,
+            chosenCards, choosableCards
+        );
+        TO_STRING_METHOD
+    
+        // std::string toString() {
+        //     std::stringstream ss;
+        //     ss << "energy: " << energy;
+        //     ss << "; stars: " << stars;
+        //     ss << "; cardsPlayedThisCombat: " << cardsPlayedThisCombat;
+        //     return ss.str();
+        // }
     };
 
 }

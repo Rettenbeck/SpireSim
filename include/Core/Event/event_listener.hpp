@@ -13,6 +13,9 @@ namespace SpireSim {
         bool inactive = false;
         EventListener(const Effect &effect_) : effect(effect_) {}
         EventListener(Id entityId_, const Effect &effect_) : entityId(entityId_), effect(effect_) {}
+        
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(EventListener, entityId, effect, inactive);
+        TO_STRING_METHOD
     };
 
     using EventListeners = std::vector<EventListener>;

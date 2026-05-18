@@ -17,11 +17,14 @@ namespace SpireSim {
         Action(ActionType actionType_, Id entityToPlay_, Id targetEntityId_) :
             actionType(actionType_), entityToPlay(entityToPlay_), targetEntityId(targetEntityId_) {}
         
-        std::string toString() {
-            std::stringstream ss;
-            ss << "actionType: " << ToString(actionType) << "; entityToPlay: " << entityToPlay << "; targetId: " << targetEntityId;
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Action, actionType, entityToPlay, targetEntityId);
+        TO_STRING_METHOD
+    
+        // std::string toString() {
+        //     std::stringstream ss;
+        //     ss << "actionType: " << ToString(actionType) << "; entityToPlay: " << entityToPlay << "; targetId: " << targetEntityId;
+        //     return ss.str();
+        // }
     };
     using Actions = std::vector<Action>;
 

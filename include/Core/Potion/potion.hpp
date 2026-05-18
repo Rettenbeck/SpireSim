@@ -12,11 +12,14 @@ namespace SpireSim {
 
         Potion() {}
 
-        std::string toString() {
-            std::stringstream ss;
-            ss << "PotionId: " << ToString(potionId);
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Potion, potionId);
+        TO_STRING_METHOD
+    
+        // std::string toString() {
+        //     std::stringstream ss;
+        //     ss << "PotionId: " << ToString(potionId);
+        //     return ss.str();
+        // }
     };
     using Potions = std::vector<Potion>;
 

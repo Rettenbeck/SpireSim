@@ -12,10 +12,13 @@ namespace SpireSim {
         Modification(ModificationType modificationType_) : modificationType(modificationType_) {}
         Modification(ModificationType modificationType_, int value_) : modificationType(modificationType_), value(value_) {}
         
-        std::string toString() {
-            std::stringstream ss; ss << "[modificationType: " << ToString(modificationType) << "; value: " << value << "]";
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Modification, modificationType, value);
+        TO_STRING_METHOD
+    
+        // std::string toString() {
+        //     std::stringstream ss; ss << "[modificationType: " << ToString(modificationType) << "; value: " << value << "]";
+        //     return ss.str();
+        // }
     };
     using Modifications = std::vector<Modification>;
 

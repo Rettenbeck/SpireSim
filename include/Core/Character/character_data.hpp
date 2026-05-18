@@ -34,14 +34,21 @@ namespace SpireSim {
             recalculateFactors();
         }
 
-        std::string toString() {
-            std::stringstream ss;
-            ss << "hp: " << hp << "; maxHp: " << maxHp << "; block: " << block;
-            ss << "; strength: " << strength << "; tmpStrength: " << tmpStrength << "; vigor: " << vigor;
-            ss << "; dex: " << dex << "; tmpDex: " << tmpDex;
-            ss << "; weak: " << weak << "; vulnerable: " << vulnerable << "; frail: " << frail;
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(CharacterData,
+            hp, maxHp, block,
+            strength, tmpStrength, vigor, dex, tmpDex,
+            weak, vulnerable, frail
+        );
+        TO_STRING_METHOD
+    
+        // std::string toString() {
+        //     std::stringstream ss;
+        //     ss << "hp: " << hp << "; maxHp: " << maxHp << "; block: " << block;
+        //     ss << "; strength: " << strength << "; tmpStrength: " << tmpStrength << "; vigor: " << vigor;
+        //     ss << "; dex: " << dex << "; tmpDex: " << tmpDex;
+        //     ss << "; weak: " << weak << "; vulnerable: " << vulnerable << "; frail: " << frail;
+        //     return ss.str();
+        // }
     };
 
 }

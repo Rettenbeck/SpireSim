@@ -23,6 +23,13 @@ namespace SpireSim {
 
         unsigned int seedDeck = 0;
         std::mt19937 genDeck;
+
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(CombatState,
+            eventRegistry, stack, turnId,
+            isStackRunning, waitingForActionOnStack, waitingForAction, stopStack, combatOver, actions
+        );
+        TO_STRING_METHOD
+    
     };
 
 }

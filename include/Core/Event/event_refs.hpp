@@ -12,26 +12,32 @@ namespace SpireSim {
         EventRef() {}
         EventRef(int eventType_, int eventIndex_) : eventType(eventType_), eventIndex(eventIndex_) {}
 
-        std::string toString() {
-            std::stringstream ss;
-            ss << "type: " << eventType << "; index: " << eventIndex;
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(EventRef, eventType, eventIndex);
+        TO_STRING_METHOD
+
+        // std::string toString() {
+        //     std::stringstream ss;
+        //     ss << "type: " << eventType << "; index: " << eventIndex;
+        //     return ss.str();
+        // }
     };
 
     struct EventRefList {
         std::vector<EventRef> list;
         EventRefList() {}
 
-        std::string toString() {
-            std::stringstream ss;
-            ss << "Event ref list: { ";
-            for(auto& entry : list) {
-                ss << "[" << entry.toString() << "] ";
-            }
-            ss << "}";
-            return ss.str();
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(EventRefList, list);
+        TO_STRING_METHOD
+
+        // std::string toString() {
+        //     std::stringstream ss;
+        //     ss << "Event ref list: { ";
+        //     for(auto& entry : list) {
+        //         ss << "[" << entry.toString() << "] ";
+        //     }
+        //     ss << "}";
+        //     return ss.str();
+        // }
     };
 
     using EventRefs = std::vector<EventRefList>;
