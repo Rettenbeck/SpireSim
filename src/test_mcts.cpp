@@ -51,13 +51,13 @@ void test() {
     state->startCombat();
 
     auto mcts = std::make_unique<SpireSim::MCTS>(state.get(), std::make_unique<SpireSim::MCTS_Heuristic_Random>(0));
-    mcts->optionIterations = 1200;
+    mcts->optionIterations = 12000;
     mcts->optionCombats = 1;
     mcts->optionNumberThreads = 1;
 
     SpireSim::Implementor implementor(state.get(), std::move(mcts));
-    implementor.optionIterations = 1;
-    implementor.optionNumberThreads = 1;
+    implementor.optionIterations = 12;
+    implementor.optionNumberThreads = 12;
 
     for(int i = 0; i < 20; i++) {
         std::cout << state->toString() << "\n\n";

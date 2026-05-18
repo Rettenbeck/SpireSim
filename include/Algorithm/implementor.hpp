@@ -12,7 +12,6 @@ namespace SpireSim {
         Combat *initialState = nullptr;
 
         int optionIterations = 100;
-        int optionAddedSeed = 0;
         int optionNumberThreads = 1;
 
         Implementor() {}
@@ -26,20 +25,11 @@ namespace SpireSim {
             cardStatsMap.clear();
             result.clear();
 
-            for(int i = 0; i < optionIterations; i++) {
-                CardStatsMap sc_CardStatsMap;
-                Result sc_Result;
-                int addedSeed = optionAddedSeed + i * optionIterations;
-
-                runSingleCombat(sc_CardStatsMap, sc_Result, addedSeed);
-
-                Merge(cardStatsMap, sc_CardStatsMap);
-                Merge(result, sc_Result);
-
-            }
+            runSingleCombat(cardStatsMap, result, optionAddedSeed);
 
             double bestActionScore = -99999;
             for(auto& [actionIndex, score] : result.scoreMap) {
+                score /= optionIterations;
                 if(score > bestActionScore) {
                     bestActionScore = score;
                     bestActionIndex = actionIndex;
@@ -82,14 +72,19 @@ namespace SpireSim {
 
         std::unique_ptr<Algorithm> doPass(int addedSeed, int iterationsPerThread) {
             auto pass = algorithm->clone();
+            pass->optionAddedSeed = addedSeed;
             pass->run();
             return std::move(pass);
         }
 
         std::unique_ptr<Algorithm> clone() {
-            return std::make_unique<Implementor>(initialState, algorithm->clone());
+            auto obj = std::make_unique<Implementor>(initialState, algorithm->clone());
+            obj->optionIterations = optionIterations;
+            obj->optionAddedSeed = optionAddedSeed;
+            obj->optionNumberThreads = optionNumberThreads;
+            return obj;
         }
-        
+
         std::string toString() {
             std::stringstream ss;
             ss << resultToString() << "\n";

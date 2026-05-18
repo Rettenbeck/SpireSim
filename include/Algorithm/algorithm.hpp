@@ -11,12 +11,13 @@ namespace SpireSim {
     public:
     
         Algorithm() {}
-        // Algorithm(Combat *initialState_) : initialState(initialState_) {}
+        Algorithm(Combat *initialState_) : initialState(initialState_) {}
 
         virtual void run() = 0;
         virtual std::unique_ptr<Algorithm> clone() = 0;
         
         Combat *initialState = nullptr;
+        int optionAddedSeed = 0;
 
         CardStatsMap cardStatsMap;
         Result result;

@@ -16,7 +16,6 @@ namespace SpireSim {
         MCTS_ResultMap mcts_ResultMap;
 
         int optionIterations = 1000;
-        int optionAddedSeed = 0;
         double optionExplorationConstant = 1.414;
 
         int seedBuffer = 0;
@@ -38,7 +37,7 @@ namespace SpireSim {
 
             internalState.increaseSeeds(optionAddedSeed);
             internalState.reshuffleDeck();
-            internalState.startCombat(true);
+            // internalState.startCombat(true);
             MCTSNode root(internalState);
 
             for(int i = 0; i < optionIterations; ++i) {

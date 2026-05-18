@@ -15,7 +15,6 @@ namespace SpireSim {
 
         int optionCombats = 100;
         int optionIterations = 1000;
-        int optionAddedSeed = 0;
         int optionNumberThreads = 1;
         double optionExplorationConstant = 1.414;
 
@@ -35,7 +34,7 @@ namespace SpireSim {
             for(int i = 0; i < optionCombats; i++) {
                 CardStatsMap sc_CardStatsMap;
                 MCTS_ResultMap sc_ResultMap;
-                int addedSeed = optionAddedSeed + i * optionCombats * optionIterations;
+                int addedSeed = optionAddedSeed + i * optionIterations;
 
                 runSingleCombat(sc_CardStatsMap, sc_ResultMap, addedSeed);
 
