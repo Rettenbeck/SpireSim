@@ -23,6 +23,8 @@ namespace SpireSim {
         CardTemplate& retrieveForCreation(CardId cardId) {
             int index = int(cardId);
             createBlankArray(index);
+            assert(cardTemplates.size() > index);
+            assert(cardTemplates.size() < 9999);
             cardTemplates[index].cardId = cardId;
             return cardTemplates[index];
         }

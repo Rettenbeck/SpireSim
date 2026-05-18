@@ -8,7 +8,7 @@ namespace SpireSim {
     class Implementor : public Algorithm {
     public:
     
-        std::unique_ptr<Algorithm> algorithm = nullptr;
+        UAlgorithm algorithm = nullptr;
         Combat *initialState = nullptr;
 
         int optionIterations = 100;
@@ -16,7 +16,7 @@ namespace SpireSim {
 
         Implementor() {}
         Implementor(Combat *initialState_) : initialState(initialState_) {}
-        Implementor(Combat *initialState_, std::unique_ptr<Algorithm> algorithm_)
+        Implementor(Combat *initialState_, UAlgorithm algorithm_)
             : initialState(initialState_), algorithm(std::move(algorithm_)) {}
 
         void run() {
@@ -47,8 +47,8 @@ namespace SpireSim {
             sc_ResultMap.clear();
 
             if(numThreads > 1) {
-                std::vector<CardStatsMap> threadCardStats(numThreads);
-                std::vector<Result> threadResults(numThreads);
+                CardStatsMaps threadCardStats(numThreads);
+                Results threadResults(numThreads);
                 std::vector<std::thread> workers;
 
                 for(int i = 0; i < numThreads; ++i) {
@@ -70,14 +70,14 @@ namespace SpireSim {
             }
         }
 
-        std::unique_ptr<Algorithm> doPass(int addedSeed, int iterationsPerThread) {
+        UAlgorithm doPass(int addedSeed, int iterationsPerThread) {
             auto pass = algorithm->clone();
             pass->optionAddedSeed = addedSeed;
             pass->run();
             return std::move(pass);
         }
 
-        std::unique_ptr<Algorithm> clone() {
+        UAlgorithm clone() {
             auto obj = std::make_unique<Implementor>(initialState, algorithm->clone());
             obj->optionIterations = optionIterations;
             obj->optionAddedSeed = optionAddedSeed;
@@ -93,5 +93,6 @@ namespace SpireSim {
         }
 
     };
+    using UImplementor = std::unique_ptr<Implementor>;
 
 }

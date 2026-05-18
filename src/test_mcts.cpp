@@ -1,61 +1,28 @@
 #include <iostream>
 #include <include.hpp>
+#include <test_data.cpp>
 
 void test() {
 
     int difficultyMoreHp  = 0;  // Ascension 7
     int difficultyMoreDmg = 0;  // Ascension 9
     
-    SpireSim::EffectPool        effectPool;
-    SpireSim::RelicPool         relicPool;
-    SpireSim::PotionPool        potionPool;
-    SpireSim::CardPool          cardPool(effectPool);
-    SpireSim::BuffPool          buffPool;
-    SpireSim::EnemyMovePool     movePool (buffPool, difficultyMoreDmg);
-    SpireSim::EnemyPool         enemyPool(movePool, difficultyMoreHp );
-    
-    SpireSim::EncounterFactory  encounterFactory(enemyPool);
-    SpireSim::PlayerFactory     playerFactory;
-    SpireSim::RelicFactory      relicFactory(relicPool);
-    SpireSim::PotionFactory     potionFactory(potionPool);
+    SpireSim::PoolContainer container;
+    auto templates = createTestData(container);
+    assert(templates.size() > 0);
+    auto state = templates[0]->get();
+    assert(state);
 
-    SpireSim::Cards deck;
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::BloodLetting, true));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Strike, true));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Defend, true));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Defend, true));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Defend, true));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::FallingStar  , true));
-    deck.push_back(cardPool.createCardFromTemplate(SpireSim::CardId::Venerate, true));
-    
-    auto state = std::make_unique<SpireSim::Combat>(
-        effectPool,
-        relicPool,
-        potionPool,
-        cardPool,
-        buffPool,
-        movePool,
-        enemyPool,
-        playerFactory.get(SpireSim::PlayerId::IronClad),
-        encounterFactory.get(SpireSim::EncounterId::Nibbits),
-        relicFactory.get({SpireSim::RelicId::BagOfPreparation, SpireSim::RelicId::CentennialPuzzle}),
-        potionFactory.get({SpireSim::PotionId::FirePotion, SpireSim::PotionId::FlexPotion}),
-        deck);
-    
     state->setSeeds(42);
     state->initialize();
     state->startCombat();
 
-    auto mcts = std::make_unique<SpireSim::MCTS>(state.get(), std::make_unique<SpireSim::MCTS_Heuristic_Random>(0));
+    auto mcts = std::make_unique<SpireSim::MCTS>(state, std::make_unique<SpireSim::MCTS_Heuristic_Random>(0));
     mcts->optionIterations = 12000;
     mcts->optionCombats = 1;
     mcts->optionNumberThreads = 1;
 
-    SpireSim::Implementor implementor(state.get(), std::move(mcts));
+    SpireSim::Implementor implementor(state, std::move(mcts));
     implementor.optionIterations = 12;
     implementor.optionNumberThreads = 12;
 

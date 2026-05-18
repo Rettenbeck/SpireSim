@@ -8,7 +8,7 @@ namespace SpireSim {
     class MCTS : public Algorithm {
     public:
     
-        std::unique_ptr<MCTS_Heuristic> heuristic = nullptr;
+        UMCTS_Heuristic heuristic = nullptr;
         Combat *initialState = nullptr;
 
         MCTS_ResultMap mcts_ResultMap;
@@ -20,7 +20,7 @@ namespace SpireSim {
 
         MCTS() {}
         MCTS(Combat *initialState_) : initialState(initialState_) {}
-        MCTS(Combat *initialState_, std::unique_ptr<MCTS_Heuristic> heuristic_)
+        MCTS(Combat *initialState_, UMCTS_Heuristic heuristic_)
             : initialState(initialState_), heuristic(std::move(heuristic_)) {}
 
         void run() {
@@ -65,8 +65,8 @@ namespace SpireSim {
             sc_ResultMap.clear();
 
             if(numThreads > 1) {
-                std::vector<CardStatsMap> threadCardStats(numThreads);
-                std::vector<MCTS_ResultMap> threadResults(numThreads);
+                CardStatsMaps threadCardStats(numThreads);
+                MCTS_ResultMaps threadResults(numThreads);
                 std::vector<std::thread> workers;
 
                 for(int i = 0; i < numThreads; ++i) {
@@ -88,7 +88,7 @@ namespace SpireSim {
             }
         }
 
-        std::unique_ptr<MCTS_Pass> doPass(int addedSeed, int iterationsPerThread) {
+        UMCTS_Pass doPass(int addedSeed, int iterationsPerThread) {
             auto pass = std::make_unique<MCTS_Pass>(initialState);
             pass->heuristic = heuristic->clone();
             pass->optionIterations = iterationsPerThread;
@@ -99,7 +99,7 @@ namespace SpireSim {
             return std::move(pass);
         }
 
-        std::unique_ptr<Algorithm> clone() {
+        UAlgorithm clone() {
             auto obj = std::make_unique<MCTS>(initialState, heuristic->clone());
             obj->optionCombats = optionCombats;
             obj->optionIterations = optionIterations;

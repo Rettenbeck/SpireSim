@@ -28,6 +28,7 @@ namespace SpireSim {
         std::mt19937 rng;
 
     };
+    using UMCTS_Heuristic = std::unique_ptr<MCTS_Heuristic>;
 
     class MCTS_Heuristic_Random : public MCTS_Heuristic {
     public:

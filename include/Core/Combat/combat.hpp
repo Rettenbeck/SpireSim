@@ -271,5 +271,7 @@ namespace SpireSim {
         }
 
     };
+    using UCombat = std::unique_ptr<Combat>;
+    using UCombats = std::vector<UCombat>;
 
 }

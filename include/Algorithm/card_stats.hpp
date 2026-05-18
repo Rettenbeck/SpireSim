@@ -32,6 +32,7 @@ namespace SpireSim {
         }
     };
     using CardStatsMap = std::map<Id, CardStats>;
+    using CardStatsMaps = std::vector<CardStatsMap>;
 
     CardStatsMap& Merge(CardStatsMap& left, const CardStatsMap& right) {
         for (const auto& [id, stats] : right) left[id] += stats;

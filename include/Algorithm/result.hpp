@@ -27,6 +27,7 @@ namespace SpireSim {
         }
 
     };
+    using Results = std::vector<Result>;
 
     Result& Merge(Result& left, const Result& right) {
         return left += right;

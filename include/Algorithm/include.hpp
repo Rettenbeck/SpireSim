@@ -1,4 +1,5 @@
 #pragma once
 
 #include <Algorithm/MCTS/mcts.hpp>
-#include <Algorithm/implementor.hpp>
+#include <Algorithm/Simulator/simulator.hpp>
+#include <Algorithm/Simulator/combat_template_fixed.hpp>

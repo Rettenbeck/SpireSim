@@ -15,6 +15,7 @@ namespace SpireSim {
             while(index >= effects.size()) {
                 effects.push_back(Effect());
             }
+            assert(effects.size() > index);
             return effects[index];
         }
         

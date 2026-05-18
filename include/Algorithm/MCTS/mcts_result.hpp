@@ -32,6 +32,7 @@ namespace SpireSim {
         }
     };
     using MCTS_ResultMap = std::map<int, MCTS_Result>;
+    using MCTS_ResultMaps = std::vector<MCTS_ResultMap>;
 
     MCTS_ResultMap& Merge(MCTS_ResultMap& left, const MCTS_ResultMap& right) {
         for (const auto& [id, stats] : right) left[id] += stats;

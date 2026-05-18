@@ -22,6 +22,7 @@ namespace SpireSim {
         BuffTemplate& retrieveForCreation(BuffId buffId) {
             int index = int(buffId);
             createBlankArray(index);
+            assert(buffTemplates.size() > index);
             buffTemplates[index].buffId = buffId;
             return buffTemplates[index];
         }

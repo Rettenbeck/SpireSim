@@ -40,5 +40,6 @@ namespace SpireSim {
         }
 
     };
+    using UAlgorithm = std::unique_ptr<Algorithm>;
 
 }

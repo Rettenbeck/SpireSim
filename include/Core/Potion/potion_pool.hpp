@@ -21,6 +21,7 @@ namespace SpireSim {
         Potion& retrieveForCreation(PotionId potionId) {
             int index = int(potionId);
             createBlankArray(index);
+            assert(potions.size() > index);
             potions[index].potionId = potionId;
             return potions[index];
         }

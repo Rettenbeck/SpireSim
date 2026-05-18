@@ -21,6 +21,7 @@ namespace SpireSim {
         Relic& retrieveForCreation(RelicId relicId) {
             int index = int(relicId);
             createBlankArray(index);
+            assert(relics.size() > index);
             relics[index].relicId = relicId;
             return relics[index];
         }

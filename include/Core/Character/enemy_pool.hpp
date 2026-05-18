@@ -23,6 +23,7 @@ namespace SpireSim {
         Enemy& retrieveForCreation(EnemyId enemyId) {
             int index = int(enemyId);
             createBlankArray(index);
+            assert(enemies.size() > index);
             enemies[index].enemyId = enemyId;
             return enemies[index];
         }

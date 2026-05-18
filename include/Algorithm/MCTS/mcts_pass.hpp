@@ -10,7 +10,7 @@ namespace SpireSim {
 
     class MCTS_Pass : public Algorithm {
     public:
-        std::unique_ptr<MCTS_Heuristic> heuristic = nullptr;
+        UMCTS_Heuristic heuristic = nullptr;
         Combat *initialState = nullptr;
 
         MCTS_ResultMap mcts_ResultMap;
@@ -22,7 +22,7 @@ namespace SpireSim {
 
         MCTS_Pass() {}
         MCTS_Pass(Combat *initialState_) : initialState(initialState_) {}
-        MCTS_Pass(Combat *initialState_, std::unique_ptr<MCTS_Heuristic> heuristic_)
+        MCTS_Pass(Combat *initialState_, UMCTS_Heuristic heuristic_)
             : initialState(initialState_), heuristic(std::move(heuristic_)) {}
 
         void run() {
@@ -171,5 +171,6 @@ namespace SpireSim {
         }
 
     };
+    using UMCTS_Pass = std::unique_ptr<MCTS_Pass>;
 
 }
