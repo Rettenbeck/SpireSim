@@ -35,7 +35,7 @@ namespace SpireSim {
             for(int i = 0; i < optionCombats; i++) {
                 CardStatsMap sc_CardStatsMap;
                 MCTS_ResultMap sc_ResultMap;
-                int addedSeed = optionAddedSeed + i * optionIterations;
+                int addedSeed = optionAddedSeed + i * optionCombats * optionIterations;
 
                 runSingleCombat(sc_CardStatsMap, sc_ResultMap, addedSeed);
 
@@ -60,42 +60,53 @@ namespace SpireSim {
             assert(optionNumberThreads != 0);
             int numThreads = (optionNumberThreads == -1) ? std::thread::hardware_concurrency() : optionNumberThreads;
             int iterationsPerThread = optionIterations / numThreads;
-
+            
             assert(heuristic);
             assert(initialState);
-
             sc_ResultMap.clear();
-            std::vector<CardStatsMap> threadCardStats(numThreads);
-            std::vector<MCTS_ResultMap> threadResults(numThreads);
-            std::vector<std::thread> workers;
 
-            for(int i = 0; i < numThreads; ++i) {
-                workers.emplace_back([&, i]() {
-                    MCTS_Pass pass(initialState);
-                    pass.heuristic = heuristic->clone();
-                    pass.optionIterations = iterationsPerThread;
-                    pass.optionExplorationConstant = optionExplorationConstant;
-                    pass.optionAddedSeed = addedSeed + i * iterationsPerThread;
-                    pass.heuristic->setSeed(pass.optionAddedSeed);
-                    pass.run();
-                    
-                    for(auto& [cardEntityId, stats] : pass.cardStatsMap) {
-                        threadCardStats[i][cardEntityId] = stats;
-                    }
-                    for(auto& [actionIndex, passResult] : pass.mcts_ResultMap) {
-                        threadResults[i][actionIndex] = passResult;
-                    }
-                });
+            if(numThreads > 1) {
+                std::vector<CardStatsMap> threadCardStats(numThreads);
+                std::vector<MCTS_ResultMap> threadResults(numThreads);
+                std::vector<std::thread> workers;
+
+                for(int i = 0; i < numThreads; ++i) {
+                    workers.emplace_back([&, i]() {
+                        auto pass = doPass(addedSeed + i * iterationsPerThread, iterationsPerThread);
+                        threadCardStats[i] = pass->cardStatsMap;
+                        threadResults[i] = pass->mcts_ResultMap;
+                    });
+                }
+
+                for(auto& t : workers) t.join();
+
+                Merge(sc_CardStats, threadCardStats);
+                Merge(sc_ResultMap, threadResults);
+            } else if(numThreads == 1) {
+                auto pass = doPass(addedSeed, iterationsPerThread);
+                sc_CardStats = pass->cardStatsMap;
+                sc_ResultMap = pass->mcts_ResultMap;
             }
+        }
 
-            for(auto& t : workers) t.join();
-
-            Merge(sc_CardStats, threadCardStats);
-            Merge(sc_ResultMap, threadResults);
+        std::unique_ptr<MCTS_Pass> doPass(int addedSeed, int iterationsPerThread) {
+            auto pass = std::make_unique<MCTS_Pass>(initialState);
+            pass->heuristic = heuristic->clone();
+            pass->optionIterations = iterationsPerThread;
+            pass->optionExplorationConstant = optionExplorationConstant;
+            pass->optionAddedSeed = addedSeed;
+            pass->heuristic->setSeed(pass->optionAddedSeed);
+            pass->run();
+            return std::move(pass);
         }
 
         std::unique_ptr<Algorithm> clone() {
-            return std::make_unique<MCTS>(initialState);
+            auto obj = std::make_unique<MCTS>(initialState, heuristic->clone());
+            obj->optionCombats = optionCombats;
+            obj->optionIterations = optionIterations;
+            obj->optionAddedSeed = optionAddedSeed;
+            obj->optionExplorationConstant = optionExplorationConstant;
+            return obj;
         }
 
         std::string toString() {

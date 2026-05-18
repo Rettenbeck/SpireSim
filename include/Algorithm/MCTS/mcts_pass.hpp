@@ -164,7 +164,11 @@ namespace SpireSim {
         }
         
         std::unique_ptr<Algorithm> clone() {
-            return std::make_unique<MCTS_Pass>(initialState);
+            auto obj = std::make_unique<MCTS_Pass>(initialState, heuristic->clone());
+            obj->optionIterations = optionIterations;
+            obj->optionAddedSeed = optionAddedSeed;
+            obj->optionExplorationConstant = optionExplorationConstant;
+            return obj;
         }
 
     };

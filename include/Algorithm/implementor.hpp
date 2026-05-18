@@ -54,30 +54,36 @@ namespace SpireSim {
 
             assert(algorithm);
             assert(initialState);
-
             sc_ResultMap.clear();
-            std::vector<CardStatsMap> threadCardStats(numThreads);
-            std::vector<Result> threadResults(numThreads);
-            std::vector<std::thread> workers;
 
-            for(int i = 0; i < numThreads; ++i) {
-                workers.emplace_back([&, i]() {
-                    algorithm->initialState = initialState;
-                    algorithm->run();
-                    
-                    for(auto& [cardEntityId, stats] : algorithm->cardStatsMap) {
-                        threadCardStats[i][cardEntityId] = stats;
-                    }
-                    for(auto& [actionIndex, score] : algorithm->result.scoreMap) {
-                        threadResults[i].scoreMap[actionIndex] = score;
-                    }
-                });
+            if(numThreads > 1) {
+                std::vector<CardStatsMap> threadCardStats(numThreads);
+                std::vector<Result> threadResults(numThreads);
+                std::vector<std::thread> workers;
+
+                for(int i = 0; i < numThreads; ++i) {
+                    workers.emplace_back([&, i]() {
+                        auto pass = doPass(addedSeed + i * iterationsPerThread, iterationsPerThread);
+                        threadCardStats[i] = pass->cardStatsMap;
+                        threadResults[i] = pass->result;
+                    });
+                }
+
+                for(auto& t : workers) t.join();
+
+                Merge(sc_CardStats, threadCardStats);
+                Merge(sc_ResultMap, threadResults);
+            } else if(numThreads == 1) {
+                auto pass = doPass(addedSeed, iterationsPerThread);
+                sc_CardStats = pass->cardStatsMap;
+                sc_ResultMap = pass->result;
             }
+        }
 
-            for(auto& t : workers) t.join();
-
-            Merge(sc_CardStats, threadCardStats);
-            Merge(sc_ResultMap, threadResults);
+        std::unique_ptr<Algorithm> doPass(int addedSeed, int iterationsPerThread) {
+            auto pass = algorithm->clone();
+            pass->run();
+            return std::move(pass);
         }
 
         std::unique_ptr<Algorithm> clone() {

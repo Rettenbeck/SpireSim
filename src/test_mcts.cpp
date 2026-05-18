@@ -51,7 +51,7 @@ void test() {
     state->startCombat();
 
     auto mcts = std::make_unique<SpireSim::MCTS>(state.get(), std::make_unique<SpireSim::MCTS_Heuristic_Random>(0));
-    mcts->optionIterations = 1400;
+    mcts->optionIterations = 1200;
     mcts->optionCombats = 1;
     mcts->optionNumberThreads = 1;
 
@@ -65,6 +65,9 @@ void test() {
         state->exportJsonToFile();
 
         std::cout << "Calculating... \n";
+
+        // assert(mcts); mcts->run();
+        // std::cout << mcts->toString();
         implementor.run();
         std::cout << implementor.toString();
 
