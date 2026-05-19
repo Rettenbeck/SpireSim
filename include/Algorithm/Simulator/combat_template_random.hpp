@@ -68,7 +68,7 @@ namespace SpireSim {
         }
 
         Combat* get() {
-            if(combats.empty()) create();
+            create();
             assert(combats.size() <= 1);
             return combats[0].get();
         }

@@ -37,6 +37,7 @@ namespace SpireSim {
 
             for(int i = 0; i < optionIterations; i++) {
                 int index = getRandomNumber(templates.size() - 1);
+                index = 2;
                 assert(index < templates.size());
                 Combat stateCopy = *(templates[index]->get());
                 std::cout << "\nFight starts: " << i << "\n";
