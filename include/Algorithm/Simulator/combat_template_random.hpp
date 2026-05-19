@@ -12,6 +12,9 @@ namespace SpireSim {
         int optionMinHpPercentage = 40;
         int optionMaxHpPercentage = 100;
 
+        bool isEnemyToughnessRandom = true;
+        bool isEnemyDeadlinessRandom = true;
+
         PlayerIds playerIds;
         EncounterIds encounterIds;
 
@@ -58,6 +61,9 @@ namespace SpireSim {
             hpMax = hpMax * hpPercentage / 100.f;
             finalPlayer.data.hp = hpMax;
 
+            if(isEnemyToughnessRandom ) enemiesMoreHp   = (getRandomNumber(1) == 0) ? true : false;
+            if(isEnemyDeadlinessRandom) enemiesDeadlier = (getRandomNumber(1) == 0) ? true : false;
+
             combats.push_back(
                 std::make_unique<SpireSim::Combat>(
                     *container.effectPool, *container.relicPool, *container.potionPool,
@@ -70,7 +76,9 @@ namespace SpireSim {
         Combat* get() {
             create();
             assert(combats.size() <= 1);
-            return combats[0].get();
+            auto ptr = combats[0].get();
+            ptr->setDifficulty(enemiesMoreHp, enemiesDeadlier);
+            return ptr;
         }
 
         CombatTemplateRandom& set(const PlayerIds &playerIds_) {

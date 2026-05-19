@@ -251,6 +251,7 @@ namespace SpireSim {
         int getTotalEnemyHp();
         int getTotalEnemyMaxHp();
         int getHpLoss();
+        void setDifficulty(bool enemiesMoreHp = false, bool enemiesDeadlier = false);
         CardId getCardIdFromEntityId(Id cardEntityId);
         
         // Actions
@@ -267,7 +268,7 @@ namespace SpireSim {
 
         // Serialization
         NLOHMANN_DEFINE_TYPE_INTRUSIVE(Combat, state, variables, ecs, pileHandler);
-        
+
         void exportJsonToFile(std::string filename = "state.txt") {
             json j; j = *this;
             std::ofstream file(filename);

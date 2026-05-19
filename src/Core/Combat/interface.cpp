@@ -49,6 +49,11 @@ namespace SpireSim {
         return variables.initialHp - ecs.getPlayer().data.hp;
     }
 
+    void Combat::setDifficulty(bool enemiesMoreHp, bool enemiesDeadlier) {
+        variables.enemiesMoreHp = enemiesMoreHp;
+        variables.enemiesDeadlier = enemiesDeadlier;
+    }
+
     CardId Combat::getCardIdFromEntityId(Id cardEntityId) {
         return ecs.getCard(cardEntityId).cardId;
     }

@@ -10,7 +10,7 @@ namespace SpireSim {
 
     struct Relic {
         RelicId relicId = RelicId::None;
-        int params[RELIC_MAX_AMOUNT_PARAMS];
+        int params[RELIC_MAX_AMOUNT_PARAMS] = {0, 0};
 
         EventList eventList;
 

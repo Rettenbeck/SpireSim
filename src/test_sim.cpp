@@ -9,7 +9,7 @@ void test_sim() {
     assert(templates.size() > 0);
     
     auto mcts = std::make_unique<SpireSim::MCTS>(std::make_unique<SpireSim::MCTS_Heuristic_Random>(0));
-    mcts->optionIterations = 2500;
+    mcts->optionIterations = 1600;
     mcts->optionCombats = 24;
     mcts->optionNumberThreads = 12;
 
@@ -18,7 +18,7 @@ void test_sim() {
     implementor->optionNumberThreads = 1;
 
     SpireSim::Simulator simulator(std::move(implementor));
-    simulator.optionIterations = 2;
+    simulator.optionIterations = 980;
     simulator.setTemplates(templates);
     simulator.run();
 

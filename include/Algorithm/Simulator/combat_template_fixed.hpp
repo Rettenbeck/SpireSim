@@ -23,7 +23,9 @@ namespace SpireSim {
         Combat* get() {
             if(combats.empty()) convert();
             assert(combats.size() <= 1);
-            return combats[0].get();
+            auto ptr = combats[0].get();
+            ptr->setDifficulty(enemiesMoreHp, enemiesDeadlier);
+            return ptr;
         }
 
     };

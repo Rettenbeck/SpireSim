@@ -15,6 +15,9 @@ namespace SpireSim {
         Relics relics;
         Potions potions;
 
+        bool enemiesMoreHp = false;     // Ascension 7
+        bool enemiesDeadlier = false;   // Ascension 9
+
         unsigned int seed = 0;
         std::mt19937 rng;
 
