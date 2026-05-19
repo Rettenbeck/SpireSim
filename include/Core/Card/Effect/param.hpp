@@ -7,8 +7,8 @@ namespace SpireSim {
 
     struct Param {
         ParamType paramType;
-        int value;
-        Param() {}
+        int value = 0;
+        Param() : paramType(ParamType::None) {}
         Param(const ParamType paramType_) : paramType(paramType_) {}
         Param(const ParamType paramType_, int value_) : paramType(paramType_), value(value_) {}
         

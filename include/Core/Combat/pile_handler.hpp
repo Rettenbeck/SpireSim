@@ -114,6 +114,7 @@ namespace SpireSim {
         }
 
         void drawCardSpecific(ECS &ecs, int maxHandSize = 10, int index = 0) {
+            assert(false);
             // if(deck.size() == 0) return;
             // if(hand.size() < maxHandSize) {
             //     moveCard(ecs, deck[index], (hand.size() >= maxHandSize) ? CardLocation::Discard : CardLocation::Hand);
@@ -125,20 +126,22 @@ namespace SpireSim {
             exhaust.clear(); removed.clear(); stack.clear();
         }
         
-        void pile_to_json(json& j, const Pile &pile, const std::string pile_name, const ECS &ecs) const {
-            for(auto cardEntityId : pile) {
-                j[pile_name] = ecs.cCards[cardEntityId];
-            }
-        }
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(PileHandler, deck, hand, discard, exhaust, removed, stack);
+
+        // void pile_to_json(json& j, const Pile &pile, const std::string pile_name, const ECS &ecs) const {
+        //     for(auto cardEntityId : pile) {
+        //         j[pile_name] = ecs.cCards[cardEntityId];
+        //     }
+        // }
         
-        void to_json(json& j, const ECS &ecs) const {
-            pile_to_json(j, deck   , "deck"   , ecs);
-            pile_to_json(j, hand   , "hand"   , ecs);
-            pile_to_json(j, discard, "discard", ecs);
-            pile_to_json(j, exhaust, "exhaust", ecs);
-            pile_to_json(j, removed, "removed", ecs);
-            pile_to_json(j, stack  , "stack"  , ecs);
-        }
+        // void to_json(json& j, const ECS &ecs) const {
+        //     pile_to_json(j, deck   , "deck"   , ecs);
+        //     pile_to_json(j, hand   , "hand"   , ecs);
+        //     pile_to_json(j, discard, "discard", ecs);
+        //     pile_to_json(j, exhaust, "exhaust", ecs);
+        //     pile_to_json(j, removed, "removed", ecs);
+        //     pile_to_json(j, stack  , "stack"  , ecs);
+        // }
 
         std::string pileToString(std::string description, Pile &pile) {
             std::stringstream ss;

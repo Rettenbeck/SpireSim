@@ -200,10 +200,10 @@ namespace SpireSim {
 
 
         // Serialization
-        friend void to_json(json& j, const Combat& self) {
-            j["state"] = self.state; j["variables"] = self.variables; j["ecs"] = self.ecs;
-            self.pileHandler.to_json(j["pileHandler"], self.ecs);
-        }
+        // friend void to_json(json& j, const Combat& self) {
+        //     j["state"] = self.state; j["variables"] = self.variables; j["ecs"] = self.ecs;
+        //     self.pileHandler.to_json(j["pileHandler"], self.ecs);
+        // }
 
 
 
@@ -266,6 +266,8 @@ namespace SpireSim {
         std::string basicDataToString();
 
         // Serialization
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Combat, state, variables, ecs, pileHandler);
+        
         void exportJsonToFile(std::string filename = "state.txt") {
             json j; j = *this;
             std::ofstream file(filename);

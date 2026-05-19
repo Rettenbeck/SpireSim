@@ -157,7 +157,10 @@ namespace SpireSim {
             for(int i = 0; i < vec.size(); i++) {
                 const T& ref = vec[i];
                 if(self.isValid(ref, i)) {
-                    j[vector_name].push_back(vec[i]);
+                    json jObj;
+                    jObj["id"] = i;
+                    jObj["data"] = ref;
+                    j[vector_name].push_back(jObj);
                 }
             }
         }
