@@ -65,7 +65,7 @@ namespace SpireSim {
             target.push_back(cardEntityId);
         }
 
-        void moveLastCardOfPile(ECS &ecs, CardLocation sourceLocation, CardLocation targetLocation) {
+        Id moveLastCardOfPile(ECS &ecs, CardLocation sourceLocation, CardLocation targetLocation) {
             auto& source = locationToPile(sourceLocation);
             auto& target = locationToPile(targetLocation);
 
@@ -76,6 +76,7 @@ namespace SpireSim {
             card.location = targetLocation;
             card.locationIndex = target.size();
             target.push_back(lastId);
+            return lastId;
         }
 
         void movePile(ECS &ecs, CardLocation sourceLocation, CardLocation targetLocation) {
@@ -103,14 +104,19 @@ namespace SpireSim {
             shufflePileIntoDeck(ecs, CardLocation::Discard);
         }
 
-        void drawCard(ECS &ecs, int maxHandSize = 10) {
+        Id drawCard(ECS &ecs, int maxHandSize = 10) {
             if(deck.size() == 0) {
                 shuffleDiscardIntoDeck(ecs);
             }
-            if(deck.size() == 0) return;
+            if(deck.size() == 0) return ENTITY_NONE;
             if(hand.size() < maxHandSize) {
-                moveLastCardOfPile(ecs, CardLocation::Deck, (hand.size() >= maxHandSize) ? CardLocation::Discard : CardLocation::Hand);
+                return moveLastCardOfPile(
+                    ecs,
+                    CardLocation::Deck,
+                    (hand.size() >= maxHandSize) ? CardLocation::Discard : CardLocation::Hand
+                );
             }
+            return ENTITY_NONE;
         }
 
         void drawCardSpecific(ECS &ecs, int maxHandSize = 10, int index = 0) {

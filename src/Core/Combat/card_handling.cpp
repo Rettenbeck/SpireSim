@@ -10,7 +10,8 @@ namespace SpireSim {
     }
     
     void Combat::drawCard() {
-        pileHandler.drawCard(ecs);
+        auto cardEntityId = pileHandler.drawCard(ecs);
+        state.cardsDrawnMap[cardEntityId]++;
     }
     
     void Combat::drawCards(int amount) {
@@ -19,6 +20,7 @@ namespace SpireSim {
 
     void Combat::discardById(Id cardEntityId) {
         pileHandler.moveCard(ecs, cardEntityId, CardLocation::Discard);
+        state.cardsDiscardedMap[cardEntityId]++;
     }
 
     void Combat::discardByIndex(int index) {

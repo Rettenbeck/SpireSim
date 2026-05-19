@@ -253,6 +253,8 @@ namespace SpireSim {
         int getHpLoss();
         void setDifficulty(bool enemiesMoreHp = false, bool enemiesDeadlier = false);
         CardId getCardIdFromEntityId(Id cardEntityId);
+        const std::map<Id, int>& getDrawnMap();
+        const std::map<Id, int>& getDiscardedMap();
         
         // Actions
         void generateActions();

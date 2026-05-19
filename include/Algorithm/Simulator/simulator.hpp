@@ -12,7 +12,10 @@ namespace SpireSim {
         UImplementor implementor = nullptr;
         UCombatTemplates templates;
 
+        CardStatsMap cardStatsMap;
+
         std::string optionFilename = "data.txt";
+        std::string optionFilenameCardStats = "stats.txt";
         unsigned int optionInitialSeed = 1;
         int optionIterations = 1;
         unsigned int seedBuffer = 0;
@@ -29,6 +32,7 @@ namespace SpireSim {
 
             rng.seed(optionInitialSeed);
             seedBuffer = optionInitialSeed;
+            cardStatsMap.clear();
 
             for(int i = 0; i < templates.size(); i++) {
                 auto t = templates[i].get();
@@ -40,11 +44,16 @@ namespace SpireSim {
                 assert(index < templates.size());
                 Combat stateCopy = *(templates[index]->get());
                 std::cout << "\nFight starts: " << i << "\n";
-                runSingleCombat(&stateCopy);
+
+                CardStatsMap cardStatsMapSingle;
+                runSingleCombat(&stateCopy, cardStatsMapSingle);
+                Merge(cardStatsMap, cardStatsMapSingle);
+                std::cout << "Card stats total: " << ToStringCardId(cardStatsMap, &stateCopy);
+                exportCardStatsToFile();
             }
         }
 
-        void runSingleCombat(Combat *state) {
+        void runSingleCombat(Combat *state, CardStatsMap &cardStatsMapSingle) {
             assert(state);
             int initialHp = state->getPlayerHealth();
             int hpLoss = 0;
@@ -84,14 +93,44 @@ namespace SpireSim {
                 auto& actions = state->getActions();
                 for(auto [actionIndex, score] : implementor->result.scoreMap) {
                     assert(actionIndex < actions.size());
+                    auto& action = actions[actionIndex];
                     json j_action;
                     j_action["score"] = score;
                     j_action["action"] = actions[actionIndex];
                     j_actions.push_back(j_action);
+                    
+                    if(action.actionType == ActionType::PlayCard) {
+                        auto cardId = state->getCardIdFromEntityId(action.entityToPlay);
+                        auto& stats = cardStatsMapSingle[int(cardId)];
+                        stats.countPlayable++;
+                        if(actionIndex == bestActionIndex) stats.countPlayedIfAble++;
+                    }
                 }
 
                 state->executeAction(bestActionIndex);
             }
+
+            for(auto& [cardEntityId, stats] : cardStatsMapSingle) {
+                stats.countPlayedIfAbleWeighted = stats.countPlayedIfAble * score;
+            }
+
+            const auto& drawnMap = state->getDrawnMap();
+            const auto& discardedMap = state->getDiscardedMap();
+            
+            for(const auto& [cardEntityId, count] : drawnMap) {
+                auto cardId = state->getCardIdFromEntityId(cardEntityId);
+                auto& stats = cardStatsMapSingle[int(cardId)];
+                stats.countDrawn = count;
+            }
+
+            for(const auto& [cardEntityId, count] : discardedMap) {
+                auto cardId = state->getCardIdFromEntityId(cardEntityId);
+                auto& stats = cardStatsMapSingle[int(cardId)];
+                stats.countDiscarded = count;
+            }
+
+            std::cout << "Fight finished! Won? " << won << "; Score: " << score << "\n";
+            std::cout << "Card stats single: " << ToStringCardId(cardStatsMapSingle, state);
 
             for(auto& j : jvec) {
                 j["hpLoss"] = hpLoss;
@@ -104,7 +143,7 @@ namespace SpireSim {
         void exportJsonToFile(std::vector<json> &jvec) {
             std::ofstream file(optionFilename, std::ios::app);
             if (file.is_open()) {
-                for(auto& j : jvec) file << j << '\n';;
+                for(auto& j : jvec) file << j.dump(2) << '\n';
                 file.close();
             } else {
                 assert(false);
@@ -116,6 +155,18 @@ namespace SpireSim {
             if (file.is_open()) {
                 file << "";
                 file.close(); // Datei ist nun leer bis auf diesen einen Eintrag
+            }
+        }
+
+        void exportCardStatsToFile() {
+            std::ofstream file(optionFilenameCardStats);
+            if (file.is_open()) {
+                json j;
+                j = cardStatsMap;
+                file << j.dump(2) << '\n';
+                file.close();
+            } else {
+                assert(false);
             }
         }
 

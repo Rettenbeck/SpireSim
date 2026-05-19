@@ -39,6 +39,8 @@ namespace SpireSim {
         if(initializeEnemiesHealth_) initializeEnemiesHealth();
         variables.initialHp = ecs.getPlayer().data.hp;
         state.stack.clear();
+        state.cardsDrawnMap.clear();
+        state.cardsDiscardedMap.clear();
     }
 
     void Combat::initializeCards(Cards &cards) {

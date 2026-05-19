@@ -26,6 +26,7 @@ namespace SpireSim {
 
     std::string CardIdToString(CardId cardId) {
         switch (cardId) {
+            // case CardId::None               : return "None";
             case CardId::Strike             : return "Strike";
             case CardId::Defend             : return "Defend";
             case CardId::Bash               : return "Bash";

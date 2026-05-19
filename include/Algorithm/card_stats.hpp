@@ -6,11 +6,15 @@
 namespace SpireSim {
 
     struct CardStats {
+        long countDrawn = 0;
+        long countDiscarded = 0;
         long countPlayable = 0;
         long countPlayedIfAble = 0;
         float countPlayedIfAbleWeighted = 0.f;
 
         void clear() {
+            countDrawn = 0;
+            countDiscarded = 0;
             countPlayable = 0;
             countPlayedIfAble = 0;
             countPlayedIfAbleWeighted = 0.f;
@@ -25,11 +29,16 @@ namespace SpireSim {
         }
 
         CardStats& operator+=(const CardStats& other) {
+            countDrawn += other.countDrawn;
+            countDiscarded += other.countDiscarded;
             countPlayable += other.countPlayable;
             countPlayedIfAble += other.countPlayedIfAble;
             countPlayedIfAbleWeighted += other.countPlayedIfAbleWeighted;
             return *this;
         }
+
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(CardStats, countDrawn, countDiscarded, countPlayable, countPlayedIfAble, countPlayedIfAbleWeighted);
+
     };
     using CardStatsMap = std::map<Id, CardStats>;
     using CardStatsMaps = std::vector<CardStatsMap>;
@@ -52,11 +61,30 @@ namespace SpireSim {
 
         for(auto& [cardEntityId, stats] : cardStatsMap) {
             ss << "  Card " << cardEntityId;
-                if(initialState != nullptr) ss << " (" << CardIdToString(initialState->getCardIdFromEntityId(cardEntityId)) << ")";
-                ss << " seen: " << stats.countPlayable
-                << "; played: " << stats.countPlayedIfAble << " (" << stats.getPlayedRate(false) << ")"
-                << "; played weighted: " << stats.countPlayedIfAbleWeighted << " (" << stats.getPlayedRate(true) << ")"
-                << "\n";
+            if(initialState != nullptr) ss << " (" << CardIdToString(initialState->getCardIdFromEntityId(cardEntityId)) << ")";
+            ss << " seen: " << stats.countPlayable
+            << "; played: " << stats.countPlayedIfAble << " (" << stats.getPlayedRate(false) << ")"
+            << "; played weighted: " << stats.countPlayedIfAbleWeighted << " (" << stats.getPlayedRate(true) << ")"
+            << "\n";
+        }
+        return ss.str();
+    }
+
+    std::string ToStringCardId(CardStatsMap &cardStatsMap, Combat *initialState = nullptr) {
+        if(cardStatsMap.empty()) return "No stats\n";
+        
+        std::stringstream ss;
+        ss << "Card stats:\n";
+
+        for(auto& [cardId, stats] : cardStatsMap) {
+            ss << "  Card " << cardId;
+            if(initialState != nullptr) ss << " (" << CardIdToString(static_cast<CardId>(cardId)) << ")";
+            ss << " seen: " << stats.countPlayable
+            << "; played: " << stats.countPlayedIfAble << " (" << stats.getPlayedRate(false) << ")"
+            << "; played weighted: " << stats.countPlayedIfAbleWeighted << " (" << stats.getPlayedRate(true) << ")"
+            << "; drawn: " << stats.countDrawn
+            << "; discarded: " << stats.countDiscarded
+            << "\n";
         }
         return ss.str();
     }

@@ -21,6 +21,9 @@ namespace SpireSim {
         bool combatOver = false;
         Actions actions;
 
+        std::map<Id, int> cardsDrawnMap;
+        std::map<Id, int> cardsDiscardedMap;
+
         unsigned int seedDeck = 0;
         std::mt19937 genDeck;
 

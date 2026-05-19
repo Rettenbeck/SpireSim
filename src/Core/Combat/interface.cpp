@@ -58,4 +58,12 @@ namespace SpireSim {
         return ecs.getCard(cardEntityId).cardId;
     }
 
+    const std::map<Id, int>& Combat::getDrawnMap() {
+        return state.cardsDrawnMap;
+    }
+
+    const std::map<Id, int>& Combat::getDiscardedMap() {
+        return state.cardsDiscardedMap;
+    }
+
 }
