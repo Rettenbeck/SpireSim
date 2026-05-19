@@ -40,7 +40,7 @@ namespace SpireSim {
                 assert(index < templates.size());
                 Combat stateCopy = *(templates[index]->get());
                 std::cout << "\nFight starts: " << i << "\n";
-                // std::cout << stateCopy.toString();
+                std::cout << stateCopy.toString();
                 runSingleCombat(&stateCopy);
             }
         }
@@ -69,6 +69,7 @@ namespace SpireSim {
                 assert(bestActionIndex < state->getActions().size());
 
                 std::cout << state->actionsToString() << "bestActionIndex: " << bestActionIndex << "\n";
+                std::cout << "Current Hp: " << state->getPlayerHealth() << "\n";
 
                 jvec.push_back(json());
                 auto& j = jvec.back();
