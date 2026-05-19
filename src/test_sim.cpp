@@ -10,8 +10,8 @@ void test_sim() {
     
     auto mcts = std::make_unique<SpireSim::MCTS>(std::make_unique<SpireSim::MCTS_Heuristic_Random>(0));
     mcts->optionIterations = 1600;
-    mcts->optionCombats = 24;
-    mcts->optionNumberThreads = 12;
+    mcts->optionCombats = 1;
+    mcts->optionNumberThreads = 1;
 
     auto implementor = std::make_unique<SpireSim::Implementor>(std::move(mcts));
     implementor->optionIterations = 1;

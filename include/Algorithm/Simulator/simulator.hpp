@@ -49,6 +49,7 @@ namespace SpireSim {
             int initialHp = state->getPlayerHealth();
             int hpLoss = 0;
             bool won = false;
+            float score = 0.f;
             std::vector<json> jvec;
 
             state->setSeeds(seedBuffer++);
@@ -60,6 +61,8 @@ namespace SpireSim {
                 if(state->isCombatOver()) {
                     hpLoss = initialHp - state->getPlayerHealth();
                     won = state->isCombatVictorious();
+                    score = ((float) state->getPlayerHealth()) / ((float) state->getPlayerMaxHealth());
+                    if(score < 0.f) score = 0.f;
                     break;
                 }
 
@@ -77,9 +80,14 @@ namespace SpireSim {
                 jvec.push_back(json());
                 auto& j = jvec.back();
                 j["state"] = *state;
-                auto& j_scores = j["scores"];
+                auto& j_actions = j["actions"];
+                auto& actions = state->getActions();
                 for(auto [actionIndex, score] : implementor->result.scoreMap) {
-                    j_scores.push_back(score);
+                    assert(actionIndex < actions.size());
+                    json j_action;
+                    j_action["score"] = score;
+                    j_action["action"] = actions[actionIndex];
+                    j_actions.push_back(j_action);
                 }
 
                 state->executeAction(bestActionIndex);

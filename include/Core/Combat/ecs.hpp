@@ -159,7 +159,7 @@ namespace SpireSim {
                 if(self.isValid(ref, i)) {
                     json jObj;
                     jObj["id"] = i;
-                    jObj["data"] = ref;
+                    jObj["objData"] = ref;
                     j[vector_name].push_back(jObj);
                 }
             }
