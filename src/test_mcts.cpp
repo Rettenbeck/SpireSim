@@ -37,7 +37,7 @@ void test() {
     for(int i = 0; i < 20; i++) {
         std::cout << state->toString() << "\n\n";
         std::cout << state->actionsToString() << "\n\n";
-        state->exportJsonToFile();
+        // state->exportJsonToFile();
 
         std::cout << "Calculating... \n";
 

@@ -49,10 +49,36 @@ SpireSim::UCombatTemplate createTestData2(SpireSim::PoolContainer &container) {
     return t;
 }
 
+SpireSim::UCombatTemplate createTestData3(SpireSim::PoolContainer &container) {
+    auto t = std::make_unique<SpireSim::CombatTemplateRandom>(container);
+    t->
+     set({SpireSim::PlayerId::IronClad, SpireSim::PlayerId::Regent})
+    .set({SpireSim::EncounterId::SF_Test, SpireSim::EncounterId::Nibbits})
+    .set({SpireSim::RelicId::BagOfPreparation, SpireSim::RelicId::CentennialPuzzle})
+    .set({SpireSim::PotionId::FirePotion, SpireSim::PotionId::FlexPotion})
+    .add({
+        {SpireSim::CardId::Hologram, true},
+        {SpireSim::CardId::Strike, true},
+        {SpireSim::CardId::Strike, true},
+        {SpireSim::CardId::Strike, true},
+        {SpireSim::CardId::Strike, true},
+        {SpireSim::CardId::Defend, true},
+        {SpireSim::CardId::Defend, true},
+        {SpireSim::CardId::Defend, true},
+        {SpireSim::CardId::Bash, true},
+        {SpireSim::CardId::Thunderclap, true},
+        {SpireSim::CardId::Venerate, true},
+        {SpireSim::CardId::FallingStar, true},
+    })
+    ;
+    return t;
+}
+
 SpireSim::UCombatTemplates createTestData(SpireSim::PoolContainer &container) {
     SpireSim::UCombatTemplates vec;
     vec.push_back(std::move(createTestData1(container)));
     vec.push_back(std::move(createTestData2(container)));
+    vec.push_back(std::move(createTestData3(container)));
     return vec;
 }
 

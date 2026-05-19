@@ -40,6 +40,7 @@ namespace SpireSim {
                 assert(index < templates.size());
                 Combat stateCopy = *(templates[index]->get());
                 std::cout << "\nFight starts: " << i << "\n";
+                // std::cout << stateCopy.toString();
                 runSingleCombat(&stateCopy);
             }
         }

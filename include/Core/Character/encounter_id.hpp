@@ -10,5 +10,6 @@ namespace SpireSim {
         Count
     };
     std::string ToString(EncounterId e) { return ToString(int(e)); }
+    using EncounterIds = std::vector<EncounterId>;
 
 }
