@@ -15,8 +15,11 @@ namespace SpireSim {
         Relics relics;
         Potions potions;
 
+        unsigned int seed = 0;
+        std::mt19937 rng;
+
         CombatTemplate(PoolContainer &container_) : container(container_) {}
-        
+
         virtual Combat* get() = 0;
 
         CombatTemplate& setCards(Cards &deck_) {
@@ -84,6 +87,16 @@ namespace SpireSim {
         CombatTemplate& set(const RelicIds &relicIds) { return setRelics(relicIds); }
         CombatTemplate& set(Potions &potions_) { return setPotions(potions_); }
         CombatTemplate& set(const PotionIds &potionIds) { return setPotions(potionIds); }
+
+        void setSeed(unsigned int seed_) {
+            seed = seed_;
+            rng.seed(seed);
+        }
+        
+        int getRandomNumber(int max) { // Including max! E.g. max = 3 produces numbers ranging from 0 to 3 including
+            std::uniform_int_distribution<int> dist(0, max);
+            return dist(rng);
+        }
 
     };
     using UCombatTemplate = std::unique_ptr<CombatTemplate>;

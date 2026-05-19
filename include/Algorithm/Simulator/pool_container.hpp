@@ -34,5 +34,6 @@ namespace SpireSim {
         }
         
     };
+    using UPoolContainer = std::unique_ptr<PoolContainer>;
 
 }

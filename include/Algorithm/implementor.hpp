@@ -16,6 +16,7 @@ namespace SpireSim {
 
         Implementor() {}
         Implementor(Combat *initialState_) : initialState(initialState_) {}
+        Implementor(UAlgorithm algorithm_) : algorithm(std::move(algorithm_)) {}
         Implementor(Combat *initialState_, UAlgorithm algorithm_)
             : initialState(initialState_), algorithm(std::move(algorithm_)) {}
 
@@ -24,6 +25,7 @@ namespace SpireSim {
             assert(algorithm);
             cardStatsMap.clear();
             result.clear();
+            algorithm->initialState = initialState;
 
             runSingleCombat(cardStatsMap, result, optionAddedSeed);
 

@@ -1,5 +1,8 @@
+#pragma once
+
 #include <iostream>
 #include <include.hpp>
+
 
 SpireSim::UCombatTemplate createTestData1(SpireSim::PoolContainer &container) {
     auto t = std::make_unique<SpireSim::CombatTemplateFixed>(container);
@@ -16,9 +19,31 @@ SpireSim::UCombatTemplate createTestData1(SpireSim::PoolContainer &container) {
         {SpireSim::CardId::FallingStar, true},
         {SpireSim::CardId::Venerate, true},
     })
-    .set(SpireSim::PlayerId::IronClad)
+    .set(SpireSim::PlayerId::Regent)
     .set(SpireSim::EncounterId::Nibbits)
     .set({SpireSim::RelicId::BagOfPreparation, SpireSim::RelicId::CentennialPuzzle})
+    .set({SpireSim::PotionId::FirePotion, SpireSim::PotionId::FlexPotion})
+    ;
+    return t;
+}
+
+SpireSim::UCombatTemplate createTestData2(SpireSim::PoolContainer &container) {
+    auto t = std::make_unique<SpireSim::CombatTemplateFixed>(container);
+    t->add({
+        {SpireSim::CardId::Hologram, true},
+        {SpireSim::CardId::Strike, true},
+        {SpireSim::CardId::Strike, true},
+        {SpireSim::CardId::Strike, true},
+        {SpireSim::CardId::Strike, true},
+        {SpireSim::CardId::Defend, true},
+        {SpireSim::CardId::Defend, true},
+        {SpireSim::CardId::Defend, true},
+        {SpireSim::CardId::Bash, true},
+        {SpireSim::CardId::Thunderclap, true},
+    })
+    .set(SpireSim::PlayerId::IronClad)
+    .set(SpireSim::EncounterId::SF_Test)
+    .set({SpireSim::RelicId::BagOfPreparation})
     .set({SpireSim::PotionId::FirePotion, SpireSim::PotionId::FlexPotion})
     ;
     return t;
@@ -27,6 +52,7 @@ SpireSim::UCombatTemplate createTestData1(SpireSim::PoolContainer &container) {
 SpireSim::UCombatTemplates createTestData(SpireSim::PoolContainer &container) {
     SpireSim::UCombatTemplates vec;
     vec.push_back(std::move(createTestData1(container)));
+    vec.push_back(std::move(createTestData2(container)));
     return vec;
 }
 

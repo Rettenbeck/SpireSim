@@ -17,6 +17,7 @@ namespace SpireSim {
 
         MCTS() {}
         MCTS(Combat *initialState_) : Algorithm(initialState_) {}
+        MCTS(UMCTS_Heuristic heuristic_) : heuristic(std::move(heuristic_)) {}
         MCTS(Combat *initialState_, UMCTS_Heuristic heuristic_)
             : Algorithm(initialState_), heuristic(std::move(heuristic_)) {}
 
