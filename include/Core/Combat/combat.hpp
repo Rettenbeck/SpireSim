@@ -38,6 +38,7 @@ namespace SpireSim {
         void registerEnemies(const Enemies &enemies);
         void registerRelics(const Relics &relics);
         void registerPotions(const Potions &potions);
+        void initializeEnemiesHealth();
         
 
 
@@ -235,7 +236,7 @@ namespace SpireSim {
                 state(other.state)
                 {}
 
-        void initialize(bool shuffleDeck = true);
+        void initialize(bool shuffleDeck = true, bool initializeEnemiesHealth = true);
 
         void setSeeds(unsigned int seedDeck_);
         void increaseSeeds(unsigned int value);
@@ -248,6 +249,7 @@ namespace SpireSim {
         int getPlayerHealth();
         int getPlayerBlock();
         int getTotalEnemyHp();
+        int getTotalEnemyMaxHp();
         int getHpLoss();
         CardId getCardIdFromEntityId(Id cardEntityId);
         

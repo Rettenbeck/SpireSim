@@ -34,8 +34,9 @@ namespace SpireSim {
         registerPotions(potions_);
     }
 
-    void Combat::initialize(bool shuffleDeck) {
+    void Combat::initialize(bool shuffleDeck, bool initializeEnemiesHealth_) {
         if(shuffleDeck) pileHandler.reshuffleDeck(ecs);
+        if(initializeEnemiesHealth_) initializeEnemiesHealth();
         variables.initialHp = ecs.getPlayer().data.hp;
         state.stack.clear();
     }
@@ -69,6 +70,16 @@ namespace SpireSim {
     void Combat::registerPotions(const Potions &potions) {
         for(auto& potion : potions) {
             auto id = ecs.addObject(potion);
+        }
+    }
+
+    void Combat::initializeEnemiesHealth() {
+        for(auto& enemy : ecs.cEnemies) {
+            int hpLower = variables.enemiesMoreHp ? enemy.maxHpLowerBoundHard : enemy.maxHpLowerBound;
+            int hpUpper = variables.enemiesMoreHp ? enemy.maxHpUpperBoundHard : enemy.maxHpUpperBound;
+            int hpInit = getRandomNumber(hpUpper - hpLower) + hpLower;
+            enemy.data.maxHp = hpInit;
+            enemy.data.hp = enemy.data.maxHp;
         }
     }
 

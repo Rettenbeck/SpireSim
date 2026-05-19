@@ -11,8 +11,8 @@ namespace SpireSim {
         CharacterData data;
         EnemyMoveIds initialMoves;
         EnemyMoveId currentMove = EnemyMoveId::None;
+        int maxHpLowerBound, maxHpUpperBound, maxHpLowerBoundHard, maxHpUpperBoundHard;
         int initialMoveCount = 0;
-        int potentialAdditionalMaxHp = 0;
         bool isMinion = false;
         EventList eventList;
 
@@ -25,14 +25,17 @@ namespace SpireSim {
         Enemy(EnemyId enemyId_, CharacterData data_, EnemyMoveIds initialMoves_)
             : enemyId(enemyId_), data(data_), initialMoves(initialMoves_) {}
 
-        void setMaxHp(int maxHp_, int potentialAdditionalMaxHp_ = 0) {
-            data.maxHp = maxHp_; data.hp = maxHp_;
-            potentialAdditionalMaxHp = potentialAdditionalMaxHp_;
+        void setMaxHp(int maxHpLowerBound_, int maxHpUpperBound_, int maxHpLowerBoundHard_, int maxHpUpperBoundHard_) {
+            data.maxHp = maxHpLowerBound; data.hp = data.maxHp;
+            maxHpLowerBound = maxHpLowerBound_;
+            maxHpUpperBound = maxHpUpperBound_;
+            maxHpLowerBoundHard = maxHpLowerBoundHard_;
+            maxHpUpperBoundHard = maxHpUpperBoundHard_;
         }
 
         NLOHMANN_DEFINE_TYPE_INTRUSIVE(Enemy,
             enemyId, data, initialMoves, currentMove,
-            initialMoveCount, potentialAdditionalMaxHp, isMinion, eventList
+            initialMoveCount, isMinion, eventList
         );
         TO_STRING_METHOD
     

@@ -8,7 +8,7 @@ namespace SpireSim {
     struct EnemyMove {
         BuffPool &buffPool;
         EnemyMoveId enemyMoveId = EnemyMoveId::None;
-        int damage = 0, attacks = 0, block = 0;
+        int damage = 0, damageHard = 0, attacks = 0, block = 0;
         int strengthGain = 0, vigor = 0;
         int applyWeak = 0, applyFrail = 0, applyVulnerable = 0;
         Buffs buffsToGain;
@@ -16,10 +16,15 @@ namespace SpireSim {
 
         EnemyMove(BuffPool &buffPool_) : buffPool(buffPool_) {}
 
-        EnemyMove& addAttack(int damage_, int attacks_ = 1) {
+        EnemyMove& addAttack(int damage_, int damageHard_, int attacks_ = 1) {
             damage = damage_;
+            damageHard = damageHard_;
             attacks = attacks_;
             return *this;
+        }
+
+        EnemyMove& addAttack(int damage_) {
+            return addAttack(damage_, damage_);
         }
 
         EnemyMove& addBlock(int block_) {
@@ -40,7 +45,7 @@ namespace SpireSim {
 
         NLOHMANN_DEFINE_TYPE_INTRUSIVE(EnemyMove,
             enemyMoveId,
-            damage, attacks, block,
+            damage, damageHard, attacks, block,
             strengthGain, vigor,
             applyWeak, applyFrail, applyVulnerable,
             buffsToGain, debuffsToApply

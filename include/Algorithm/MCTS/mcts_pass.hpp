@@ -71,7 +71,8 @@ namespace SpireSim {
                     float loss = ((float) state.getHpLoss()) / ((float) state.getPlayerMaxHealth());
                     return 1.0f - loss;
                 } else {
-                    return -1.0f;
+                    float loss = ((float) state.getTotalEnemyHp()) / ((float) state.getTotalEnemyMaxHp());
+                    return 0.f - loss;
                 }
             }
             

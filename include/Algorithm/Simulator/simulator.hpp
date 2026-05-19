@@ -37,11 +37,9 @@ namespace SpireSim {
 
             for(int i = 0; i < optionIterations; i++) {
                 int index = getRandomNumber(templates.size() - 1);
-                index = 2;
                 assert(index < templates.size());
                 Combat stateCopy = *(templates[index]->get());
                 std::cout << "\nFight starts: " << i << "\n";
-                std::cout << stateCopy.toString();
                 runSingleCombat(&stateCopy);
             }
         }
@@ -55,7 +53,8 @@ namespace SpireSim {
 
             state->setSeeds(seedBuffer++);
             state->initialize();
-            state->startCombat(true);
+            std::cout << state->toString();
+            state->startCombat();
 
             for(int i = 0; i < maxActions; i++) {
                 if(state->isCombatOver()) {

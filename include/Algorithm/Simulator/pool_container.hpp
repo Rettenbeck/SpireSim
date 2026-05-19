@@ -19,14 +19,14 @@ namespace SpireSim {
         std::unique_ptr<RelicFactory>      relicFactory;
         std::unique_ptr<PotionFactory>     potionFactory;
 
-        PoolContainer(int difficultyMoreHp = 0, int difficultyMoreDmg = 0) {
+        PoolContainer() {
             effectPool = std::make_unique<EffectPool>();
             relicPool = std::make_unique<RelicPool>();
             potionPool = std::make_unique<PotionPool>();
             cardPool = std::make_unique<CardPool>(*effectPool);
             buffPool = std::make_unique<BuffPool>();
-            movePool = std::make_unique<EnemyMovePool>(*buffPool, difficultyMoreDmg);
-            enemyPool = std::make_unique<EnemyPool>(*movePool, difficultyMoreHp);
+            movePool = std::make_unique<EnemyMovePool>(*buffPool);
+            enemyPool = std::make_unique<EnemyPool>(*movePool);
             encounterFactory = std::make_unique<EncounterFactory>(*enemyPool);
             playerFactory = std::make_unique<PlayerFactory>();
             relicFactory = std::make_unique<RelicFactory>(*relicPool);

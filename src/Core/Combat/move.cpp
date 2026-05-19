@@ -18,8 +18,9 @@ namespace SpireSim {
 
     void Combat::resolveMove(Id enemyEntityId, Enemy &enemy, EnemyMove &move) {
         if(move.attacks > 0) {
+            int damage = variables.enemiesDeadlier ? move.damageHard : move.damage;
             for(int i = 0; i < move.attacks; i++)
-                dealDamage(enemyEntityId, enemy.data, ecs.playerEntityId, ecs.getPlayer().data, move.damage);
+                dealDamage(enemyEntityId, enemy.data, ecs.playerEntityId, ecs.getPlayer().data, damage);
             move.vigor = 0;
         }
         if(move.block           > 0) { gainBlock(enemy.data, move.block); }

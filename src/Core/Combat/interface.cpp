@@ -37,6 +37,14 @@ namespace SpireSim {
         return sum;
     }
 
+    int Combat::getTotalEnemyMaxHp() {
+        int sum = 0;
+        for(auto enemyId : ecs.enemyEntityIds) {
+            sum += ecs.getEnemy(enemyId).data.maxHp;
+        }
+        return sum;
+    }
+
     int Combat::getHpLoss() {
         return variables.initialHp - ecs.getPlayer().data.hp;
     }

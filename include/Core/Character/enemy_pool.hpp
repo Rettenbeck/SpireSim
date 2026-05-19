@@ -7,10 +7,9 @@
 namespace SpireSim {
 
     struct EnemyPool {
-        int isDifficult;
         Enemies enemies;
         
-        EnemyPool(EnemyMovePool &enemyMovePool, int isDifficult_ = 0) : isDifficult(isDifficult_) {
+        EnemyPool(EnemyMovePool &enemyMovePool) {
             createEnemyPool(enemyMovePool);
         }
         
@@ -19,7 +18,7 @@ namespace SpireSim {
                 enemies.push_back(Enemy());
             }
         }
-        // 
+        
         Enemy& retrieveForCreation(EnemyId enemyId) {
             int index = int(enemyId);
             createBlankArray(index);
@@ -28,10 +27,15 @@ namespace SpireSim {
             return enemies[index];
         }
         
-        Enemy& retrieveForCreation(EnemyId enemyId, EnemyMoveId initialMove, int maxHp, int potentialAdditionalMaxHp = 0) {
+        Enemy& retrieveForCreation( EnemyId enemyId,
+                                    EnemyMoveId initialMove,
+                                    int maxHpLowerBound, int maxHpUpperBound,
+                                    int maxHpLowerBoundHard, int maxHpUpperBoundHard
+                                )
+        {
             auto& enemy = retrieveForCreation(enemyId);
             enemy.initialMoves.push_back(initialMove);
-            enemy.setMaxHp(maxHp, potentialAdditionalMaxHp);
+            enemy.setMaxHp(maxHpLowerBound, maxHpUpperBound, maxHpLowerBoundHard, maxHpUpperBoundHard);
             return enemy;
         }
         
@@ -44,9 +48,9 @@ namespace SpireSim {
         void createEnemyPool(EnemyMovePool &enemyMovePool) {
             createBlankArray(int(EnemyId::Count));
             
-            retrieveForCreation(EnemyId::ShrinkerBeetle, EnemyMoveId::Shrinker, 38 + 2 * isDifficult, 2);
-            retrieveForCreation(EnemyId::FuzzyWormCrawler, EnemyMoveId::AcidGoop, 55 + 2 * isDifficult, 2);
-            retrieveForCreation(EnemyId::Nibbit, EnemyMoveId::Butt, 42 + 2 * isDifficult, 4);
+            retrieveForCreation(EnemyId::ShrinkerBeetle, EnemyMoveId::Shrinker, 38, 40, 40, 42);
+            retrieveForCreation(EnemyId::FuzzyWormCrawler, EnemyMoveId::AcidGoop, 55, 57, 58, 59);
+            retrieveForCreation(EnemyId::Nibbit, EnemyMoveId::Butt, 42, 46, 44, 48);
         }
         
         std::string toString() {

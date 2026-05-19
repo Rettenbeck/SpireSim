@@ -8,10 +8,9 @@ namespace SpireSim {
 
     struct EnemyMovePool {
         BuffPool &buffPool;
-        int isDifficult;
         EnemyMoves enemyMoves;
         
-        EnemyMovePool(BuffPool &buffPool_, int isDifficult_ = 0) : buffPool(buffPool_), isDifficult(isDifficult_) {
+        EnemyMovePool(BuffPool &buffPool_) : buffPool(buffPool_) {
             fillNextEnemyMoveList();
             createEnemyMovePool();
         }
@@ -40,13 +39,13 @@ namespace SpireSim {
             createBlankArray(int(EnemyMoveId::Count));
             
             retrieveForCreation(EnemyMoveId::Shrinker).addDebuff(BuffId::Shrink);
-            retrieveForCreation(EnemyMoveId::Chomp).addAttack( 7 + 1 * isDifficult);
-            retrieveForCreation(EnemyMoveId::Stomp).addAttack(13 + 1 * isDifficult);
+            retrieveForCreation(EnemyMoveId::Chomp).addAttack(7, 8);
+            retrieveForCreation(EnemyMoveId::Stomp).addAttack(13, 14);
 
-            retrieveForCreation(EnemyMoveId::AcidGoop).addAttack(4 + 2 * isDifficult);
+            retrieveForCreation(EnemyMoveId::AcidGoop).addAttack(4, 6);
             retrieveForCreation(EnemyMoveId::Inhale).gainStrength(7);
 
-            retrieveForCreation(EnemyMoveId::Butt ).addAttack(12 + 1 * isDifficult);
+            retrieveForCreation(EnemyMoveId::Butt ).addAttack(12, 13);
             retrieveForCreation(EnemyMoveId::Slice).addAttack(6).addBlock(5);
             retrieveForCreation(EnemyMoveId::Hiss ).gainStrength(2);
         }
