@@ -58,7 +58,7 @@ namespace SpireSim {
 
             for(int i = 0; i < maxActions; i++) {
                 if(state->isCombatOver()) {
-                    hpLoss = state->getPlayerHealth() - initialHp;
+                    hpLoss = initialHp - state->getPlayerHealth();
                     won = state->isCombatVictorious();
                     break;
                 }
@@ -68,12 +68,15 @@ namespace SpireSim {
                 int bestActionIndex = implementor->bestActionIndex;
                 assert(bestActionIndex < state->getActions().size());
 
-                std::cout << state->actionsToString() << "bestActionIndex: " << bestActionIndex << "\n";
+                std::cout << "\n";
+                std::cout << state->actionsToString();
+                std::cout << implementor->result.toString();
+                std::cout << "bestActionIndex: " << bestActionIndex << "\n";
                 std::cout << "Current Hp: " << state->getPlayerHealth() << "\n";
 
                 jvec.push_back(json());
                 auto& j = jvec.back();
-                j = *state;
+                j["state"] = *state;
                 auto& j_scores = j["scores"];
                 for(auto [actionIndex, score] : implementor->result.scoreMap) {
                     j_scores.push_back(score);
