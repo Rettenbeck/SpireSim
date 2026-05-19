@@ -10,15 +10,15 @@ void test_sim() {
     
     auto mcts = std::make_unique<SpireSim::MCTS>(std::make_unique<SpireSim::MCTS_Heuristic_Random>(0));
     mcts->optionIterations = 1600;
-    mcts->optionCombats = 1;
-    mcts->optionNumberThreads = 1;
+    mcts->optionCombats = 12;
+    mcts->optionNumberThreads = 12;
 
     auto implementor = std::make_unique<SpireSim::Implementor>(std::move(mcts));
     implementor->optionIterations = 1;
     implementor->optionNumberThreads = 1;
 
     SpireSim::Simulator simulator(std::move(implementor));
-    simulator.optionIterations = 90;
+    simulator.optionIterations = 980;
     simulator.setTemplates(templates);
     simulator.run();
 

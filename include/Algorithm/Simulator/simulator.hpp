@@ -143,7 +143,7 @@ namespace SpireSim {
         void exportJsonToFile(std::vector<json> &jvec) {
             std::ofstream file(optionFilename, std::ios::app);
             if (file.is_open()) {
-                for(auto& j : jvec) file << j.dump(2) << '\n';
+                for(auto& j : jvec) file << j.dump() << '\n';
                 file.close();
             } else {
                 assert(false);
@@ -154,7 +154,7 @@ namespace SpireSim {
             std::ofstream file(optionFilename, std::ios::out | std::ios::trunc);
             if (file.is_open()) {
                 file << "";
-                file.close(); // Datei ist nun leer bis auf diesen einen Eintrag
+                file.close();
             }
         }
 
