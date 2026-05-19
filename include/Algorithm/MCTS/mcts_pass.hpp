@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Algorithm/algorithm.hpp>
 #include <Algorithm/MCTS/mcts_node.hpp>
 #include <Algorithm/MCTS/mcts_result.hpp>
 #include <Algorithm/MCTS/heuristics.hpp>
@@ -11,8 +10,6 @@ namespace SpireSim {
     class MCTS_Pass : public Algorithm {
     public:
         UMCTS_Heuristic heuristic = nullptr;
-        Combat *initialState = nullptr;
-
         MCTS_ResultMap mcts_ResultMap;
 
         int optionIterations = 1000;
@@ -21,14 +18,14 @@ namespace SpireSim {
         int seedBuffer = 0;
 
         MCTS_Pass() {}
-        MCTS_Pass(Combat *initialState_) : initialState(initialState_) {}
+        MCTS_Pass(Combat *initialState_) : Algorithm(initialState_) {}
+        MCTS_Pass(UMCTS_Heuristic heuristic_) : heuristic(std::move(heuristic_)) {}
         MCTS_Pass(Combat *initialState_, UMCTS_Heuristic heuristic_)
-            : initialState(initialState_), heuristic(std::move(heuristic_)) {}
+            : Algorithm(initialState_), heuristic(std::move(heuristic_)) {}
 
         void run() {
             assert(heuristic);
             assert(initialState);
-
             Combat internalState = *initialState;
 
             cardStatsMap.clear();
@@ -50,6 +47,7 @@ namespace SpireSim {
                 backpropagate(expanded, score, hpLoss);
             }
 
+            double bestActionScore = -99999;
             for(auto& child : root.children) {
                 auto& mcts_result = mcts_ResultMap[child->parentActionIndex];
                 auto& resultScore = result.scoreMap[child->parentActionIndex];
@@ -59,6 +57,11 @@ namespace SpireSim {
                 mcts_result.totalHpLoss = child->totalHpLoss;
                 mcts_result.optionIterations = optionIterations;
                 resultScore += child->visits;
+
+                if(child->visits > bestActionScore) {
+                    bestActionScore = child->visits;
+                    bestActionIndex = child->parentActionIndex;
+                }
             }
         }
 
@@ -138,6 +141,8 @@ namespace SpireSim {
             while(!stateCopy.isCombatOver() && steps < maxSteps) {
                 assert(!stateCopy.getActions().empty());
                 int i = heuristic->getAction(stateCopy);
+                assert(i >= 0);
+                assert(i < stateCopy.getActions().size());
                 stateCopy.executeAction(i);
             }
             return {evaluateState(stateCopy), stateCopy.getHpLoss()};
@@ -168,6 +173,15 @@ namespace SpireSim {
             obj->optionAddedSeed = optionAddedSeed;
             obj->optionExplorationConstant = optionExplorationConstant;
             return obj;
+        }
+
+        std::string toString() {
+            std::stringstream ss;
+            // ss << resultToString() << "\n";
+            ss << "Best action index: " << bestActionIndex << "\n";
+            ss << ToString(cardStatsMap) << "\n";
+            ss << ToString(mcts_ResultMap) << "\n";
+            return ss.str();
         }
 
     };

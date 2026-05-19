@@ -7,10 +7,7 @@ namespace SpireSim {
 
     class MCTS : public Algorithm {
     public:
-    
         UMCTS_Heuristic heuristic = nullptr;
-        Combat *initialState = nullptr;
-
         MCTS_ResultMap mcts_ResultMap;
 
         int optionCombats = 100;
@@ -19,9 +16,9 @@ namespace SpireSim {
         double optionExplorationConstant = 1.414;
 
         MCTS() {}
-        MCTS(Combat *initialState_) : initialState(initialState_) {}
+        MCTS(Combat *initialState_) : Algorithm(initialState_) {}
         MCTS(Combat *initialState_, UMCTS_Heuristic heuristic_)
-            : initialState(initialState_), heuristic(std::move(heuristic_)) {}
+            : Algorithm(initialState_), heuristic(std::move(heuristic_)) {}
 
         void run() {
             cardStatsMap.clear();

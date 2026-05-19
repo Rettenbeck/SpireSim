@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Core/Combat/include.hpp>
+#include <Algorithm/algorithm.hpp>
 
 
 namespace SpireSim {
@@ -32,12 +33,35 @@ namespace SpireSim {
 
     class MCTS_Heuristic_Random : public MCTS_Heuristic {
     public:
-        MCTS_Heuristic_Random(unsigned int seed) : MCTS_Heuristic(seed) {}
+        MCTS_Heuristic_Random(unsigned int seed = 0) : MCTS_Heuristic(seed) {}
 
         int getAction(Combat &state) {
-            return getRandomNumber(state.getActions().size() - 1);
+            auto i = getRandomNumber(state.getActions().size() - 1);
+            // std::cout << i << "; size: " << state.getActions().size() << " ; ";
+            return i;
         }
 
+        std::unique_ptr<MCTS_Heuristic> clone() {
+            return std::make_unique<MCTS_Heuristic_Random>(optionSeed);
+        }
+
+    };
+
+    class MCTS_Heuristic_Algorithm : public MCTS_Heuristic {
+    public:
+
+        UAlgorithm algorithm = nullptr;
+
+        MCTS_Heuristic_Algorithm(UAlgorithm algorithm_, unsigned int seed = 0)
+            : algorithm(std::move(algorithm_)), MCTS_Heuristic(seed) {}
+
+        int getAction(Combat &state) {
+            assert(algorithm);
+            algorithm->initialState = &state;
+            algorithm->run();
+            return algorithm->bestActionIndex;
+        }
+        
         std::unique_ptr<MCTS_Heuristic> clone() {
             return std::make_unique<MCTS_Heuristic_Random>(optionSeed);
         }

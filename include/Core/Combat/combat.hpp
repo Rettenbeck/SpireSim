@@ -241,7 +241,7 @@ namespace SpireSim {
         void increaseSeeds(unsigned int value);
 
         // Interface methods
-        Actions& getActions();
+        const Actions& getActions() const;
         bool isCombatOver();
         bool isCombatVictorious();
         int getPlayerMaxHealth();

@@ -5,7 +5,7 @@
 
 namespace SpireSim {
 
-    Actions& Combat::getActions() {
+    const Actions& Combat::getActions() const {
         return state.actions;
     }
 
