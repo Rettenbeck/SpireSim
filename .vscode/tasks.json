@@ -21,7 +21,12 @@
                 "-static-libgcc",
                 "-static-libstdc++",
                 //"-flto=2",
-                "-O2"
+                "-O2",
+
+                // ONNX
+                "-I", "C:/libs/onnxruntime/include",
+                "-L", "C:/libs/onnxruntime/lib",
+                "-lonnxruntime"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"

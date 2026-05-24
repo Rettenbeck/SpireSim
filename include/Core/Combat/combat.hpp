@@ -15,7 +15,7 @@
 namespace SpireSim {
 
     class Combat {
-    private:
+    public:
 
         CombatState state;
         CombatVariables variables;
@@ -208,7 +208,7 @@ namespace SpireSim {
 
 
 
-    public:
+    // public:
         Combat (EffectPool &effectPool_,
                 RelicPool &relicPool_,
                 PotionPool &potionPool_,
