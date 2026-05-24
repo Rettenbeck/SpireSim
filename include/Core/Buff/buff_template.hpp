@@ -17,6 +17,27 @@ namespace SpireSim {
         BuffTemplate(int amountParams_ = 0, bool dependentOnCreator_ = false)
             : amountParams(amountParams_), dependentOnCreator(dependentOnCreator_) {}
 
+        BuffTemplate& dependOnCreator(bool dependentOnCreator_ = true) {
+            dependentOnCreator = dependentOnCreator_;
+            return *this;
+        }
+
+        BuffTemplate& modifyParentDamagePerc(const Param &param) {
+            eventList.push_back({
+                EventType::OnDealDamageForInterception,
+                EventListener(Effect(EffectType::ModifyParentDamagePerc, {param}))
+            });
+            return *this;
+        }
+
+        BuffTemplate& modifyCardDamageFlat(const Params &params) {
+            eventList.push_back({
+                EventType::OnDealDamageForInterception,
+                EventListener(Effect(EffectType::ModifyCardDamageFlat, params))
+            });
+            return *this;
+        }
+
         NLOHMANN_DEFINE_TYPE_INTRUSIVE(BuffTemplate, buffId, buffCategory, amountParams, dependentOnCreator, eventList);
         TO_STRING_METHOD
     

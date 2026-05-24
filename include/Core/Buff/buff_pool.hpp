@@ -27,6 +27,13 @@ namespace SpireSim {
             return buffTemplates[index];
         }
         
+        BuffTemplate& retrieveForCreation(BuffId buffId, BuffCategory buffCategory, int amountParams = 0) {
+            auto& buffTemplate = retrieveForCreation(buffId);
+            buffTemplate.buffCategory = buffCategory;
+            buffTemplate.amountParams = amountParams;
+            return buffTemplate;
+        }
+        
         BuffTemplate& retrieve(BuffId buffId) {
             int index = int(buffId);
             assert(index < buffTemplates.size());
@@ -55,17 +62,12 @@ namespace SpireSim {
         
         void createBuffPool() {
             createBlankArray(int(BuffId::Count));
-            auto& buffGainStrengthPerTurn = retrieveForCreation(BuffId::GainStrengthPerTurn);
-            auto& buffShrink = retrieveForCreation(BuffId::Shrink);
+            
+            retrieveForCreation(BuffId::GainStrengthPerTurn, BuffCategory::Buff, 1);
 
-            buffGainStrengthPerTurn.buffCategory = BuffCategory::Buff;
-            buffGainStrengthPerTurn.amountParams = 1;
-
-            buffShrink.buffCategory = BuffCategory::Debuff;
-            buffShrink.eventList.push_back({EventType::OnDealDamageForInterception, EventListener(
-                Effect(EffectType::ModifyParentDamagePerc, {Param(ParamType::FixedValue, BUFF_SHRINKER_PERCENTAGE)}
-            ))});
-            buffShrink.dependentOnCreator = true;
+            retrieveForCreation(BuffId::Shrink, BuffCategory::Debuff)
+                .modifyParentDamagePerc(Param(ParamType::FixedValue, BUFF_SHRINKER_PERCENTAGE))
+                .dependOnCreator();
         }
         
         std::string toString() {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Core/Combat/entity.hpp>
+#include <Core/Card/Subtypes/card_id.hpp>
 
 
 namespace SpireSim {
@@ -22,12 +23,16 @@ namespace SpireSim {
         int xValue = 0;
         int enemies = 0;
         
+        std::map<CardId, int> cardIdIncreasedDamage;
+        std::map<Id, int> entityIdIncreasedDamage;
+
         Ids chosenCards, choosableCards;
 
         NLOHMANN_DEFINE_TYPE_INTRUSIVE(CombatVariables,
             enemiesMoreHp, enemiesDeadlier,
             initialHp, turn, cardDrawOnTurn, maxHandSize, energyPerTurn, energy, stars,
             hasTakenDamage, cardsPlayedThisCombat, xValue, enemies,
+            cardIdIncreasedDamage, entityIdIncreasedDamage,
             chosenCards, choosableCards
         );
         TO_STRING_METHOD

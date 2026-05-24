@@ -133,6 +133,8 @@ namespace SpireSim {
             retrieveForCreationAOEAttack(CardId::Thunderclap, 1, 4, 7).applyVulnerable(1, 1);
             retrieveForCreation(CardId::BloodLetting, 0).loseLifeSelf(3).gainEnergy(2, 3);
 
+            retrieveForCreationSingleAttack(CardId::Neutralize, 0, 3, 4).applyWeak(1, 2);
+
             retrieveForCreation(CardId::Venerate, 1).gainStars(2, 3);
             retrieveForCreationSingleAttack(CardId::FallingStar, 0, 8, 12)
                 .addStarCost(2).applyWeak(1).applyVulnerable(1);

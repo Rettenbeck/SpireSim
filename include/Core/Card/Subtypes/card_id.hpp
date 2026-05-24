@@ -13,6 +13,9 @@ namespace SpireSim {
         // Ironclad
         Bash, Thunderclap, BloodLetting,
         
+        // Silent
+        Neutralize,
+
         // Regent
         Venerate, FallingStar,
         MakeItSo, CosmicIndifference,

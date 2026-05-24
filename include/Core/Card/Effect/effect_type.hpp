@@ -12,7 +12,7 @@ namespace SpireSim {
         CardDealDamage, CardGainBlock, CardApplyVulnerable, CardApplyWeak,
         LoseLifeSelf,
         MoveCard, MoveChosenCards,
-        ModifyParentDamagePerc
+        ModifyParentDamagePerc, ModifyCardDamageFlat
     };
     std::string ToString(EffectType e) { return ToString(int(e)); }
 
