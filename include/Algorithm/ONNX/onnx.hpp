@@ -136,17 +136,21 @@ namespace SpireSim {
                     auto& enemy = enemies[enemyId];
 
                     data.first.push_back(enemyId);
+                    data.first.push_back(int(enemy.enemyId));
+                    data.first.push_back(int(enemy.currentMove));
                     data.first.push_back(normalize(enemy.data.hp, 100.0));
                     data.first.push_back(normalize(enemy.data.block, 100.0));
                     data.first.push_back(normalize(enemy.data.strength, 10.0));
                 } else {
+                    data.first.push_back(-1);
+                    data.first.push_back(-1);
                     data.first.push_back(-1);
                     data.first.push_back(0.0);
                     data.first.push_back(0.0);
                     data.first.push_back(0.0);
                 }
             }
-            data.second = { 1, 4, 4 };
+            data.second = { 1, 4, 6 };
             return data;
         }
 
@@ -156,9 +160,10 @@ namespace SpireSim {
             data.first = {
                 normalize(playerData.hp, 100.0),
                 normalize(playerData.block, 100.0),
-                normalize(initialState->variables.energy, 3.0)
+                normalize(initialState->variables.energy, 3.0),
+                normalize(initialState->variables.stars, 5.0)
             };
-            data.second = { 1, 3 };
+            data.second = { 1, 4 };
             return data;
         }
 
@@ -174,11 +179,13 @@ namespace SpireSim {
                     auto& card = cards[cardEntityId];
 
                     data.first.push_back(cardEntityId);
+                    data.first.push_back(int(card.cardId));
                     data.first.push_back(normalize(card.data.damage, 20.0));
                     data.first.push_back(normalize(card.data.block, 20.0));
                     data.first.push_back(card.data.energyCost);
                     data.first.push_back((card.isUpgraded ? 1.0 : 0.0));
                 } else {
+                    data.first.push_back(-1);
                     data.first.push_back(-1);
                     data.first.push_back(0.0);
                     data.first.push_back(0.0);
@@ -186,7 +193,7 @@ namespace SpireSim {
                     data.first.push_back(0.0);
                 }
             }
-            data.second = { 1, 10, 5 };
+            data.second = { 1, 10, 6 };
             return data;
         }
 
@@ -208,7 +215,10 @@ namespace SpireSim {
         void checkInput(Pair &data) {
             int input_size = 1;
             for(auto value : data.second) input_size *= value;
-            assert(data.first.size() == input_size);
+            if(data.first.size() != input_size) {
+                std::cout << data.first.size() << "; " << input_size << "\n";
+                assert(false);
+            }
         }
 
         void initialize() {
