@@ -9,8 +9,8 @@ void test_onnx() {
     
     SpireSim::PoolContainer container;
     auto templates = createTestData(container);
-    assert(templates.size() > 0);
-    auto state = templates[0]->get();
+    assert(templates.size() > 1);
+    auto state = templates[1]->get();
     assert(state);
 
     state->setSeeds(42);

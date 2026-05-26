@@ -183,6 +183,9 @@ namespace SpireSim {
                     data.first.push_back(normalize(card.data.damage, 20.0));
                     data.first.push_back(normalize(card.data.block, 20.0));
                     data.first.push_back(card.data.energyCost);
+                    data.first.push_back(card.data.starCost);
+                    data.first.push_back(card.data.vulnerable);
+                    data.first.push_back(card.data.weak);
                     data.first.push_back((card.isUpgraded ? 1.0 : 0.0));
                 } else {
                     data.first.push_back(-1);
@@ -191,9 +194,12 @@ namespace SpireSim {
                     data.first.push_back(0.0);
                     data.first.push_back(0.0);
                     data.first.push_back(0.0);
+                    data.first.push_back(0.0);
+                    data.first.push_back(0.0);
+                    data.first.push_back(0.0);
                 }
             }
-            data.second = { 1, 10, 6 };
+            data.second = { 1, 10, 9 };
             return data;
         }
 

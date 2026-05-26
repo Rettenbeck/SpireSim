@@ -80,6 +80,11 @@ namespace SpireSim {
     {
         int damageCalculated = calculateDamage(sourceEntityId, sourceData, targetEntityId, targetData, damage);
         triggerInterceptor(EventType::OnDealDamageForInterception, InterceptorContext(sourceEntityId), damageCalculated);
+
+        if(variables.recordDamage) [[unlikely]] {
+            recordDamage(sourceEntityId, sourceData, targetEntityId, targetData, damageCalculated);
+        }
+        
         if(targetData.block >= damageCalculated) {
             targetData.block -= damageCalculated;
         } else {
@@ -87,7 +92,12 @@ namespace SpireSim {
             targetData.block = 0;
             targetData.hp -= damageCalculated;
             if(damageCalculated > 0) onDamageDealt(sourceEntityId, sourceData, targetEntityId, targetData, damageCalculated);
-            if(targetData.hp <= 0) entityDies(targetEntityId);
+            if(targetData.hp <= 0) {
+                entityDies(targetEntityId);
+                // if(variables.recordDamage) [[unlikely]] {
+                //     recordLethal(sourceEntityId, sourceData, targetEntityId, targetData);
+                // }
+            }
         }
     }
 

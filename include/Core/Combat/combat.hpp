@@ -255,6 +255,25 @@ namespace SpireSim {
         CardId getCardIdFromEntityId(Id cardEntityId);
         const std::map<Id, int>& getDrawnMap();
         const std::map<Id, int>& getDiscardedMap();
+
+        void startRecordingDamage() {
+            variables.entityDamageRecorded.clear();
+            variables.recordDamage = true;
+        }
+        void stopRecordingDamage() {
+            variables.recordDamage = false;
+        }
+        void recordDamage(Id sourceEntityId, CharacterData &sourceData, Id targetEntityId, CharacterData &targetData,
+                            int damage)
+        {
+            variables.entityDamageRecorded[sourceEntityId].push_back(damage);
+        }
+        void hardEndTurn() {
+            // ONLY USE FOR RECORDING PURPOSES!!
+            state.waitingForAction = false;
+            state.waitingForActionOnStack = false;
+            proceedPhases();
+        }
         
         // Actions
         void generateActions();
