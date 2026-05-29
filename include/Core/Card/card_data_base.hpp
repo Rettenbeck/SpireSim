@@ -71,8 +71,8 @@ namespace SpireSim {
 
         }
 
-        CardDataBaseEntries::iterator find(CardId cardId) {
-            return std::find_if(
+        CardDataBaseEntry* find(CardId cardId) {
+            auto it = std::find_if(
                 entries.begin(),
                 entries.end(),
                 [cardId](const CardDataBaseEntry& e)
@@ -80,13 +80,14 @@ namespace SpireSim {
                     return e.cardId == cardId;
                 }
             );
+            if(it == entries.end()) return nullptr;
+            return it.base();
         }
 
         void check() {
             for(int i = 1; i < int(CardId::Count); i++) {
                 auto cardId = static_cast<CardId>(i);
-                auto it = find(cardId);
-                if(it == entries.end()) {
+                if(!find(cardId)) {
                     std::cout << "Card id not found: " << i << "\n";
                     assert(false);
                 }

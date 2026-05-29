@@ -22,6 +22,9 @@ namespace SpireSim {
         moveCard(effect.sourceEntityId, card.data.pileAfterPlay);
         variables.cardAddedDamage = 0;
         variables.cardsPlayedThisCombat++;
+        if(cardPool.retrieve(card.cardId).cardType == CardType::Attack) {
+            ecs.getPlayer().data.vigor = 0;
+        }
         triggerEvent(EventType::OnCardPlayed);
     }
 

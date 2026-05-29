@@ -2,6 +2,7 @@
 
 #include <Core/Event/event_listener.hpp>
 #include <Core/Card/Subtypes/card_id.hpp>
+#include <Core/Card/Subtypes/card_type.hpp>
 #include <Core/Card/Subtypes/card_data.hpp>
 
 
@@ -10,6 +11,7 @@ namespace SpireSim {
     struct CardTemplate {
         EffectPool& effectPool;
         CardId cardId;
+        CardType cardType;
         CardData normalData, upgradedData;
         EventList eventList;
         

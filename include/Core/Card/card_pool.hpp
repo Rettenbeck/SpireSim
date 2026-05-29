@@ -28,8 +28,12 @@ namespace SpireSim {
             createBlankArray(index);
             assert(cardTemplates.size() > index);
             assert(cardTemplates.size() < 9999);
-            cardTemplates[index].cardId = cardId;
-            return cardTemplates[index];
+            auto& cardTemplate = cardTemplates[index];
+            cardTemplate.cardId = cardId;
+            auto dbEntry = cardDataBase.find(cardId);
+            assert(dbEntry);
+            cardTemplate.cardType = dbEntry->cardType;
+            return cardTemplate;
         }
         
         CardTemplate& retrieveForCreation(CardId cardId, int energyCostNormal, int energyCostUpgraded) {

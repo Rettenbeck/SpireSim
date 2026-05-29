@@ -94,9 +94,9 @@ namespace SpireSim {
     
     std::string Combat::cardIdToString(CardId cardId) {
         auto& db = cardPool.cardDataBase;
-        auto it = db.find(cardId);
-        assert(it != db.entries.end());
-        return it->name;
+        auto ptr = db.find(cardId);
+        assert(ptr);
+        return ptr->name;
     }
 
 }
