@@ -44,7 +44,7 @@ namespace SpireSim {
         
         CardTemplate& copyLastAddedEffect(int value, CardData &data) {
             assert(data.effects.size() > 0);
-            auto& lastEffect = data.effects.back();
+            auto lastEffect = data.effects.back();
             for(int i = 0; i < value; i++) data.effects.push_back(lastEffect);
             return *this;
         }
@@ -118,6 +118,13 @@ namespace SpireSim {
             normalData.cardAnyParam2 = value;
             upgradedData.cardAnyParam2 = valueUpgraded;
             addEffect(EffectId::CardGainStars);
+            return *this;
+        }
+        
+        CardTemplate& addVigor(int value, int valueUpgraded) {
+            normalData.cardAnyParam2 = value;
+            upgradedData.cardAnyParam2 = valueUpgraded;
+            addEffect(EffectId::CardGainVigor);
             return *this;
         }
         

@@ -151,6 +151,7 @@ namespace SpireSim {
         void executeMoveCard(Effect &effect);
         void executeCardModifyDamageFlat(Effect &effect);
         void executeSharpenClaws(Effect &effect);
+        void executeGainVigor(Effect &effect);
 
 
 

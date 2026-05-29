@@ -64,6 +64,7 @@ namespace SpireSim {
             ADDC(AstralPulse                , Attack, Common    , Regent    )
             ADDC(CelestialMight             , Attack, Common    , Regent    )
             ADDC(CosmicIndifference         , Skill , Common    , Regent    )
+            ADDC(Terraforming               , Skill , Uncommon  , Regent    )
             ADDC(MakeItSo                   , Attack, Rare      , Regent    )
 
             // Defect

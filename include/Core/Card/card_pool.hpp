@@ -161,6 +161,8 @@ namespace SpireSim {
                 .chooseCards(1, 2, CardLocation::Discard)
                 .moveChosenCardsToTarget(CardLocation::Deck);
             
+            retrieveForCreation(CardId::Terraforming, 1).addVigor(6, 8);
+
             retrieveForCreationSingleAttack(CardId::MakeItSo, 0, 6, 9).returnToHandAfterXCards(3);
 
             // Defect

@@ -39,6 +39,7 @@ namespace SpireSim {
             case EffectType::CardGainBlock          : executeCardGainBlock        (effect); return;
             case EffectType::CardApplyVulnerable    : executeCardApplyVulnerable  (effect); return;
             case EffectType::CardApplyWeak          : executeCardApplyWeak        (effect); return;
+            case EffectType::GainVigor              : executeGainVigor            (effect); return;
             case EffectType::MoveCard               : executeMoveCard             (effect); return;
             case EffectType::MoveChosenCards        : executeMoveChosenCards      (effect); return;
             case EffectType::CardModifyDamageFlat   : executeCardModifyDamageFlat (effect); return;

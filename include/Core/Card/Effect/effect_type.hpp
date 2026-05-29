@@ -10,6 +10,7 @@ namespace SpireSim {
         ChooseCards, ChooseSingleCard,
         DrawCards, GainEnergy, GainStars,
         CardDealDamage, CardGainBlock, CardApplyVulnerable, CardApplyWeak,
+        GainVigor,
         LoseLifeSelf,
         MoveCard, MoveChosenCards,
         ModifyParentDamagePerc, CardModifyDamageFlat,

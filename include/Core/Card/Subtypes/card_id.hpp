@@ -19,7 +19,9 @@ namespace SpireSim {
         // Regent
         Venerate, FallingStar,
         AstralPulse, CelestialMight,
-        CosmicIndifference, MakeItSo,
+        CosmicIndifference,
+        Terraforming,
+        MakeItSo,
         
         // Defect
         Hologram, Claw,

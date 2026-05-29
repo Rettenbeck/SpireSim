@@ -43,6 +43,11 @@ namespace SpireSim {
         gainStars(effect.resolutionParams[0]);
     }
 
+    void Combat::executeGainVigor(Effect &effect) {
+        assert(effect.resolutionParams.size() > 0);
+        gainVigorPlayer(effect.resolutionParams[0]);
+    }
+
     void Combat::executeLoseLifeSelf(Effect &effect) {
         assert(effect.resolutionParams.size() > 0);
         loseLifeSelf(effect.resolutionParams[0]);
