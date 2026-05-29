@@ -1,20 +1,22 @@
 #pragma once
 
 #include <Core/Card/Subtypes/card_id.hpp>
+#include <Core/Card/Subtypes/card_type.hpp>
 #include <Core/Card/Subtypes/card_rarity.hpp>
 #include <Core/Character/player_id.hpp>
 
 
 namespace SpireSim {
 
-    #define ADDC(NAME,RARITY,PLAYER) \
-        entries.push_back(CardDataBaseEntry(CardId::NAME, CardRarity::RARITY, PlayerId::PLAYER, #NAME));
+    #define ADDC(NAME,TYPE,RARITY,PLAYER) \
+        entries.push_back(CardDataBaseEntry(CardId::NAME, CardType::TYPE, CardRarity::RARITY, PlayerId::PLAYER, #NAME));
 
-    #define ADDF(NAME,RARITY,PLAYER,IS_STRIKE,IS_DEFEND) \
-        entries.push_back(CardDataBaseEntry(CardId::NAME, CardRarity::RARITY, PlayerId::PLAYER, #NAME, IS_STRIKE, IS_DEFEND));
+    #define ADDF(NAME,TYPE,RARITY,PLAYER,IS_STRIKE,IS_DEFEND) \
+        entries.push_back(CardDataBaseEntry(CardId::NAME, CardType::TYPE, CardRarity::RARITY, PlayerId::PLAYER, #NAME, IS_STRIKE, IS_DEFEND));
 
     struct CardDataBaseEntry {
         CardId cardId = CardId::None;
+        CardType cardType = CardType::None;
         CardRarity rarity = CardRarity::None;
         PlayerId playerId = PlayerId::None;
         std::string name = "NONE";
@@ -23,13 +25,14 @@ namespace SpireSim {
 
         CardDataBaseEntry() {}
 
-        CardDataBaseEntry(CardId cardId_, CardRarity rarity_, PlayerId playerId_, std::string name_)
-            : cardId(cardId_), rarity(rarity_), playerId(playerId_), name(name_) {}
+        CardDataBaseEntry(CardId cardId_, CardType cardType_, CardRarity rarity_,
+            PlayerId playerId_, std::string name_) :
+                cardId(cardId_), cardType(cardType_), rarity(rarity_), playerId(playerId_), name(name_) {}
         
-        CardDataBaseEntry(CardId cardId_, CardRarity rarity_, PlayerId playerId_,
-            std::string name_, bool isStrike_, bool isDefend_) :
-                cardId(cardId_), rarity(rarity_), playerId(playerId_),
-                name(name_), isStrike(isStrike_), isDefend(isDefend_) {}
+        CardDataBaseEntry(CardId cardId_, CardType cardType_, CardRarity rarity_,
+            PlayerId playerId_, std::string name_, bool isStrike_, bool isDefend_) :
+                cardId(cardId_), cardType(cardType_), rarity(rarity_), playerId(playerId_), name(name_),
+                isStrike(isStrike_), isDefend(isDefend_) {}
     };
     using CardDataBaseEntries = std::vector<CardDataBaseEntry>;
 
@@ -44,27 +47,27 @@ namespace SpireSim {
             entries.clear();
 
             // Basics
-            ADDF(Strike                     , Basic     , Colorless , true  , false )
-            ADDF(Defend                     , Basic     , Colorless , false , true  )
+            ADDF(Strike                     , Attack, Basic     , Colorless , true  , false )
+            ADDF(Defend                     , Skill , Basic     , Colorless , false , true  )
 
             // Ironclad
-            ADDC(Bash                       , Basic     , IronClad  )
-            ADDC(Thunderclap                , Common    , IronClad  )
-            ADDC(BloodLetting               , Common    , IronClad  )
+            ADDC(Bash                       , Attack, Basic     , IronClad  )
+            ADDC(Thunderclap                , Attack, Common    , IronClad  )
+            ADDC(BloodLetting               , Skill , Common    , IronClad  )
 
             // Silent
-            ADDC(Neutralize                 , Basic     , Silent    )
+            ADDC(Neutralize                 , Attack, Basic     , Silent    )
 
             // Regent
-            ADDC(Venerate                   , Basic     , Regent    )
-            ADDC(FallingStar                , Basic     , Regent    )
-            ADDC(AstralPulse                , Common    , Regent    )
-            ADDC(CosmicIndifference         , Common    , Regent    )
-            ADDC(MakeItSo                   , Rare      , Regent    )
+            ADDC(Venerate                   , Skill , Basic     , Regent    )
+            ADDC(FallingStar                , Attack, Basic     , Regent    )
+            ADDC(AstralPulse                , Attack, Common    , Regent    )
+            ADDC(CosmicIndifference         , Skill , Common    , Regent    )
+            ADDC(MakeItSo                   , Attack, Rare      , Regent    )
 
             // Defect
-            ADDC(Hologram                   , Common    , Defect    )
-            ADDC(Claw                       , Common    , Defect    )
+            ADDC(Hologram                   , Skill , Common    , Defect    )
+            ADDC(Claw                       , Attack, Common    , Defect    )
 
         }
 

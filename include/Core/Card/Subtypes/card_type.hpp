@@ -6,7 +6,7 @@
 namespace SpireSim {
 
     enum class CardType {
-        Attack, Skill, Power, Status, Curse
+        None, Attack, Skill, Power, Status, Curse
     };
     std::string ToString(CardType e) { return ToString(int(e)); }
 
