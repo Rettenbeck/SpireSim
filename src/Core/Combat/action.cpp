@@ -25,9 +25,7 @@ namespace SpireSim {
         }
     }
 
-    void Combat::executeAction(int actionIndex) {
-        assert(actionIndex < state.actions.size());
-        auto& action = state.actions[actionIndex];
+    void Combat::executeAction(Action &action) {
         switch (action.actionType) {
             case ActionType::EndTurn:
                 state.waitingForAction = false;
@@ -51,6 +49,12 @@ namespace SpireSim {
         } else {
             proceedPhases();
         }
+    }
+
+    void Combat::executeAction(int actionIndex) {
+        assert(actionIndex < state.actions.size());
+        auto& action = state.actions[actionIndex];
+        executeAction(action);
     }
 
     void Combat::startCombat(bool shuffleDeck) {

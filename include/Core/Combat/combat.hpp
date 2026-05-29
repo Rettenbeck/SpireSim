@@ -245,6 +245,7 @@ namespace SpireSim {
         const Actions& getActions() const;
         bool isCombatOver();
         bool isCombatVictorious();
+        int getAmountEnemies();
         int getPlayerMaxHealth();
         int getPlayerHealth();
         int getPlayerBlock();
@@ -256,27 +257,14 @@ namespace SpireSim {
         const std::map<Id, int>& getDrawnMap();
         const std::map<Id, int>& getDiscardedMap();
 
-        void startRecordingDamage() {
-            variables.entityDamageRecorded.clear();
-            variables.recordDamage = true;
-        }
-        void stopRecordingDamage() {
-            variables.recordDamage = false;
-        }
-        void recordDamage(Id sourceEntityId, CharacterData &sourceData, Id targetEntityId, CharacterData &targetData,
-                            int damage)
-        {
-            variables.entityDamageRecorded[sourceEntityId].push_back(damage);
-        }
-        void hardEndTurn() {
-            // ONLY USE FOR RECORDING PURPOSES!!
-            state.waitingForAction = false;
-            state.waitingForActionOnStack = false;
-            proceedPhases();
-        }
+        void startRecordingDamage();
+        void stopRecordingDamage();
+        void recordDamage(Id sourceEntityId, CharacterData &sourceData, Id targetEntityId, CharacterData &targetData, int damage);
+        void hardEndTurn();
         
         // Actions
         void generateActions();
+        void executeAction(Action &action);
         void executeAction(int actionIndex);
         void startCombat(bool shuffleDeck = false);
         void reshuffleDeck();

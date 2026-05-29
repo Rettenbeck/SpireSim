@@ -94,9 +94,6 @@ namespace SpireSim {
             if(damageCalculated > 0) onDamageDealt(sourceEntityId, sourceData, targetEntityId, targetData, damageCalculated);
             if(targetData.hp <= 0) {
                 entityDies(targetEntityId);
-                // if(variables.recordDamage) [[unlikely]] {
-                //     recordLethal(sourceEntityId, sourceData, targetEntityId, targetData);
-                // }
             }
         }
     }

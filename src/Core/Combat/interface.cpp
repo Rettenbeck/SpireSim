@@ -17,6 +17,10 @@ namespace SpireSim {
         return (variables.enemies == 0 ? true : false);
     }
 
+    int Combat::getAmountEnemies() {
+        return variables.enemies;
+    }
+
     int Combat::getPlayerMaxHealth() {
         return ecs.getPlayer().data.maxHp;
     }
@@ -66,4 +70,26 @@ namespace SpireSim {
         return state.cardsDiscardedMap;
     }
 
+    void Combat::startRecordingDamage() {
+        variables.entityDamageRecorded.clear();
+        variables.recordDamage = true;
+    }
+
+    void Combat::stopRecordingDamage() {
+        variables.recordDamage = false;
+    }
+
+    void Combat::recordDamage(Id sourceEntityId, CharacterData &sourceData, Id targetEntityId, CharacterData &targetData,
+                        int damage)
+    {
+        variables.entityDamageRecorded[sourceEntityId][targetEntityId].push_back(damage);
+    }
+
+    void Combat::hardEndTurn() {
+        // ONLY USE FOR RECORDING PURPOSES!!
+        state.waitingForAction = false;
+        state.waitingForActionOnStack = false;
+        proceedPhases();
+    }
+    
 }

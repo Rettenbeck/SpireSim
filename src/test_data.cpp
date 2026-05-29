@@ -76,9 +76,9 @@ SpireSim::UCombatTemplate createTestData3(SpireSim::PoolContainer &container) {
 
 SpireSim::UCombatTemplates createTestData(SpireSim::PoolContainer &container) {
     SpireSim::UCombatTemplates vec;
-    vec.push_back(std::move(createTestData1(container)));
+    // vec.push_back(std::move(createTestData1(container)));
     vec.push_back(std::move(createTestData2(container)));
-    vec.push_back(std::move(createTestData3(container)));
+    // vec.push_back(std::move(createTestData3(container)));
     return vec;
 }
 

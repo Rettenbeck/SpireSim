@@ -96,7 +96,8 @@ namespace SpireSim {
                     auto& action = actions[actionIndex];
                     json j_action;
                     j_action["score"] = score;
-                    j_action["action"] = actions[actionIndex];
+                    auto& j_action_data = j_action["action"];
+                    addActionJson(j_action_data, actions[actionIndex], state);
                     j_actions.push_back(j_action);
                     
                     if(action.actionType == ActionType::PlayCard) {
@@ -138,6 +139,44 @@ namespace SpireSim {
             }
 
             exportJsonToFile(jvec);
+        }
+
+        void addActionJson(json &j, Action action, Combat *state) {
+            Combat stateCopy = *state;
+            stateCopy.startRecordingDamage();
+            stateCopy.executeAction(action);
+
+            j = action;
+            j["lethal"] = state->getAmountEnemies() > stateCopy.getAmountEnemies();
+            j["wins"] = stateCopy.isCombatOver() &&  stateCopy.isCombatVictorious();
+            j["dies"] = stateCopy.isCombatOver() && !stateCopy.isCombatVictorious();
+
+            int tId = action.targetEntityId;            // Target of action
+            int pId = stateCopy.ecs.playerEntityId;     // Player Id
+            int trueDamageDealt = 0;
+
+            std::map<Id, std::map<Id, std::vector<int>>>& dmgRec = stateCopy.variables.entityDamageRecorded;
+            auto it = dmgRec.find(pId);
+            if(it != dmgRec.end()) {    // Key found! Player dealt damage to at least one enemy
+                auto targetDmgRec = it->second;
+
+                if(tId != ENTITY_NONE) {    // Action has a specific target -> check whether player dealt damage to that target
+                    auto it2 = targetDmgRec.find(tId);
+                    if(it2 != targetDmgRec.end()) {     // Key found! Player dealt damage to the target enemy -> sum up this damage
+                        for(auto dmg : it2->second) trueDamageDealt += dmg;
+                    }
+                } else {    // Action does not have a specific target -> Sum up damage for each individual enemy and
+                            // return the highest value. This is to avoid large numbers when using AOE attacks on many
+                            // enemies (only record the highest amount one single enemy receives rather than the total sum)
+                    for(auto& [targetId, damageList] : targetDmgRec) {
+                        int damageDealtToSingleEnemy = 0;
+                        for(auto dmg : damageList) damageDealtToSingleEnemy += dmg;
+                        if(damageDealtToSingleEnemy > trueDamageDealt) trueDamageDealt = damageDealtToSingleEnemy;
+                    }
+                }
+            }
+
+            j["trueDamage"] = trueDamageDealt;
         }
 
         void exportJsonToFile(std::vector<json> &jvec) {
