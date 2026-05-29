@@ -11,7 +11,10 @@ namespace SpireSim {
         MoveChosenCardsToDeck, MoveChosenCardsToHand,
         CardGainEnergy, CardGainStars,
         CardDealDamage, CardGainBlock, CardApplyVulnerable, CardApplyWeak,
-        CardLoseLifeSelf
+        CardLoseLifeSelf,
+
+        // Card specific
+        CardModifyDamageFlatClaw, CardSharpenClaws
     };
     std::string ToString(EffectId e) { return ToString(int(e)); }
 

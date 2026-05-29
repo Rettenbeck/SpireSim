@@ -7,16 +7,17 @@ namespace SpireSim {
 
     inline int Combat::resolveParam(Param &param, Id sourceEntityId) {
         switch(param.paramType) {
-            case ParamType::FixedValue:             return param.value;
-            case ParamType::CardAttackDamage:       return ecs.getCard(sourceEntityId).data.damage;
-            case ParamType::CardBlockValue:         return ecs.getCard(sourceEntityId).data.block;
-            case ParamType::CardApplyVulnerable:    return ecs.getCard(sourceEntityId).data.vulnerable;
-            case ParamType::CardApplyWeak:          return ecs.getCard(sourceEntityId).data.weak;
-            case ParamType::CardsPlayedThisCombat:  return variables.cardsPlayedThisCombat;
-            case ParamType::CardAnyParam1:          return ecs.getCard(sourceEntityId).data.cardAnyParam1;
-            case ParamType::CardAnyParam2:          return ecs.getCard(sourceEntityId).data.cardAnyParam2;
-            case ParamType::CardAnyParam3:          return ecs.getCard(sourceEntityId).data.cardAnyParam3;
-            case ParamType::XValue:                 return variables.xValue;
+            case ParamType::FixedValue              : return param.value;
+            case ParamType::CardAttackDamage        : return ecs.getCard(sourceEntityId).data.damage;
+            case ParamType::CardBlockValue          : return ecs.getCard(sourceEntityId).data.block;
+            case ParamType::CardApplyVulnerable     : return ecs.getCard(sourceEntityId).data.vulnerable;
+            case ParamType::CardApplyWeak           : return ecs.getCard(sourceEntityId).data.weak;
+            case ParamType::CardsPlayedThisCombat   : return variables.cardsPlayedThisCombat;
+            case ParamType::CardAnyParam1           : return ecs.getCard(sourceEntityId).data.cardAnyParam1;
+            case ParamType::CardAnyParam2           : return ecs.getCard(sourceEntityId).data.cardAnyParam2;
+            case ParamType::CardAnyParam3           : return ecs.getCard(sourceEntityId).data.cardAnyParam3;
+            case ParamType::XValue                  : return variables.xValue;
+            case ParamType::ClawDamage              : return variables.clawDamage;
             default: assert(false);
         }
     }

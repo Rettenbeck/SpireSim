@@ -26,7 +26,7 @@ void test_mcts() {
 
 
     auto mcts = std::make_unique<SpireSim::MCTS>(state, std::make_unique<SpireSim::MCTS_Heuristic_Random>(0));
-    mcts->optionIterations = 12000;
+    mcts->optionIterations = 2600;
     mcts->optionCombats = 1;
     mcts->optionNumberThreads = 1;
 

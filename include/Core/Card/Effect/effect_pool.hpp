@@ -70,6 +70,12 @@ namespace SpireSim {
             retrieveForCreation(EffectId::CardLoseLifeSelf)
             .fill(EffectType::LoseLifeSelf, {Param(ParamType::CardAnyParam3)}, {});
             
+            retrieveForCreation(EffectId::CardModifyDamageFlatClaw)
+            .fill(EffectType::CardModifyDamageFlat, {Param(ParamType::ClawDamage)}, {});
+            
+            retrieveForCreation(EffectId::CardSharpenClaws)
+            .fill(EffectType::SharpenClaws, {Param(ParamType::CardAnyParam3)}, {});
+            
         }
         
         EffectPool() {

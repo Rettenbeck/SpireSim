@@ -12,7 +12,8 @@ namespace SpireSim {
         CardApplyVulnerable, CardApplyWeak,
         CardsPlayedThisCombat,
         CardAnyParam1, CardAnyParam2, CardAnyParam3,
-        XValue
+        XValue,
+        ClawDamage
     };
     std::string ToString(ParamType e) { return ToString(int(e)); }
 

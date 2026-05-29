@@ -148,6 +148,8 @@ namespace SpireSim {
         void executeCardApplyWeak(Effect &effect);
         void executeMoveChosenCards(Effect &effect);
         void executeMoveCard(Effect &effect);
+        void executeCardModifyDamageFlat(Effect &effect);
+        void executeSharpenClaws(Effect &effect);
 
 
 

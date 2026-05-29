@@ -30,14 +30,6 @@ namespace SpireSim {
             return *this;
         }
 
-        BuffTemplate& modifyCardDamageFlat(const Params &params) {
-            eventList.push_back({
-                EventType::OnDealDamageForInterception,
-                EventListener(Effect(EffectType::ModifyCardDamageFlat, params))
-            });
-            return *this;
-        }
-
         NLOHMANN_DEFINE_TYPE_INTRUSIVE(BuffTemplate, buffId, buffCategory, amountParams, dependentOnCreator, eventList);
         TO_STRING_METHOD
     

@@ -31,6 +31,7 @@ SpireSim::UCombatTemplate createTestData2(SpireSim::PoolContainer &container) {
     auto t = std::make_unique<SpireSim::CombatTemplateFixed>(container);
     t->add({
         {SpireSim::CardId::Hologram, true},
+        {SpireSim::CardId::Claw, true},
         {SpireSim::CardId::Strike, true},
         {SpireSim::CardId::Strike, true},
         {SpireSim::CardId::Strike, true},

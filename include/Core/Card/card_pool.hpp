@@ -147,6 +147,10 @@ namespace SpireSim {
             retrieveForCreationBlock(CardId::Hologram, 1, 3, 5)
                 .chooseCards(1, 1, CardLocation::Discard)
                 .moveChosenCardsToTarget(CardLocation::Hand);
+            
+            retrieveForCreationSingleAttack(CardId::Claw, 0, 3, 4)
+                .addEffectInFront(EffectId::CardModifyDamageFlatClaw)
+                .sharpenClaws(2, 3);
         }
         
         std::string toString() {

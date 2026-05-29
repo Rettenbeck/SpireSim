@@ -20,6 +20,7 @@ namespace SpireSim {
     void Combat::executeFinishCardPlayed(Effect &effect) {
         auto& card = ecs.getCard(effect.sourceEntityId);
         moveCard(effect.sourceEntityId, card.data.pileAfterPlay);
+        variables.cardAddedDamage = 0;
         variables.cardsPlayedThisCombat++;
         triggerEvent(EventType::OnCardPlayed);
     }
@@ -78,7 +79,7 @@ namespace SpireSim {
         assert(effect.resolutionParams.size() > 0);
         auto& card = ecs.getCard(effect.sourceEntityId);
         auto& cardData = cardPool.retrieveData(card);
-        int& damageToDeal = effect.resolutionParams[0];
+        int damageToDeal = effect.resolutionParams[0] + variables.cardAddedDamage;
 
         switch(cardData.targetingType) {
             case TargetingType::Single:
@@ -156,4 +157,15 @@ namespace SpireSim {
         moveCard(effect.sourceEntityId, static_cast<CardLocation>(effect.resolutionParams[0]));
     }
     
+    void Combat::executeCardModifyDamageFlat(Effect &effect) {
+        assert(effect.resolutionParams.size() > 0);
+        auto& card = ecs.getCard(effect.sourceEntityId);
+        variables.cardAddedDamage = effect.resolutionParams[0];
+    }
+
+    void Combat::executeSharpenClaws(Effect &effect) {
+        assert(effect.resolutionParams.size() > 0);
+        variables.clawDamage += effect.resolutionParams[0];
+    }
+
 }

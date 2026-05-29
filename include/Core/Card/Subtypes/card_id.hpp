@@ -21,7 +21,7 @@ namespace SpireSim {
         MakeItSo, CosmicIndifference,
         
         // Defect
-        Hologram,
+        Hologram, Claw,
 
         Count
     };
@@ -40,6 +40,7 @@ namespace SpireSim {
             case CardId::MakeItSo           : return "Make It So";
             case CardId::CosmicIndifference : return "Cosmic Indifference";
             case CardId::Hologram           : return "Hologram";
+            case CardId::Claw               : return "Claw";
             default: assert(false);
         }
     }

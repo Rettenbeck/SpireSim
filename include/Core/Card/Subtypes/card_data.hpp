@@ -19,9 +19,17 @@ namespace SpireSim {
         int damage = 0, block = 0, replay = 0;
         int vulnerable = 0, weak = 0;
         int cardAnyParam1 = 0, cardAnyParam2 = 0, cardAnyParam3 = 0;
+
+        // Param1 -> Draw X cards; choose X cards; return X cards
+        // Param2 -> Gain X energy; gain X stars
+        // Param3 -> Lose X life; sharpen claws
         
         void addEffect(EffectPool &effectPool, EffectId effectId) {
             effects.push_back(effectPool.retrieve(effectId));
+        }
+        
+        void addEffectInFront(EffectPool &effectPool, EffectId effectId) {
+            effects.insert(effects.begin(), effectPool.retrieve(effectId));
         }
         
         NLOHMANN_DEFINE_TYPE_INTRUSIVE(CardData,

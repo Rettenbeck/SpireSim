@@ -22,6 +22,8 @@ namespace SpireSim {
         int cardsPlayedThisCombat = 0;
         int xValue = 0;
         int enemies = 0;
+        int clawDamage = 0;
+        int cardAddedDamage = 0;
         
         bool recordDamage = false;
         std::map<Id, std::map<Id, std::vector<int>>> entityDamageRecorded; // [from][to][damage]
@@ -32,6 +34,7 @@ namespace SpireSim {
             enemiesMoreHp, enemiesDeadlier,
             initialHp, turn, cardDrawOnTurn, maxHandSize, energyPerTurn, energy, stars,
             hasTakenDamage, cardsPlayedThisCombat, xValue, enemies,
+            clawDamage,
             chosenCards, choosableCards
         );
         TO_STRING_METHOD

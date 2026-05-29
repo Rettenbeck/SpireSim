@@ -34,6 +34,12 @@ namespace SpireSim {
             return *this;
         }
 
+        CardTemplate& addEffectInFront(EffectId effectId) {
+            normalData.addEffectInFront(effectPool, effectId);
+            upgradedData.addEffectInFront(effectPool, effectId);
+            return *this;
+        }
+        
         CardTemplate& addEvent(const EventListEntry &event) {
             eventList.push_back(event);
             return *this;
@@ -142,6 +148,13 @@ namespace SpireSim {
             normalData.cardAnyParam3 = value;
             upgradedData.cardAnyParam3 = value;
             addEffect(EffectId::CardLoseLifeSelf);
+            return *this;
+        }
+        
+        CardTemplate& sharpenClaws(int value, int valueUpgraded) {
+            normalData.cardAnyParam3 = value;
+            upgradedData.cardAnyParam3 = valueUpgraded;
+            addEffect(EffectId::CardSharpenClaws);
             return *this;
         }
         
