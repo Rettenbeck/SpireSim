@@ -42,6 +42,23 @@ namespace SpireSim {
             return *this;
         }
         
+        CardTemplate& copyLastAddedEffect(int value, CardData &data) {
+            assert(data.effects.size() > 0);
+            auto& lastEffect = data.effects.back();
+            for(int i = 0; i < value; i++) data.effects.push_back(lastEffect);
+            return *this;
+        }
+        
+        CardTemplate& copyLastAddedEffect(int value, int valueUpgraded) {
+            copyLastAddedEffect(value, normalData);
+            copyLastAddedEffect(valueUpgraded, upgradedData);
+            return *this;
+        }
+        
+        CardTemplate& copyLastAddedEffect(int value) {
+            return copyLastAddedEffect(value, value);
+        }
+        
         CardTemplate& addEvent(const EventListEntry &event) {
             eventList.push_back(event);
             return *this;

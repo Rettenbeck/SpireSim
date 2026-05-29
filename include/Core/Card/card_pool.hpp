@@ -155,6 +155,7 @@ namespace SpireSim {
                 .addStarCost(2).applyWeak(1).applyVulnerable(1);
             
             retrieveForCreationAOEAttack(CardId::AstralPulse, 0, 14, 18).addStarCost(3);
+            retrieveForCreationSingleAttack(CardId::CelestialMight, 2, 6, 6).copyLastAddedEffect(2, 3);
 
             retrieveForCreationBlock(CardId::CosmicIndifference, 1, 6, 9)
                 .chooseCards(1, 2, CardLocation::Discard)

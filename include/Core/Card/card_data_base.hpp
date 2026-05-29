@@ -62,6 +62,7 @@ namespace SpireSim {
             ADDC(Venerate                   , Skill , Basic     , Regent    )
             ADDC(FallingStar                , Attack, Basic     , Regent    )
             ADDC(AstralPulse                , Attack, Common    , Regent    )
+            ADDC(CelestialMight             , Attack, Common    , Regent    )
             ADDC(CosmicIndifference         , Skill , Common    , Regent    )
             ADDC(MakeItSo                   , Attack, Rare      , Regent    )
 
