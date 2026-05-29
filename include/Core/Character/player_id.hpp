@@ -6,7 +6,9 @@
 namespace SpireSim {
 
     enum class PlayerId {
-        None, IronClad, Silent, Regent, NecroBinder, Defect,
+        None,
+        IronClad, Silent, Regent, NecroBinder, Defect,
+        Colorless, Basic,
         Count
     };
     std::string ToString(PlayerId e) { return ToString(int(e)); }

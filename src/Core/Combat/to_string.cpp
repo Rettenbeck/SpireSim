@@ -31,12 +31,12 @@ namespace SpireSim {
                     break;
                 case ActionType::PlayCard:
                     ss << "Play card " << action.entityToPlay << " (";
-                    ss << CardIdToString(ecs.getCard(action.entityToPlay).cardId);
+                    ss << cardIdToString(ecs.getCard(action.entityToPlay).cardId);
                     ss << ") on " << action.targetEntityId;
                     break;
                 case ActionType::ChooseCard:
                     ss << "Choose card " << action.entityToPlay << " (";
-                    ss << CardIdToString(ecs.getCard(action.entityToPlay).cardId);
+                    ss << cardIdToString(ecs.getCard(action.entityToPlay).cardId);
                     ss << ")";
                     break;
                 default:

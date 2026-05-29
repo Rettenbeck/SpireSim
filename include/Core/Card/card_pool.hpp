@@ -2,6 +2,7 @@
 
 #include <Core/Card/card.hpp>
 #include <Core/Card/Subtypes/card_template.hpp>
+#include <Core/Card/card_data_base.hpp>
 
 
 namespace SpireSim {
@@ -9,9 +10,11 @@ namespace SpireSim {
     struct CardPool {
         CardTemplates cardTemplates;
         EffectPool& effectPool;
+        CardDataBase cardDataBase;
         
         CardPool(EffectPool &effectPool_) : effectPool(effectPool_) {
             createCardPool();
+            cardDataBase.check();
         }
         
         void createBlankArray(int index) {
@@ -126,15 +129,23 @@ namespace SpireSim {
         void createCardPool() {
             createBlankArray(int(CardId::Count));
 
+
+            // Basics
             retrieveForCreationSingleAttack(CardId::Strike, 1, 6, 9);
             retrieveForCreationBlock(CardId::Defend, 1, 5, 8);
 
+
+            // Ironclad
             retrieveForCreationSingleAttack(CardId::Bash, 2, 8, 11).applyVulnerable(2, 3);
             retrieveForCreationAOEAttack(CardId::Thunderclap, 1, 4, 7).applyVulnerable(1, 1);
             retrieveForCreation(CardId::BloodLetting, 0).loseLifeSelf(3).gainEnergy(2, 3);
 
+
+            // Silent
             retrieveForCreationSingleAttack(CardId::Neutralize, 0, 3, 4).applyWeak(1, 2);
 
+
+            // Regent
             retrieveForCreation(CardId::Venerate, 1).gainStars(2, 3);
             retrieveForCreationSingleAttack(CardId::FallingStar, 0, 8, 12)
                 .addStarCost(2).applyWeak(1).applyVulnerable(1);
@@ -144,6 +155,8 @@ namespace SpireSim {
                 .chooseCards(1, 2, CardLocation::Discard)
                 .moveChosenCardsToTarget(CardLocation::Deck);
             
+
+            // Defect
             retrieveForCreationBlock(CardId::Hologram, 1, 3, 5)
                 .chooseCards(1, 1, CardLocation::Discard)
                 .moveChosenCardsToTarget(CardLocation::Hand);
@@ -151,6 +164,8 @@ namespace SpireSim {
             retrieveForCreationSingleAttack(CardId::Claw, 0, 3, 4)
                 .addEffectInFront(EffectId::CardModifyDamageFlatClaw)
                 .sharpenClaws(2, 3);
+            
+            
         }
         
         std::string toString() {

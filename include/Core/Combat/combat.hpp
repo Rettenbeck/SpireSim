@@ -10,6 +10,7 @@
 #include <Core/Character/enemy_pool.hpp>
 #include <Core/Combat/pile_handler.hpp>
 #include <Core/Event/interceptor_context.hpp>
+#include <Core/Card/card_data_base.hpp>
 
 
 namespace SpireSim {
@@ -258,6 +259,7 @@ namespace SpireSim {
         CardId getCardIdFromEntityId(Id cardEntityId);
         const std::map<Id, int>& getDrawnMap();
         const std::map<Id, int>& getDiscardedMap();
+        std::string cardIdToString(CardId cardId);
 
         void startRecordingDamage();
         void stopRecordingDamage();

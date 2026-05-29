@@ -87,9 +87,16 @@ namespace SpireSim {
 
     void Combat::hardEndTurn() {
         // ONLY USE FOR RECORDING PURPOSES!!
-        state.waitingForAction = false;
-        state.waitingForActionOnStack = false;
-        proceedPhases();
+        // state.waitingForAction = false;
+        // state.waitingForActionOnStack = false;
+        // proceedPhases();
     }
     
+    std::string Combat::cardIdToString(CardId cardId) {
+        auto& db = cardPool.cardDataBase;
+        auto it = db.find(cardId);
+        assert(it != db.entries.end());
+        return it->name;
+    }
+
 }

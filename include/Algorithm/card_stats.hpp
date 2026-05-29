@@ -61,7 +61,7 @@ namespace SpireSim {
 
         for(auto& [cardEntityId, stats] : cardStatsMap) {
             ss << "  Card " << cardEntityId;
-            if(initialState != nullptr) ss << " (" << CardIdToString(initialState->getCardIdFromEntityId(cardEntityId)) << ")";
+            if(initialState != nullptr) ss << " (" << initialState->cardIdToString(initialState->getCardIdFromEntityId(cardEntityId)) << ")";
             ss << " seen: " << stats.countPlayable
             << "; played: " << stats.countPlayedIfAble << " (" << stats.getPlayedRate(false) << ")"
             << "; played weighted: " << stats.countPlayedIfAbleWeighted << " (" << stats.getPlayedRate(true) << ")"
@@ -78,7 +78,7 @@ namespace SpireSim {
 
         for(auto& [cardId, stats] : cardStatsMap) {
             ss << "  Card " << cardId;
-            if(initialState != nullptr) ss << " (" << CardIdToString(static_cast<CardId>(cardId)) << ")";
+            if(initialState != nullptr) ss << " (" << initialState->cardIdToString(static_cast<CardId>(cardId)) << ")";
             ss << " seen: " << stats.countPlayable
             << "; played: " << stats.countPlayedIfAble << " (" << stats.getPlayedRate(false) << ")"
             << "; played weighted: " << stats.countPlayedIfAbleWeighted << " (" << stats.getPlayedRate(true) << ")"

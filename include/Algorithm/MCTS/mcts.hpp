@@ -110,7 +110,7 @@ namespace SpireSim {
             std::stringstream ss;
             // ss << resultToString() << "\n";
             ss << "Best action index: " << bestActionIndex << "\n";
-            ss << ToString(cardStatsMap) << "\n";
+            // ss << ToString(cardStatsMap) << "\n";
             ss << ToString(mcts_ResultMap) << "\n";
             return ss.str();
         }
