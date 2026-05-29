@@ -58,6 +58,7 @@ namespace SpireSim {
             // Regent
             ADDC(Venerate                   , Basic     , Regent    )
             ADDC(FallingStar                , Basic     , Regent    )
+            ADDC(AstralPulse                , Common    , Regent    )
             ADDC(CosmicIndifference         , Common    , Regent    )
             ADDC(MakeItSo                   , Rare      , Regent    )
 

@@ -149,12 +149,14 @@ namespace SpireSim {
             retrieveForCreation(CardId::Venerate, 1).gainStars(2, 3);
             retrieveForCreationSingleAttack(CardId::FallingStar, 0, 8, 12)
                 .addStarCost(2).applyWeak(1).applyVulnerable(1);
-            retrieveForCreationSingleAttack(CardId::MakeItSo, 0, 6, 9).returnToHandAfterXCards(3);
             
+            retrieveForCreationAOEAttack(CardId::AstralPulse, 0, 14, 18).addStarCost(3);
+
             retrieveForCreationBlock(CardId::CosmicIndifference, 1, 6, 9)
                 .chooseCards(1, 2, CardLocation::Discard)
                 .moveChosenCardsToTarget(CardLocation::Deck);
             
+            retrieveForCreationSingleAttack(CardId::MakeItSo, 0, 6, 9).returnToHandAfterXCards(3);
 
             // Defect
             retrieveForCreationBlock(CardId::Hologram, 1, 3, 5)
