@@ -34,6 +34,15 @@ namespace SpireSim {
         }
     }
 
+    void Combat::discardHandEndOfTurn() {
+        for(std::size_t i = pileHandler.hand.size(); i-- > 0; ) {
+            assert(pileHandler.hand.size() > i);
+            auto cardEntityId = pileHandler.hand[i];
+            auto& card = ecs.getCard(cardEntityId);
+            if(!card.data.retain) discardById(cardEntityId);
+        }
+    }
+
     void Combat::determineChoosableCards(CardLocation from) {
         variables.choosableCards.clear();
         auto& v = variables.chosenCards;

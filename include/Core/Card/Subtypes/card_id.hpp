@@ -18,13 +18,16 @@ namespace SpireSim {
 
         // Regent
         Venerate, FallingStar,
-        AstralPulse, CelestialMight,
+        AstralPulse, CelestialMight, CloakOfStars, CollisionCourse,
         CosmicIndifference,
         Terraforming,
         MakeItSo,
         
         // Defect
         Hologram, Claw,
+
+        // Status
+        Debris,
 
         Count
     };

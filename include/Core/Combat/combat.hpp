@@ -197,6 +197,7 @@ namespace SpireSim {
         void discardById(Id cardEntityId);
         void discardByIndex(int index);
         void discardHand();
+        void discardHandEndOfTurn();
         void determineChoosableCards(CardLocation from);
         void chooseCard();
         int getRandomNumber(int max);

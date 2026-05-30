@@ -15,6 +15,7 @@ namespace SpireSim {
         PlayableType playableType = PlayableType::Playable;
         TargetingType targetingType = TargetingType::None;
         CardLocation pileAfterPlay = CardLocation::Discard;
+        bool retain = false;
         int energyCost = 0, starCost = 0;
         int damage = 0, block = 0, replay = 0;
         int vulnerable = 0, weak = 0;

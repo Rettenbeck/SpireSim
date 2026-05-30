@@ -68,6 +68,32 @@ namespace SpireSim {
             return addEvent({eventType, eventListener});
         }
 
+        CardTemplate& unplayable() {
+            normalData.playableType = PlayableType::Unplayable;
+            upgradedData.playableType = PlayableType::Unplayable;
+            return *this;
+        }
+
+        CardTemplate& exhaust(bool normal, bool upgraded) {
+            if(normal) normalData.pileAfterPlay = CardLocation::Exhaust;
+            if(upgraded) upgradedData.pileAfterPlay = CardLocation::Exhaust;
+            return *this;
+        }
+
+        CardTemplate& exhaust() {
+            return exhaust(true, true);
+        }
+
+        CardTemplate& retain(bool normal, bool upgraded) {
+            normalData.retain = normal;
+            upgradedData.retain = upgraded;
+            return *this;
+        }
+
+        CardTemplate& retain() {
+            return retain(true, true);
+        }
+
         CardTemplate& addStarCost(int starCostNormal, int starCostUpgraded) {
             normalData.starCost = starCostNormal;
             upgradedData.starCost = starCostUpgraded;

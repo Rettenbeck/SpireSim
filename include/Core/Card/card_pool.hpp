@@ -161,6 +161,9 @@ namespace SpireSim {
                 .chooseCards(1, 2, CardLocation::Discard)
                 .moveChosenCardsToTarget(CardLocation::Deck);
             
+            retrieveForCreationBlock(CardId::CloakOfStars, 0, 7, 10).addStarCost(1);
+            retrieveForCreationSingleAttack(CardId::CollisionCourse, 0, 11, 15);
+
             retrieveForCreation(CardId::Terraforming, 1).addVigor(6, 8);
 
             retrieveForCreationSingleAttack(CardId::MakeItSo, 0, 6, 9).returnToHandAfterXCards(3);
@@ -174,7 +177,9 @@ namespace SpireSim {
                 .addEffectInFront(EffectId::CardModifyDamageFlatClaw)
                 .sharpenClaws(2, 3);
             
-            
+            // Status
+            retrieveForCreation(CardId::Debris, 1).exhaust();
+
         }
         
         std::string toString() {

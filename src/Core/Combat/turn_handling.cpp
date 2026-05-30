@@ -64,7 +64,7 @@ namespace SpireSim {
     }
     
     void Combat::handlePhase_PlayerEnd() {
-        discardHand();
+        discardHandEndOfTurn();
         onCharacterEndTurn(ecs.getPlayer().data);
     }
     

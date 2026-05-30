@@ -14,6 +14,9 @@ namespace SpireSim {
     #define ADDF(NAME,TYPE,RARITY,PLAYER,IS_STRIKE,IS_DEFEND) \
         entries.push_back(CardDataBaseEntry(CardId::NAME, CardType::TYPE, CardRarity::RARITY, PlayerId::PLAYER, #NAME, IS_STRIKE, IS_DEFEND));
 
+    #define ADDS(NAME) \
+        entries.push_back(CardDataBaseEntry(CardId::NAME, CardType::Status, CardRarity::Status, PlayerId::Colorless, #NAME));
+
     struct CardDataBaseEntry {
         CardId cardId = CardId::None;
         CardType cardType = CardType::None;
@@ -63,6 +66,8 @@ namespace SpireSim {
             ADDC(FallingStar                , Attack, Basic     , Regent    )
             ADDC(AstralPulse                , Attack, Common    , Regent    )
             ADDC(CelestialMight             , Attack, Common    , Regent    )
+            ADDC(CloakOfStars               , Skill , Common    , Regent    )
+            ADDC(CollisionCourse            , Attack, Common    , Regent    )
             ADDC(CosmicIndifference         , Skill , Common    , Regent    )
             ADDC(Terraforming               , Skill , Uncommon  , Regent    )
             ADDC(MakeItSo                   , Attack, Rare      , Regent    )
@@ -70,6 +75,9 @@ namespace SpireSim {
             // Defect
             ADDC(Hologram                   , Skill , Common    , Defect    )
             ADDC(Claw                       , Attack, Common    , Defect    )
+
+            // Status
+            ADDS(Debris                                                     )
 
         }
 
