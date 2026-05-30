@@ -23,7 +23,7 @@ namespace SpireSim {
 
         // Param1 -> Draw X cards; choose X cards; return X cards
         // Param2 -> Gain X energy; gain X stars, gain X vigor
-        // Param3 -> Lose X life; increase claw damage by X
+        // Param3 -> Lose X life; increase claw damage by X; create Card with id X
         
         void addEffect(EffectPool &effectPool, EffectId effectId) {
             effects.push_back(effectPool.retrieve(effectId));

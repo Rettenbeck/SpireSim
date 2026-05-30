@@ -63,6 +63,24 @@ namespace SpireSim {
         }
     }
 
+    Id Combat::createCardInPile(CardLocation location, CardId cardId, bool isUpgraded) {
+        if(location == CardLocation::Hand && pileHandler.hand.size() >= variables.maxHandSize) {
+            location = CardLocation::Discard;
+        }
+        
+        Card card;
+        card.isUpgraded = isUpgraded;
+        cardPool.retrieve(cardId).derive(card);
+        auto id = ecs.addObject(card);
+        Card& cardCreated = ecs.cCards[id];
+        cardCreated.location = location;
+        auto& pile = pileHandler.locationToPile(location);
+        cardCreated.locationIndex = pile.size();
+        pile.push_back(id);
+        registerEventsFromEntity(cardPool.retrieve(cardCreated.cardId), id);
+        return id;
+    }
+
     int Combat::getRandomNumber(int max) { // Inlcuding max! e.g. max = 3 produces number ranging from 0 to 3 including
         std::uniform_int_distribution<int> dist(0, max);
         return dist(state.genDeck);

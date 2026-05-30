@@ -14,6 +14,7 @@ namespace SpireSim {
         LoseLifeSelf,
         MoveCard, MoveChosenCards,
         ModifyParentDamagePerc, CardModifyDamageFlat,
+        CreateCardInHand, CreateCardUpgradedInHand,
 
         // Card specific
         SharpenClaws

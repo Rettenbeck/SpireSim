@@ -43,11 +43,6 @@ namespace SpireSim {
         gainStars(effect.resolutionParams[0]);
     }
 
-    void Combat::executeGainVigor(Effect &effect) {
-        assert(effect.resolutionParams.size() > 0);
-        gainVigorPlayer(effect.resolutionParams[0]);
-    }
-
     void Combat::executeLoseLifeSelf(Effect &effect) {
         assert(effect.resolutionParams.size() > 0);
         loseLifeSelf(effect.resolutionParams[0]);
@@ -151,6 +146,11 @@ namespace SpireSim {
         }
     }
     
+    void Combat::executeGainVigor(Effect &effect) {
+        assert(effect.resolutionParams.size() > 0);
+        gainVigorPlayer(effect.resolutionParams[0]);
+    }
+
     void Combat::executeMoveChosenCards(Effect &effect) {
         assert(effect.resolutionParams.size() > 0);
         auto location = static_cast<CardLocation>(effect.resolutionParams[0]);
@@ -169,6 +169,18 @@ namespace SpireSim {
         assert(effect.resolutionParams.size() > 0);
         auto& card = ecs.getCard(effect.sourceEntityId);
         variables.cardAddedDamage = effect.resolutionParams[0];
+    }
+
+    void Combat::executeCreateCardInHand(Effect &effect) {
+        assert(effect.resolutionParams.size() > 0);
+        auto cardId = static_cast<CardId>(effect.resolutionParams[0]);
+        createCardInPile(CardLocation::Hand, cardId);
+    }
+
+    void Combat::executeCreateCardUpgradedInHand(Effect &effect) {
+        assert(effect.resolutionParams.size() > 0);
+        auto cardId = static_cast<CardId>(effect.resolutionParams[0]);
+        createCardInPile(CardLocation::Hand, cardId, true);
     }
 
     void Combat::executeSharpenClaws(Effect &effect) {

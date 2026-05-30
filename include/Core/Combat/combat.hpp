@@ -147,11 +147,13 @@ namespace SpireSim {
         void executeCardGainBlock(Effect &effect);
         void executeCardApplyVulnerable(Effect &effect);
         void executeCardApplyWeak(Effect &effect);
+        void executeGainVigor(Effect &effect);
         void executeMoveChosenCards(Effect &effect);
         void executeMoveCard(Effect &effect);
         void executeCardModifyDamageFlat(Effect &effect);
+        void executeCreateCardInHand(Effect &effect);
+        void executeCreateCardUpgradedInHand(Effect &effect);
         void executeSharpenClaws(Effect &effect);
-        void executeGainVigor(Effect &effect);
 
 
 
@@ -201,14 +203,7 @@ namespace SpireSim {
         void determineChoosableCards(CardLocation from);
         void chooseCard();
         int getRandomNumber(int max);
-
-
-
-        // Serialization
-        // friend void to_json(json& j, const Combat& self) {
-        //     j["state"] = self.state; j["variables"] = self.variables; j["ecs"] = self.ecs;
-        //     self.pileHandler.to_json(j["pileHandler"], self.ecs);
-        // }
+        Id createCardInPile(CardLocation location, CardId cardId, bool isUpgraded = false);
 
 
 

@@ -8,15 +8,15 @@ SpireSim::UCombatTemplate createTestData1(SpireSim::PoolContainer &container) {
     auto t = std::make_unique<SpireSim::CombatTemplateFixed>(container);
     t->add({
         {SpireSim::CardId::BloodLetting, true},
-        {SpireSim::CardId::CloakOfStars, false},
+        {SpireSim::CardId::CollisionCourse, false},
         {SpireSim::CardId::Strike, false},
-        // {SpireSim::CardId::Strike, true},
-        // {SpireSim::CardId::Strike, true},
+        {SpireSim::CardId::Strike, false},
         {SpireSim::CardId::Strike, true},
+        {SpireSim::CardId::Strike, true},
+        {SpireSim::CardId::Defend, false},
+        {SpireSim::CardId::Defend, false},
         {SpireSim::CardId::Defend, true},
-        {SpireSim::CardId::Defend, true},
-        {SpireSim::CardId::Defend, true},
-        {SpireSim::CardId::FallingStar, true},
+        {SpireSim::CardId::FallingStar, false},
         {SpireSim::CardId::Venerate, true},
     })
     .set(SpireSim::PlayerId::Regent)

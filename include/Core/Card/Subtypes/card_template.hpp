@@ -203,6 +203,25 @@ namespace SpireSim {
             return *this;
         }
         
+        void createCardInHand(CardData &cardData, CardId cardId, bool createUpgraded) {
+            if(createUpgraded) {
+                cardData.addEffect(effectPool, EffectId::CardCreateCardUpgradedInHand);
+            } else {
+                cardData.addEffect(effectPool, EffectId::CardCreateCardInHand);
+            }
+            cardData.cardAnyParam3 = int(cardId);
+        }
+        
+        CardTemplate& createCardInHand(CardId cardId, bool deriveUpgraded) {
+            createCardInHand(normalData, cardId, false);
+            createCardInHand(upgradedData, cardId, deriveUpgraded);
+            return *this;
+        }
+        
+        CardTemplate& createCardInHand(CardId cardId) {
+            return createCardInHand(cardId, false);
+        }
+        
         CardTemplate& sharpenClaws(int value, int valueUpgraded) {
             normalData.cardAnyParam3 = value;
             upgradedData.cardAnyParam3 = valueUpgraded;

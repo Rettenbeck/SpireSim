@@ -162,7 +162,7 @@ namespace SpireSim {
                 .moveChosenCardsToTarget(CardLocation::Deck);
             
             retrieveForCreationBlock(CardId::CloakOfStars, 0, 7, 10).addStarCost(1);
-            retrieveForCreationSingleAttack(CardId::CollisionCourse, 0, 11, 15);
+            retrieveForCreationSingleAttack(CardId::CollisionCourse, 0, 11, 15).createCardInHand(CardId::Debris);
 
             retrieveForCreation(CardId::Terraforming, 1).addVigor(6, 8);
 

@@ -13,6 +13,7 @@ namespace SpireSim {
         CardDealDamage, CardGainBlock, CardApplyVulnerable, CardApplyWeak,
         CardGainVigor,
         CardLoseLifeSelf,
+        CardCreateCardInHand, CardCreateCardUpgradedInHand,
 
         // Card specific
         CardModifyDamageFlatClaw, CardSharpenClaws

@@ -76,6 +76,12 @@ namespace SpireSim {
             retrieveForCreation(EffectId::CardModifyDamageFlatClaw)
             .fill(EffectType::CardModifyDamageFlat, {Param(ParamType::ClawDamage)}, {});
             
+            retrieveForCreation(EffectId::CardCreateCardInHand)
+            .fill(EffectType::CreateCardInHand, {Param(ParamType::CardAnyParam3)}, {});
+            
+            retrieveForCreation(EffectId::CardCreateCardUpgradedInHand)
+            .fill(EffectType::CreateCardUpgradedInHand, {Param(ParamType::CardAnyParam3)}, {});
+            
             retrieveForCreation(EffectId::CardSharpenClaws)
             .fill(EffectType::SharpenClaws, {Param(ParamType::CardAnyParam3)}, {});
             
