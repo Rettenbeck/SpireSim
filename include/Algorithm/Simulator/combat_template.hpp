@@ -18,8 +18,7 @@ namespace SpireSim {
         bool enemiesMoreHp = false;     // Ascension 7
         bool enemiesDeadlier = false;   // Ascension 9
 
-        unsigned int seed = 0;
-        std::mt19937 rng;
+        RNG rng;
 
         CombatTemplate(PoolContainer &container_) : container(container_) {}
 
@@ -92,15 +91,9 @@ namespace SpireSim {
         CombatTemplate& set(const PotionIds &potionIds) { return setPotions(potionIds); }
 
         void setSeed(unsigned int seed_) {
-            seed = seed_;
-            rng.seed(seed);
+            rng.setSeed(seed_);
         }
         
-        int getRandomNumber(int max) { // Including max! E.g. max = 3 produces numbers ranging from 0 to 3 including
-            std::uniform_int_distribution<int> dist(0, max);
-            return dist(rng);
-        }
-
     };
     using UCombatTemplate = std::unique_ptr<CombatTemplate>;
     using UCombatTemplates = std::vector<UCombatTemplate>;

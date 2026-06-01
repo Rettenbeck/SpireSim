@@ -9,7 +9,7 @@ namespace SpireSim {
         auto& nextMoves = NextEnemyMoveList[move];
         assert(!nextMoves.empty());
         if(nextMoves.size() == 1) return nextMoves[0];
-        return nextMoves[getRandomNumber(nextMoves.size() - 1)];
+        return nextMoves[state.rngEnemies.getRandomNumber(nextMoves.size() - 1)];
     }
 
     void Combat::advanceMove(EnemyMoveId &move) {

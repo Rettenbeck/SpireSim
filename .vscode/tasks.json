@@ -20,8 +20,9 @@
                 "-lshell32",
                 "-static-libgcc",
                 "-static-libstdc++",
-                //"-flto=2",
-                "-O2",
+                // "-flto=2",
+                "-O3",
+                // "-g"
 
                 // ONNX
                 "-I", "C:/libs/onnxruntime/include",

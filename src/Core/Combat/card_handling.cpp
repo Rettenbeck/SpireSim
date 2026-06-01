@@ -81,9 +81,4 @@ namespace SpireSim {
         return id;
     }
 
-    int Combat::getRandomNumber(int max) { // Inlcuding max! e.g. max = 3 produces number ranging from 0 to 3 including
-        std::uniform_int_distribution<int> dist(0, max);
-        return dist(state.genDeck);
-    }
-
 }

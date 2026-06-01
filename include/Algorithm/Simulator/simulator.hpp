@@ -48,7 +48,7 @@ namespace SpireSim {
                 CardStatsMap cardStatsMapSingle;
                 runSingleCombat(&stateCopy, cardStatsMapSingle);
                 Merge(cardStatsMap, cardStatsMapSingle);
-                std::cout << "Card stats total: " << ToStringCardId(cardStatsMap, &stateCopy);
+                // std::cout << "Card stats total: " << ToStringCardId(cardStatsMap, &stateCopy);
                 exportCardStatsToFile();
             }
         }
@@ -63,7 +63,7 @@ namespace SpireSim {
 
             state->setSeeds(seedBuffer++);
             state->initialize();
-            std::cout << state->toString();
+            // std::cout << state->toString();
             state->startCombat();
 
             for(int i = 0; i < maxActions; i++) {
@@ -80,11 +80,11 @@ namespace SpireSim {
                 int bestActionIndex = implementor->bestActionIndex;
                 assert(bestActionIndex < state->getActions().size());
 
-                std::cout << "\n";
-                std::cout << state->actionsToString();
-                std::cout << implementor->result.toString();
-                std::cout << "bestActionIndex: " << bestActionIndex << "\n";
-                std::cout << "Current Hp: " << state->getPlayerHealth() << "\n";
+                // std::cout << "\n";
+                // std::cout << state->actionsToString();
+                // std::cout << implementor->result.toString();
+                // std::cout << "bestActionIndex: " << bestActionIndex << "\n";
+                // std::cout << "Current Hp: " << state->getPlayerHealth() << "\n";
 
                 jvec.push_back(json());
                 auto& j = jvec.back();
@@ -130,8 +130,8 @@ namespace SpireSim {
                 stats.countDiscarded = count;
             }
 
-            std::cout << "Fight finished! Won? " << won << "; Score: " << score << "\n";
-            std::cout << "Card stats single: " << ToStringCardId(cardStatsMapSingle, state);
+            // std::cout << "Fight finished! Won? " << won << "; Score: " << score << "\n";
+            // std::cout << "Card stats single: " << ToStringCardId(cardStatsMapSingle, state);
 
             for(auto& j : jvec) {
                 j["hpLoss"] = hpLoss;

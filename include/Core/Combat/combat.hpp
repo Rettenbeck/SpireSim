@@ -202,7 +202,6 @@ namespace SpireSim {
         void discardHandEndOfTurn();
         void determineChoosableCards(CardLocation from);
         void chooseCard();
-        int getRandomNumber(int max);
         Id createCardInPile(CardLocation location, CardId cardId, bool isUpgraded = false);
 
 
@@ -238,7 +237,7 @@ namespace SpireSim {
 
         void initialize(bool shuffleDeck = true, bool initializeEnemiesHealth = true);
 
-        void setSeeds(unsigned int seedDeck_);
+        void setSeeds(unsigned int seed);
         void increaseSeeds(unsigned int value);
 
         // Interface methods

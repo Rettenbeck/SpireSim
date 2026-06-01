@@ -92,7 +92,7 @@ namespace SpireSim {
             pass->optionIterations = iterationsPerThread;
             pass->optionExplorationConstant = optionExplorationConstant;
             pass->optionAddedSeed = addedSeed;
-            pass->heuristic->setSeed(pass->optionAddedSeed);
+            pass->heuristic->rng.setSeed(pass->optionAddedSeed);
             pass->run();
             return std::move(pass);
         }

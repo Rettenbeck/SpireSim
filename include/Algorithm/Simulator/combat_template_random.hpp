@@ -33,36 +33,36 @@ namespace SpireSim {
             assert(playerIds.size() > 0);
             assert(encounterIds.size() > 0);
 
-            int deckSize = getRandomNumber(optionMaxDeckSize - optionMinDeckSize) + optionMinDeckSize;
+            int deckSize = rng.getRandomNumber(optionMaxDeckSize - optionMinDeckSize) + optionMinDeckSize;
             Cards finalDeck;
             for(int i = 0; i < deckSize; i++) {
-                int index = getRandomNumber(deck.size() - 1);
+                int index = rng.getRandomNumber(deck.size() - 1);
                 finalDeck.push_back(deck[index]);
             }
 
             Relics finalRelics;
             for(auto& relic : relics) {
-                if(getRandomNumber(1) == 0) finalRelics.push_back(relic);
+                if(rng.getRandomNumber(1) == 0) finalRelics.push_back(relic);
             }
 
             Potions finalPotions;
             for(auto& potion : potions) {
-                if(getRandomNumber(1) == 0) finalPotions.push_back(potion);
+                if(rng.getRandomNumber(1) == 0) finalPotions.push_back(potion);
             }
 
-            auto playerId = playerIds[getRandomNumber(playerIds.size() - 1)];
-            auto encounterId = encounterIds[getRandomNumber(encounterIds.size() - 1)];
+            auto playerId = playerIds[rng.getRandomNumber(playerIds.size() - 1)];
+            auto encounterId = encounterIds[rng.getRandomNumber(encounterIds.size() - 1)];
 
             auto finalPlayer = container.playerFactory->get(playerId);
             auto finalEnemies = container.encounterFactory->get(encounterId);
 
-            float hpPercentage = getRandomNumber(optionMaxHpPercentage - optionMinHpPercentage) + optionMinHpPercentage;
+            float hpPercentage = rng.getRandomNumber(optionMaxHpPercentage - optionMinHpPercentage) + optionMinHpPercentage;
             float hpMax = finalPlayer.data.maxHp;
             hpMax = hpMax * hpPercentage / 100.f;
             finalPlayer.data.hp = hpMax;
 
-            if(isEnemyToughnessRandom ) enemiesMoreHp   = (getRandomNumber(1) == 0) ? true : false;
-            if(isEnemyDeadlinessRandom) enemiesDeadlier = (getRandomNumber(1) == 0) ? true : false;
+            if(isEnemyToughnessRandom ) enemiesMoreHp   = (rng.getRandomNumber(1) == 0) ? true : false;
+            if(isEnemyDeadlinessRandom) enemiesDeadlier = (rng.getRandomNumber(1) == 0) ? true : false;
 
             combats.push_back(
                 std::make_unique<SpireSim::Combat>(

@@ -79,22 +79,20 @@ namespace SpireSim {
         for(auto& enemy : ecs.cEnemies) {
             int hpLower = variables.enemiesMoreHp ? enemy.maxHpLowerBoundHard : enemy.maxHpLowerBound;
             int hpUpper = variables.enemiesMoreHp ? enemy.maxHpUpperBoundHard : enemy.maxHpUpperBound;
-            int hpInit = getRandomNumber(hpUpper - hpLower) + hpLower;
+            int hpInit = state.rngEnemies.getRandomNumber(hpUpper - hpLower) + hpLower;
             enemy.data.maxHp = hpInit;
             enemy.data.hp = enemy.data.maxHp;
         }
     }
 
-    void Combat::setSeeds(unsigned int seedDeck_) {
-        state.seedDeck = seedDeck_;
-        state.genDeck.seed(state.seedDeck);
-
-        pileHandler.seedDeck = seedDeck_;
-        pileHandler.genDeck.seed(pileHandler.seedDeck);
+    void Combat::setSeeds(unsigned int seed) {
+        state.rngDeck.setSeed(seed);
+        state.rngEnemies.setSeed(seed);
     }
 
     void Combat::increaseSeeds(unsigned int value) {
-        setSeeds(state.seedDeck + value);
+        state.rngDeck.increaseSeeds(value);
+        state.rngEnemies.increaseSeeds(value);
     }
 
 }

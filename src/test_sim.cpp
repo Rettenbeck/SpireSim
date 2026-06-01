@@ -18,7 +18,7 @@ void test_sim() {
     implementor->optionNumberThreads = 1;
 
     SpireSim::Simulator simulator(std::move(implementor));
-    simulator.optionIterations = 980;
+    simulator.optionIterations = 6;
     simulator.setTemplates(templates);
     simulator.run();
 

@@ -6,7 +6,7 @@
 
 
 int main() {
-    test_mcts();
+    test_sim();
 
     std::cout << "[Program finished]\n";
     std::string s; std::cin >> s;
