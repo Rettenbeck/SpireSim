@@ -60,7 +60,7 @@ namespace SpireSim {
                 int selected = select(rootIndex);
 
                 int expanded = selected;
-                if(!nodePool[expanded].state.isCombatOver()) expand(selected);
+                if(!nodePool[expanded].state.isCombatOver()) expanded = expand(selected);
 
                 auto [score, hpLoss] = rollout(expanded);
                 backpropagate(expanded, score, hpLoss);
@@ -173,9 +173,9 @@ namespace SpireSim {
         void backpropagate(int nodeIndex, double score, double hpLoss) {
             int currentNodeIndex = nodeIndex;
             while(currentNodeIndex != -1) {
-                nodePool[nodeIndex].visits++;
-                nodePool[nodeIndex].totalScore += score;
-                nodePool[nodeIndex].totalHpLoss += hpLoss;
+                nodePool[currentNodeIndex].visits++;
+                nodePool[currentNodeIndex].totalScore += score;
+                nodePool[currentNodeIndex].totalHpLoss += hpLoss;
                 currentNodeIndex = nodePool[currentNodeIndex].parent;
             }
         }
