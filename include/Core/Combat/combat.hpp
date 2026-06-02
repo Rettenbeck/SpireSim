@@ -145,6 +145,7 @@ namespace SpireSim {
         void executeChooseCards(Effect &effect);
         void executeCardDealDamage(Effect &effect);
         void executeCardGainBlock(Effect &effect);
+        void executeCardMultiHit(Effect &effect);
         void executeCardApplyVulnerable(Effect &effect);
         void executeCardApplyWeak(Effect &effect);
         void executeGainVigor(Effect &effect);
@@ -189,6 +190,7 @@ namespace SpireSim {
         void resolveStackFully();
         bool isCardPlayable(Card &card);
         bool isCardPlayable(Id cardEntityId);
+        Id chooseRandomEnemy();
 
 
 

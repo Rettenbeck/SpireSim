@@ -24,6 +24,7 @@ namespace SpireSim {
         int enemies = 0;
         int clawDamage = 0;
         int cardAddedDamage = 0;
+        int cardHits = -1;
         
         bool recordDamage = false;
         std::map<Id, std::map<Id, std::vector<int>>> entityDamageRecorded; // [from][to][damage]

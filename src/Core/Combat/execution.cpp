@@ -21,6 +21,7 @@ namespace SpireSim {
         auto& card = ecs.getCard(effect.sourceEntityId);
         moveCard(effect.sourceEntityId, card.data.pileAfterPlay);
         variables.cardAddedDamage = 0;
+        variables.cardHits = -1;
         variables.cardsPlayedThisCombat++;
         if(cardPool.retrieve(card.cardId).cardType == CardType::Attack) {
             ecs.getPlayer().data.vigor = 0;
@@ -83,18 +84,24 @@ namespace SpireSim {
         auto& card = ecs.getCard(effect.sourceEntityId);
         auto& cardData = cardPool.retrieveData(card);
         int damageToDeal = effect.resolutionParams[0] + variables.cardAddedDamage;
+        int hits = variables.cardHits > -1 ? variables.cardHits : 1;
 
-        switch(cardData.targetingType) {
-            case TargetingType::Single:
-                dealDamageToEnemy(ecs.playerEntityId, ecs.getPlayer().data, card.targetEntityId, damageToDeal);
-                break;
-            case TargetingType::All:
-                for(auto id : ecs.enemyEntityIds) {
-                    dealDamageToEnemy(ecs.playerEntityId, ecs.getPlayer().data, id, damageToDeal);
-                }
-                break;
-            default:
-                assert(false);
+        for(int i = 0; i < hits; i++) {
+            switch(cardData.targetingType) {
+                case TargetingType::Single:
+                    dealDamageToEnemy(ecs.playerEntityId, ecs.getPlayer().data, card.targetEntityId, damageToDeal);
+                    break;
+                case TargetingType::All:
+                    for(auto id : ecs.enemyEntityIds) {
+                        dealDamageToEnemy(ecs.playerEntityId, ecs.getPlayer().data, id, damageToDeal);
+                    }
+                    break;
+                case TargetingType::Random:
+                    dealDamageToEnemy(ecs.playerEntityId, ecs.getPlayer().data, chooseRandomEnemy(), damageToDeal);
+                    break;
+                default:
+                    assert(false);
+            }
         }
     }
     
@@ -106,6 +113,11 @@ namespace SpireSim {
         gainBlock(ecs.playerEntityId, blockToGain);
     }
     
+    void Combat::executeCardMultiHit(Effect &effect) {
+        assert(effect.resolutionParams.size() > 0);
+        variables.cardHits = effect.resolutionParams[0];
+    }
+
     void Combat::executeCardApplyVulnerable(Effect &effect) {
         assert(effect.resolutionParams.size() > 0);
         auto& card = ecs.getCard(effect.sourceEntityId);

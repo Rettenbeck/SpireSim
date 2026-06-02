@@ -11,6 +11,7 @@ namespace SpireSim {
         MoveChosenCardsToDeck, MoveChosenCardsToHand,
         CardGainEnergy, CardGainStars,
         CardDealDamage, CardGainBlock, CardApplyVulnerable, CardApplyWeak,
+        CardMultiHitFixed, CardMultiHitX,
         CardGainVigor,
         CardLoseLifeSelf,
         CardCreateCardInHand, CardCreateCardUpgradedInHand,

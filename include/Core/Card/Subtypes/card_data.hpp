@@ -17,7 +17,7 @@ namespace SpireSim {
         CardLocation pileAfterPlay = CardLocation::Discard;
         bool retain = false;
         int energyCost = 0, starCost = 0;
-        int damage = 0, block = 0, replay = 0;
+        int damage = 0, block = 0, hits = 0, replay = 0;
         int vulnerable = 0, weak = 0;
         int cardAnyParam1 = 0, cardAnyParam2 = 0, cardAnyParam3 = 0;
 

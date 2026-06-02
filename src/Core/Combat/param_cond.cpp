@@ -10,6 +10,7 @@ namespace SpireSim {
             case ParamType::FixedValue              : return param.value;
             case ParamType::CardAttackDamage        : return ecs.getCard(sourceEntityId).data.damage;
             case ParamType::CardBlockValue          : return ecs.getCard(sourceEntityId).data.block;
+            case ParamType::CardHits                : return ecs.getCard(sourceEntityId).data.hits;
             case ParamType::CardApplyVulnerable     : return ecs.getCard(sourceEntityId).data.vulnerable;
             case ParamType::CardApplyWeak           : return ecs.getCard(sourceEntityId).data.weak;
             case ParamType::CardsPlayedThisCombat   : return variables.cardsPlayedThisCombat;

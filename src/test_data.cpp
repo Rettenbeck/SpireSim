@@ -8,9 +8,9 @@ SpireSim::UCombatTemplate createTestData1(SpireSim::PoolContainer &container) {
     auto t = std::make_unique<SpireSim::CombatTemplateFixed>(container);
     t->add({
         {SpireSim::CardId::BloodLetting, true},
-        {SpireSim::CardId::CollisionCourse, false},
-        {SpireSim::CardId::Strike, false},
-        {SpireSim::CardId::Strike, false},
+        {SpireSim::CardId::CelestialMight, false},
+        {SpireSim::CardId::Stardust, false},
+        {SpireSim::CardId::CelestialMight, true},
         {SpireSim::CardId::Strike, true},
         {SpireSim::CardId::Strike, true},
         {SpireSim::CardId::Defend, false},
@@ -78,8 +78,8 @@ SpireSim::UCombatTemplate createTestData3(SpireSim::PoolContainer &container) {
 SpireSim::UCombatTemplates createTestData(SpireSim::PoolContainer &container) {
     SpireSim::UCombatTemplates vec;
     vec.push_back(std::move(createTestData1(container)));
-    vec.push_back(std::move(createTestData2(container)));
-    vec.push_back(std::move(createTestData3(container)));
+    // vec.push_back(std::move(createTestData2(container)));
+    // vec.push_back(std::move(createTestData3(container)));
     return vec;
 }
 

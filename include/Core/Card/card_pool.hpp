@@ -86,6 +86,10 @@ namespace SpireSim {
             return retrieveForCreationAttack(cardId, TargetingType::All, energyCost, damage, damageUpgraded);
         }
         
+        CardTemplate& retrieveForCreationRandomAttack(CardId cardId, int energyCost, int damage, int damageUpgraded) {
+            return retrieveForCreationAttack(cardId, TargetingType::Random, energyCost, damage, damageUpgraded);
+        }
+        
         CardTemplate& retrieve(CardId cardId) {
             int index = int(cardId);
             assert(index < cardTemplates.size());
@@ -155,7 +159,7 @@ namespace SpireSim {
                 .addStarCost(2).applyWeak(1).applyVulnerable(1);
             
             retrieveForCreationAOEAttack(CardId::AstralPulse, 0, 14, 18).addStarCost(3);
-            retrieveForCreationSingleAttack(CardId::CelestialMight, 2, 6, 6).copyLastAddedEffect(2, 3);
+            retrieveForCreationSingleAttack(CardId::CelestialMight, 2, 6, 6).multiHitFixed(3, 4);
 
             retrieveForCreationBlock(CardId::CosmicIndifference, 1, 6, 9)
                 .chooseCards(1, 2, CardLocation::Discard)
@@ -165,6 +169,7 @@ namespace SpireSim {
             retrieveForCreationSingleAttack(CardId::CollisionCourse, 0, 11, 15).createCardInHand(CardId::Debris);
 
             retrieveForCreation(CardId::Terraforming, 1).addVigor(6, 8);
+            retrieveForCreationRandomAttack(CardId::Stardust, 0, 5, 7).XCostStars().multiHitX();
 
             retrieveForCreationSingleAttack(CardId::MakeItSo, 0, 6, 9).returnToHandAfterXCards(3);
 

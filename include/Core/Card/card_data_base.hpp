@@ -70,6 +70,7 @@ namespace SpireSim {
             ADDC(CollisionCourse            , Attack, Common    , Regent    )
             ADDC(CosmicIndifference         , Skill , Common    , Regent    )
             ADDC(Terraforming               , Skill , Uncommon  , Regent    )
+            ADDC(Stardust                   , Attack, Uncommon  , Regent    )
             ADDC(MakeItSo                   , Attack, Rare      , Regent    )
 
             // Defect

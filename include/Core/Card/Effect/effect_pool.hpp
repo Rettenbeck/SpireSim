@@ -31,6 +31,12 @@ namespace SpireSim {
             retrieveForCreation(EffectId::CardDealDamage)
             .fill(EffectType::CardDealDamage, {Param(ParamType::CardAttackDamage)}, {});
             
+            retrieveForCreation(EffectId::CardMultiHitFixed)
+            .fill(EffectType::CardMultiHit, {Param(ParamType::CardHits)}, {});
+            
+            retrieveForCreation(EffectId::CardMultiHitX)
+            .fill(EffectType::CardMultiHit, {Param(ParamType::XValue)}, {});
+            
             retrieveForCreation(EffectId::CardGainBlock)
             .fill(EffectType::CardGainBlock, {Param(ParamType::CardBlockValue)}, {});
             

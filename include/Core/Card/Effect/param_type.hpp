@@ -7,7 +7,7 @@ namespace SpireSim {
 
     enum class ParamType {
         None, FixedValue,
-        CardProperty, CardAttackDamage, CardBlockValue,
+        CardProperty, CardAttackDamage, CardHits, CardBlockValue,
         CardLoseLive,
         CardApplyVulnerable, CardApplyWeak,
         CardsPlayedThisCombat,

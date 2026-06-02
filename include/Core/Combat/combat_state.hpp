@@ -24,7 +24,7 @@ namespace SpireSim {
         std::map<Id, int> cardsDrawnMap;
         std::map<Id, int> cardsDiscardedMap;
 
-        RNG rngDeck, rngEnemies;
+        RNG rngDeck, rngEnemies, rngCast;
 
         NLOHMANN_DEFINE_TYPE_INTRUSIVE(CombatState,
             eventRegistry, stack, turnId,

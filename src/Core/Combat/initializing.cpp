@@ -88,11 +88,13 @@ namespace SpireSim {
     void Combat::setSeeds(unsigned int seed) {
         state.rngDeck.setSeed(seed);
         state.rngEnemies.setSeed(seed);
+        state.rngCast.setSeed(seed);
     }
 
     void Combat::increaseSeeds(unsigned int value) {
         state.rngDeck.increaseSeeds(value);
         state.rngEnemies.increaseSeeds(value);
+        state.rngCast.increaseSeeds(value);
     }
 
 }

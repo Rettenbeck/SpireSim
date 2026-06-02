@@ -6,7 +6,7 @@
 namespace SpireSim {
 
     enum class TargetingType {
-        None, Single, All
+        None, Single, All, Random
     };
     std::string ToString(TargetingType e) { return ToString(int(e)); }
 

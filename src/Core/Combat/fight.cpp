@@ -99,6 +99,7 @@ namespace SpireSim {
     }
 
     inline void Combat::dealDamageToEnemy(Id sourceEntityId, CharacterData &sourceData, Id targetEntityId, int damage) {
+        if(targetEntityId == ENTITY_NONE) return;
         auto& enemy = ecs.getEnemy(targetEntityId);
         if(enemy.enemyId == EnemyId::None) {
             // fizzle...

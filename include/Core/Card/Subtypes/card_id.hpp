@@ -21,6 +21,7 @@ namespace SpireSim {
         AstralPulse, CelestialMight, CloakOfStars, CollisionCourse,
         CosmicIndifference,
         Terraforming,
+        Stardust,
         MakeItSo,
         
         // Defect

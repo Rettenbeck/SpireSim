@@ -42,6 +42,28 @@ namespace SpireSim {
             return *this;
         }
         
+        CardTemplate& multiHitFixed(int value, CardData &data) {
+            data.addEffectInFront(effectPool, EffectId::CardMultiHitFixed);
+            data.hits = value;
+            return *this;
+        }
+        
+        CardTemplate& multiHitFixed(int value, int valueUpgraded) {
+            multiHitFixed(value, normalData);
+            multiHitFixed(valueUpgraded, upgradedData);
+            return *this;
+        }
+        
+        CardTemplate& multiHitFixed(int value) {
+            return multiHitFixed(value, value);
+        }
+        
+        CardTemplate& multiHitX() {
+            normalData.addEffectInFront(effectPool, EffectId::CardMultiHitX);
+            upgradedData.addEffectInFront(effectPool, EffectId::CardMultiHitX);
+            return *this;
+        }
+        
         CardTemplate& copyLastAddedEffect(int value, CardData &data) {
             assert(data.effects.size() > 0);
             auto lastEffect = data.effects.back();
@@ -151,6 +173,30 @@ namespace SpireSim {
             normalData.cardAnyParam2 = value;
             upgradedData.cardAnyParam2 = valueUpgraded;
             addEffect(EffectId::CardGainVigor);
+            return *this;
+        }
+        
+        CardTemplate& XCost(CardData &data) {
+            data.energyCost = 0;
+            data.playableType = PlayableType::XCost;
+            return *this;
+        }
+        
+        CardTemplate& XCost() {
+            XCost(normalData);
+            XCost(upgradedData);
+            return *this;
+        }
+        
+        CardTemplate& XCostStars(CardData &data) {
+            data.starCost = 0;
+            data.playableType = PlayableType::XCostStars;
+            return *this;
+        }
+        
+        CardTemplate& XCostStars() {
+            XCostStars(normalData);
+            XCostStars(upgradedData);
             return *this;
         }
         
