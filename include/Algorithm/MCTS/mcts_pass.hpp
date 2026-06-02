@@ -7,21 +7,40 @@
 
 namespace SpireSim {
 
+    const int MCTS_POOL_RESERVE = 200000; 
+
     class MCTS_Pass : public Algorithm {
     public:
         UMCTS_Heuristic heuristic = nullptr;
         MCTS_ResultMap mcts_ResultMap;
+        MCTSNodes nodePool;
 
         int optionIterations = 1000;
         double optionExplorationConstant = 1.414;
 
         int seedBuffer = 0;
 
-        MCTS_Pass() {}
-        MCTS_Pass(Combat *initialState_) : Algorithm(initialState_) {}
-        MCTS_Pass(UMCTS_Heuristic heuristic_) : heuristic(std::move(heuristic_)) {}
+        MCTS_Pass() {
+            reserve();
+        }
+
+        MCTS_Pass(Combat *initialState_) : Algorithm(initialState_) {
+            reserve();
+        }
+
+        MCTS_Pass(UMCTS_Heuristic heuristic_) : heuristic(std::move(heuristic_)) {
+            reserve();
+        }
+
         MCTS_Pass(Combat *initialState_, UMCTS_Heuristic heuristic_)
-            : Algorithm(initialState_), heuristic(std::move(heuristic_)) {}
+            : Algorithm(initialState_), heuristic(std::move(heuristic_))
+        {
+            reserve();
+        }
+
+        void reserve() {
+            nodePool.reserve(MCTS_POOL_RESERVE);
+        }
 
         void run() {
             assert(heuristic);
@@ -35,34 +54,36 @@ namespace SpireSim {
             internalState.increaseSeeds(optionAddedSeed);
             internalState.reshuffleDeck();
             // internalState.startCombat(true);
-            MCTSNode root(internalState);
+            int rootIndex = createNode(std::move(internalState));
 
             for(int i = 0; i < optionIterations; ++i) {
-                MCTSNode* selected = select(&root);
+                int selected = select(rootIndex);
 
-                MCTSNode* expanded = selected;
-                if(!expanded->state.isCombatOver()) expand(selected);
+                int expanded = selected;
+                if(!nodePool[expanded].state.isCombatOver()) expand(selected);
 
                 auto [score, hpLoss] = rollout(expanded);
                 backpropagate(expanded, score, hpLoss);
             }
 
             double bestActionScore = -99999;
-            for(auto& child : root.children) {
-                auto& mcts_result = mcts_ResultMap[child->parentActionIndex];
-                auto& resultScore = result.scoreMap[child->parentActionIndex];
+            for(auto& childIndex : nodePool[rootIndex].childIndices) {
+                auto& mcts_result = mcts_ResultMap[nodePool[childIndex].parentActionIndex];
+                auto& resultScore = result.scoreMap[nodePool[childIndex].parentActionIndex];
 
-                mcts_result.visits = child->visits;
-                mcts_result.totalScore = child->totalScore;
-                mcts_result.totalHpLoss = child->totalHpLoss;
+                mcts_result.visits = nodePool[childIndex].visits;
+                mcts_result.totalScore = nodePool[childIndex].totalScore;
+                mcts_result.totalHpLoss = nodePool[childIndex].totalHpLoss;
                 mcts_result.optionIterations = optionIterations;
-                resultScore += child->visits;
+                resultScore += nodePool[childIndex].visits;
 
-                if(child->visits > bestActionScore) {
-                    bestActionScore = child->visits;
-                    bestActionIndex = child->parentActionIndex;
+                if(nodePool[childIndex].visits > bestActionScore) {
+                    bestActionScore = nodePool[childIndex].visits;
+                    bestActionIndex = nodePool[childIndex].parentActionIndex;
                 }
             }
+
+            clear();
         }
 
         float evaluateState(Combat& state) {
@@ -80,62 +101,62 @@ namespace SpireSim {
             return -loss;
         }
 
-        MCTSNode* select(MCTSNode* root) {
-            MCTSNode* current = root;
+        int select(int rootIndex) {
+            int currentNodeIndex = rootIndex;
 
-            while (current->untriedActionIndices.empty() && !current->children.empty()) {
-                MCTSNode* bestChild = nullptr;
+            while(nodePool[currentNodeIndex].untriedActionIndices.empty() &&
+                    !nodePool[currentNodeIndex].childIndices.empty())
+            {
+                int bestChildIndex = -1;
                 double bestUCB1 = -std::numeric_limits<double>::infinity();
 
-                for (auto& child : current->children) {
-                    if(child->parentActionCardId != ENTITY_NONE) cardStatsMap[child->parentActionCardId].countPlayable++;
-                    double ucb1 = calculateUCB1(*child, current->visits, optionExplorationConstant);
+                for (auto childIndex : nodePool[currentNodeIndex].childIndices) {
+                    if(nodePool[childIndex].parentActionCardId != ENTITY_NONE)
+                        cardStatsMap[nodePool[childIndex].parentActionCardId].countPlayable++;
+                    double ucb1 = calculateUCB1(childIndex, nodePool[currentNodeIndex].visits, optionExplorationConstant);
                     if (ucb1 > bestUCB1) {
                         bestUCB1 = ucb1;
-                        bestChild = child.get();
+                        bestChildIndex = childIndex;
                     }
                 }
 
-                if (bestChild == nullptr) break; 
-                current = bestChild;
+                if (bestChildIndex == -1) break; 
+                currentNodeIndex = bestChildIndex;
 
-                if(current->parentActionCardId != ENTITY_NONE) {
-                    auto& stats = cardStatsMap[current->parentActionCardId];
+                if(nodePool[currentNodeIndex].parentActionCardId != ENTITY_NONE) {
+                    auto& stats = cardStatsMap[nodePool[currentNodeIndex].parentActionCardId];
                     stats.countPlayedIfAble++;
-                    if(current->visits > 0) stats.countPlayedIfAbleWeighted += (current->totalScore) / (current->visits);
+                    if(nodePool[currentNodeIndex].visits > 0) stats.countPlayedIfAbleWeighted +=
+                        (nodePool[currentNodeIndex].totalScore) / (nodePool[currentNodeIndex].visits);
                 }
             }
 
-            return current;
+            return currentNodeIndex;
         }
 
-        MCTSNode* expand(MCTSNode* node) {
-            if (node->untriedActionIndices.empty()) {
-                return node; // Nichts mehr zu tun, Knoten ist bereits voll expandiert
+        int expand(int nodeIndex) {
+            if (nodePool[nodeIndex].untriedActionIndices.empty()) {
+                return nodeIndex; 
             }
 
-            // 1. Wähle eine unversuchte Aktion (meistens die letzte, da effizienter beim Löschen)
-            int actionCardEntityId = node->untriedActionIndices.back();
-            int actionIndex = node->untriedActionIndices.size() - 1;
-            node->untriedActionIndices.pop_back();
+            int actionCardEntityId = nodePool[nodeIndex].untriedActionIndices.back();
+            int actionIndex = nodePool[nodeIndex].untriedActionIndices.size() - 1;
+            nodePool[nodeIndex].untriedActionIndices.pop_back();
 
-            // 2. Erzeuge einen neuen Combat durch Kopie und führe die Aktion aus
-            Combat nextState = node->state; // Kopier-Konstruktor/Klonen
+            Combat nextState = nodePool[nodeIndex].state;
             nextState.executeAction(actionIndex);
 
-            // 3. Erstelle den neuen Kind-Knoten
-            auto child = std::make_unique<MCTSNode>(nextState);
-            child->parent = node;
-            child->parentActionIndex = actionIndex;
-            child->parentActionCardId = actionCardEntityId;
+            int childIndex = createNode(std::move(nextState));
+            nodePool[childIndex].parent = nodeIndex;
+            nodePool[childIndex].parentActionIndex = actionIndex;
+            nodePool[childIndex].parentActionCardId = actionCardEntityId;
 
-            // 4. Füge das Kind der Liste hinzu und gib einen Pointer darauf zurück
-            node->children.push_back(std::move(child));
-            return node->children.back().get();
+            nodePool[nodeIndex].childIndices.push_back(childIndex);
+            return childIndex;
         }
 
-        std::pair<float, float> rollout(MCTSNode* node, int maxSteps = 50) {
-            auto stateCopy = node->state;
+        std::pair<float, float> rollout(int nodeIndex, int maxSteps = 50) {
+            auto stateCopy = nodePool[nodeIndex].state;
             stateCopy.increaseSeeds(seedBuffer++);
             stateCopy.reshuffleDeck();
             int steps = 0;
@@ -149,23 +170,33 @@ namespace SpireSim {
             return {evaluateState(stateCopy), stateCopy.getHpLoss()};
         }
 
-        void backpropagate(MCTSNode* node, double score, double hpLoss) {
-            MCTSNode* current = node;
-            while (current != nullptr) {
-                current->visits++;
-                current->totalScore += score;
-                current->totalHpLoss += hpLoss;
-                current = current->parent;
+        void backpropagate(int nodeIndex, double score, double hpLoss) {
+            int currentNodeIndex = nodeIndex;
+            while(currentNodeIndex != -1) {
+                nodePool[nodeIndex].visits++;
+                nodePool[nodeIndex].totalScore += score;
+                nodePool[nodeIndex].totalHpLoss += hpLoss;
+                currentNodeIndex = nodePool[currentNodeIndex].parent;
             }
         }
 
-        double calculateUCB1(const MCTSNode& node, int parentVisits, double explorationConstant = 1.414) {
-            if (node.visits == 0) {
-                return std::numeric_limits<double>::infinity(); // Unbesuchte Knoten priorisieren
+        double calculateUCB1(int nodeIndex, int parentVisits, double explorationConstant = 1.414) {
+            if (nodePool[nodeIndex].visits == 0) {
+                return std::numeric_limits<double>::infinity(); // Priorize unvisited nodes
             }
-            // Ausbeutung (Exploitation) + Erkundung (Exploration)
-            return (node.totalScore / node.visits) + 
-                explorationConstant * std::sqrt(std::log(parentVisits) / node.visits);
+            
+            // Exploration vs exploitation
+            return (nodePool[nodeIndex].totalScore / nodePool[nodeIndex].visits) + 
+                explorationConstant * std::sqrt(std::log(parentVisits) / nodePool[nodeIndex].visits);
+        }
+
+        int createNode(Combat&& state) {
+            nodePool.emplace_back(std::move(state));
+            return nodePool.size() - 1;
+        }
+
+        void clear() {
+            nodePool.clear();
         }
         
         std::unique_ptr<Algorithm> clone() {
