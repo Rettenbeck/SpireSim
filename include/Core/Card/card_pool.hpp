@@ -161,6 +161,10 @@ namespace SpireSim {
             retrieveForCreationAOEAttack(CardId::AstralPulse, 0, 14, 18).addStarCost(3);
             retrieveForCreationSingleAttack(CardId::CelestialMight, 2, 6, 6).multiHitFixed(3, 4);
 
+            retrieveForCreation(CardId::Begone, 1)
+                .chooseCard(CardLocation::Hand)
+                .transformChosenCard(CardId::MinionStrike, true);
+
             retrieveForCreationBlock(CardId::CosmicIndifference, 1, 6, 9)
                 .chooseCards(1, 2, CardLocation::Discard)
                 .moveChosenCardsToTarget(CardLocation::Deck);
@@ -173,9 +177,12 @@ namespace SpireSim {
 
             retrieveForCreationSingleAttack(CardId::MakeItSo, 0, 6, 9).returnToHandAfterXCards(3);
 
+            // Regent - Generated
+            retrieveForCreationSingleAttack(CardId::MinionStrike, 0, 6, 9).drawCards(1).exhaust();
+
             // Defect
             retrieveForCreationBlock(CardId::Hologram, 1, 3, 5)
-                .chooseCards(1, 1, CardLocation::Discard)
+                .chooseCard(CardLocation::Discard)
                 .moveChosenCardsToTarget(CardLocation::Hand);
             
             retrieveForCreationSingleAttack(CardId::Claw, 0, 3, 4)

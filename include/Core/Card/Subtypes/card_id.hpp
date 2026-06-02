@@ -18,11 +18,14 @@ namespace SpireSim {
 
         // Regent
         Venerate, FallingStar,
-        AstralPulse, CelestialMight, CloakOfStars, CollisionCourse,
+        AstralPulse, Begone, CelestialMight, CloakOfStars, CollisionCourse,
         CosmicIndifference,
         Terraforming,
         Stardust,
         MakeItSo,
+
+        // Regent - Generated
+        MinionStrike,
         
         // Defect
         Hologram, Claw,

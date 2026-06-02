@@ -155,6 +155,10 @@ namespace SpireSim {
             return *this;
         }
         
+        CardTemplate& drawCards(int value) {
+            return drawCards(value, value);
+        }
+        
         CardTemplate& gainEnergy(int value, int valueUpgraded) {
             normalData.cardAnyParam2 = value;
             upgradedData.cardAnyParam2 = valueUpgraded;
@@ -206,11 +210,20 @@ namespace SpireSim {
             EffectId effectId;
             switch (cardLocation) {
                 case CardLocation::Deck   : effectId = EffectId::ChooseCardsFromDeck   ; break;
+                case CardLocation::Hand   : effectId = EffectId::ChooseCardsFromHand   ; break;
                 case CardLocation::Discard: effectId = EffectId::ChooseCardsFromDiscard; break;
                 default: assert(false);
             }
             addEffect(effectId);
             return *this;
+        }
+        
+        CardTemplate& chooseCards(int value, CardLocation cardLocation) {
+            return chooseCards(value, value, cardLocation);
+        }
+        
+        CardTemplate& chooseCard(CardLocation cardLocation) {
+            return chooseCards(1, 1, cardLocation);
         }
         
         CardTemplate& moveChosenCardsToTarget(CardLocation cardLocation) {
@@ -266,6 +279,25 @@ namespace SpireSim {
         
         CardTemplate& createCardInHand(CardId cardId) {
             return createCardInHand(cardId, false);
+        }
+        
+        void transformChosenCard(CardData &cardData, CardId cardId, bool createUpgraded) {
+            if(createUpgraded) {
+                cardData.addEffect(effectPool, EffectId::CardTransformChosenUpgraded);
+            } else {
+                cardData.addEffect(effectPool, EffectId::CardTransformChosen);
+            }
+            cardData.cardAnyParam3 = int(cardId);
+        }
+        
+        CardTemplate& transformChosenCard(CardId cardId, bool deriveUpgraded) {
+            transformChosenCard(normalData, cardId, false);
+            transformChosenCard(upgradedData, cardId, deriveUpgraded);
+            return *this;
+        }
+        
+        CardTemplate& transformChosenCard(CardId cardId) {
+            return transformChosenCard(cardId, false);
         }
         
         CardTemplate& sharpenClaws(int value, int valueUpgraded) {

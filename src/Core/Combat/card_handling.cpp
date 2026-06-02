@@ -81,4 +81,27 @@ namespace SpireSim {
         return id;
     }
 
+    Id Combat::transform(Id cardEntityId, CardId cardId, bool isUpgraded) {
+        auto& cardOld = ecs.getCard(cardEntityId);
+        unregisterEventsFromEntity(cardEntityId);
+        auto location = cardOld.location;
+        auto locationIndex = cardOld.locationIndex;
+        cardOld.location = CardLocation::Removed;
+        cardOld.locationIndex = pileHandler.removed.size();
+        pileHandler.removed.push_back(cardEntityId);
+        
+        
+        Card newCard;
+        newCard.isUpgraded = isUpgraded;
+        cardPool.retrieve(cardId).derive(newCard);
+        auto newCardEntityId = ecs.addObject(newCard);
+        Card& cardCreated = ecs.cCards[newCardEntityId];
+        cardCreated.location = location;
+        cardCreated.locationIndex = locationIndex;
+        pileHandler.locationToPile(cardCreated.location)[locationIndex] = newCardEntityId;
+        registerEventsFromEntity(cardPool.retrieve(cardCreated.cardId), newCardEntityId);
+
+        return newCardEntityId;
+    }
+    
 }

@@ -6,7 +6,7 @@
 namespace SpireSim {
 
     enum class CardRarity {
-        None, Basic, Common, Uncommon, Rare, Quest, Status, Curse
+        None, Basic, Common, Uncommon, Rare, Generated, Quest, Status, Curse
     };
     
 }

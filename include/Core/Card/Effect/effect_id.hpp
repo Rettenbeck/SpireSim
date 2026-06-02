@@ -7,7 +7,7 @@ namespace SpireSim {
 
     enum class EffectId {
         CardDrawCards,
-        ChooseCardsFromDeck, ChooseCardsFromDiscard,
+        ChooseCardsFromDeck, ChooseCardsFromHand, ChooseCardsFromDiscard,
         MoveChosenCardsToDeck, MoveChosenCardsToHand,
         CardGainEnergy, CardGainStars,
         CardDealDamage, CardGainBlock, CardApplyVulnerable, CardApplyWeak,
@@ -15,6 +15,7 @@ namespace SpireSim {
         CardGainVigor,
         CardLoseLifeSelf,
         CardCreateCardInHand, CardCreateCardUpgradedInHand,
+        CardTransformChosen, CardTransformChosenUpgraded,
 
         // Card specific
         CardModifyDamageFlatClaw, CardSharpenClaws

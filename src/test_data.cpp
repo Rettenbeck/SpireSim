@@ -8,9 +8,9 @@ SpireSim::UCombatTemplate createTestData1(SpireSim::PoolContainer &container) {
     auto t = std::make_unique<SpireSim::CombatTemplateFixed>(container);
     t->add({
         {SpireSim::CardId::BloodLetting, true},
-        {SpireSim::CardId::CelestialMight, false},
+        {SpireSim::CardId::Begone, false},
         {SpireSim::CardId::Stardust, false},
-        {SpireSim::CardId::CelestialMight, true},
+        {SpireSim::CardId::Begone, true},
         {SpireSim::CardId::Strike, true},
         {SpireSim::CardId::Strike, true},
         {SpireSim::CardId::Defend, false},

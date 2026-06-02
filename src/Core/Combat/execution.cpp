@@ -195,6 +195,22 @@ namespace SpireSim {
         createCardInPile(CardLocation::Hand, cardId, true);
     }
 
+    void Combat::executeTransformChosen(Effect &effect) {
+        assert(effect.resolutionParams.size() > 0);
+        auto cardId = static_cast<CardId>(effect.resolutionParams[0]);
+        for(auto cardEntityId : variables.chosenCards) {
+            transform(cardEntityId, cardId);
+        }
+    }
+
+    void Combat::executeTransformChosenUpgraded(Effect &effect) {
+        assert(effect.resolutionParams.size() > 0);
+        auto cardId = static_cast<CardId>(effect.resolutionParams[0]);
+        for(auto cardEntityId : variables.chosenCards) {
+            transform(cardEntityId, cardId, true);
+        }
+    }
+
     void Combat::executeSharpenClaws(Effect &effect) {
         assert(effect.resolutionParams.size() > 0);
         variables.clawDamage += effect.resolutionParams[0];

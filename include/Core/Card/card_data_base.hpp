@@ -65,6 +65,7 @@ namespace SpireSim {
             ADDC(Venerate                   , Skill , Basic     , Regent    )
             ADDC(FallingStar                , Attack, Basic     , Regent    )
             ADDC(AstralPulse                , Attack, Common    , Regent    )
+            ADDC(Begone                     , Skill , Common    , Regent    )
             ADDC(CelestialMight             , Attack, Common    , Regent    )
             ADDC(CloakOfStars               , Skill , Common    , Regent    )
             ADDC(CollisionCourse            , Attack, Common    , Regent    )
@@ -72,6 +73,9 @@ namespace SpireSim {
             ADDC(Terraforming               , Skill , Uncommon  , Regent    )
             ADDC(Stardust                   , Attack, Uncommon  , Regent    )
             ADDC(MakeItSo                   , Attack, Rare      , Regent    )
+
+            // Regent - Generated
+            ADDC(MinionStrike               , Attack, Generated , Regent    )
 
             // Defect
             ADDC(Hologram                   , Skill , Common    , Defect    )

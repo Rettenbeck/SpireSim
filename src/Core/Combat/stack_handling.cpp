@@ -46,6 +46,8 @@ namespace SpireSim {
             case EffectType::CardModifyDamageFlat       : executeCardModifyDamageFlat       (effect); return;
             case EffectType::CreateCardInHand           : executeCreateCardInHand           (effect); return;
             case EffectType::CreateCardUpgradedInHand   : executeCreateCardUpgradedInHand   (effect); return;
+            case EffectType::TransformChosen            : executeTransformChosen            (effect); return;
+            case EffectType::TransformChosenUpgraded    : executeTransformChosenUpgraded    (effect); return;
             case EffectType::SharpenClaws               : executeSharpenClaws               (effect); return;
             default: assert(false);
         }

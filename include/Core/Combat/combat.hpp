@@ -154,6 +154,8 @@ namespace SpireSim {
         void executeCardModifyDamageFlat(Effect &effect);
         void executeCreateCardInHand(Effect &effect);
         void executeCreateCardUpgradedInHand(Effect &effect);
+        void executeTransformChosen(Effect &effect);
+        void executeTransformChosenUpgraded(Effect &effect);
         void executeSharpenClaws(Effect &effect);
 
 
@@ -205,6 +207,7 @@ namespace SpireSim {
         void determineChoosableCards(CardLocation from);
         void chooseCard();
         Id createCardInPile(CardLocation location, CardId cardId, bool isUpgraded = false);
+        Id transform(Id cardEntityId, CardId cardId, bool isUpgraded = false);
 
 
 

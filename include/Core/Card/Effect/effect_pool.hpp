@@ -52,6 +52,12 @@ namespace SpireSim {
                         Param(ParamType::FixedValue, int(CardLocation::Deck))
                     }, {});
             
+            retrieveForCreation(EffectId::ChooseCardsFromHand)
+            .fill(EffectType::ChooseCards,
+                    {   Param(ParamType::CardAnyParam1),
+                        Param(ParamType::FixedValue, int(CardLocation::Hand))
+                    }, {});
+            
             retrieveForCreation(EffectId::ChooseCardsFromDiscard)
             .fill(EffectType::ChooseCards,
                     {   Param(ParamType::CardAnyParam1),
@@ -87,6 +93,12 @@ namespace SpireSim {
             
             retrieveForCreation(EffectId::CardCreateCardUpgradedInHand)
             .fill(EffectType::CreateCardUpgradedInHand, {Param(ParamType::CardAnyParam3)}, {});
+            
+            retrieveForCreation(EffectId::CardTransformChosen)
+            .fill(EffectType::TransformChosen, {Param(ParamType::CardAnyParam3)}, {});
+            
+            retrieveForCreation(EffectId::CardTransformChosenUpgraded)
+            .fill(EffectType::TransformChosenUpgraded, {Param(ParamType::CardAnyParam3)}, {});
             
             retrieveForCreation(EffectId::CardSharpenClaws)
             .fill(EffectType::SharpenClaws, {Param(ParamType::CardAnyParam3)}, {});
