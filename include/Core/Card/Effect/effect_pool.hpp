@@ -77,10 +77,13 @@ namespace SpireSim {
             .fill(EffectType::GainEnergy, {Param(ParamType::CardAnyParam2)}, {});
             
             retrieveForCreation(EffectId::CardGainStars)
-            .fill(EffectType::GainStars, {Param(ParamType::CardAnyParam2)}, {});
+            .fill(EffectType::GainStars, {Param(ParamType::CardAnyParam3)}, {});
             
             retrieveForCreation(EffectId::CardGainVigor)
             .fill(EffectType::GainVigor, {Param(ParamType::CardAnyParam2)}, {});
+            
+            retrieveForCreation(EffectId::CardForge)
+            .fill(EffectType::Forge, {Param(ParamType::CardAnyParam4)}, {});
             
             retrieveForCreation(EffectId::CardLoseLifeSelf)
             .fill(EffectType::LoseLifeSelf, {Param(ParamType::CardAnyParam3)}, {});

@@ -175,9 +175,11 @@ namespace SpireSim {
             retrieveForCreation(CardId::Terraforming, 1).addVigor(6, 8);
             retrieveForCreationRandomAttack(CardId::Stardust, 0, 5, 7).XCostStars().multiHitX();
 
+            retrieveForCreation(CardId::BigBang, 0).gainEnergy(1).gainStars(1).drawCards(1).forge(5);
             retrieveForCreationSingleAttack(CardId::MakeItSo, 0, 6, 9).returnToHandAfterXCards(3);
 
             // Regent - Generated
+            retrieveForCreationSingleAttack(CardId::SovereignBlade, 2, 10, 10).retain().upgradedData.energyCost = 1;
             retrieveForCreationSingleAttack(CardId::MinionStrike, 0, 6, 9).drawCards(1).exhaust();
 
             // Defect

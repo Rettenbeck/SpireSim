@@ -17,6 +17,7 @@ namespace SpireSim {
             case ParamType::CardAnyParam1           : return ecs.getCard(sourceEntityId).data.cardAnyParam1;
             case ParamType::CardAnyParam2           : return ecs.getCard(sourceEntityId).data.cardAnyParam2;
             case ParamType::CardAnyParam3           : return ecs.getCard(sourceEntityId).data.cardAnyParam3;
+            case ParamType::CardAnyParam4           : return ecs.getCard(sourceEntityId).data.cardAnyParam4;
             case ParamType::XValue                  : return variables.xValue;
             case ParamType::ClawDamage              : return variables.clawDamage;
             default: assert(false);

@@ -123,6 +123,8 @@ namespace SpireSim {
         inline void gainTempDexterity(CharacterData &targetData, int value);
         inline void gainTempDexterityPlayer(int value);
 
+        inline void forge(int value);
+
 
 
         // Move effects
@@ -156,6 +158,7 @@ namespace SpireSim {
         void executeCreateCardUpgradedInHand(Effect &effect);
         void executeTransformChosen(Effect &effect);
         void executeTransformChosenUpgraded(Effect &effect);
+        void executeForge(Effect &effect);
         void executeSharpenClaws(Effect &effect);
 
 

@@ -236,4 +236,20 @@ namespace SpireSim {
         gainTempDexterity(ecs.getPlayer().data, value);
     }
 
+    inline void Combat::forge(int value) {
+        auto ids = pileHandler.findAllCardsInPile(
+            ecs,
+            {CardLocation::Deck, CardLocation::Hand, CardLocation::Discard},
+            CardId::SovereignBlade
+        );
+        if(ids.empty()) {
+            ids.push_back(createCardInPile(CardLocation::Hand, CardId::SovereignBlade));
+        }
+        for(auto id : ids) {
+            auto& card = ecs.getCard(id);
+            card.data.cardAnyParam4 += value;
+            card.data.damage += value;
+        }
+    }
+
 }

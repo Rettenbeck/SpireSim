@@ -11,7 +11,7 @@ namespace SpireSim {
         CardLoseLive,
         CardApplyVulnerable, CardApplyWeak,
         CardsPlayedThisCombat,
-        CardAnyParam1, CardAnyParam2, CardAnyParam3,
+        CardAnyParam1, CardAnyParam2, CardAnyParam3, CardAnyParam4,
         XValue,
         ClawDamage
     };

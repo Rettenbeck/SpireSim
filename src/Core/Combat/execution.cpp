@@ -211,6 +211,11 @@ namespace SpireSim {
         }
     }
 
+    void Combat::executeForge(Effect &effect) {
+        assert(effect.resolutionParams.size() > 0);
+        forge(effect.resolutionParams[0]);
+    }
+
     void Combat::executeSharpenClaws(Effect &effect) {
         assert(effect.resolutionParams.size() > 0);
         variables.clawDamage += effect.resolutionParams[0];

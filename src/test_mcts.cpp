@@ -4,9 +4,6 @@
 
 void test_mcts() {
 
-    int difficultyMoreHp  = 0;  // Ascension 7
-    int difficultyMoreDmg = 0;  // Ascension 9
-    
     SpireSim::PoolContainer container;
     auto templates = createTestData(container);
     assert(templates.size() > 0);

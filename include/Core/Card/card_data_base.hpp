@@ -73,8 +73,10 @@ namespace SpireSim {
             ADDC(Terraforming               , Skill , Uncommon  , Regent    )
             ADDC(Stardust                   , Attack, Uncommon  , Regent    )
             ADDC(MakeItSo                   , Attack, Rare      , Regent    )
+            ADDC(BigBang                    , Skill , Rare      , Regent    )
 
             // Regent - Generated
+            ADDC(SovereignBlade             , Attack, Generated , Regent    )
             ADDC(MinionStrike               , Attack, Generated , Regent    )
 
             // Defect

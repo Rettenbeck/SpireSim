@@ -9,5 +9,6 @@ namespace SpireSim {
         None, Deck, Hand, Discard, Exhaust, Removed, Stack, Temp
     };
     std::string ToString(CardLocation e) { return ToString(int(e)); }
+    using CardLocations = std::vector<CardLocation>;
 
 }

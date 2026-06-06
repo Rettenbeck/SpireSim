@@ -166,11 +166,19 @@ namespace SpireSim {
             return *this;
         }
         
+        CardTemplate& gainEnergy(int value) {
+            return gainEnergy(value, value);
+        }
+        
         CardTemplate& gainStars(int value, int valueUpgraded) {
-            normalData.cardAnyParam2 = value;
-            upgradedData.cardAnyParam2 = valueUpgraded;
+            normalData.cardAnyParam3 = value;
+            upgradedData.cardAnyParam3 = valueUpgraded;
             addEffect(EffectId::CardGainStars);
             return *this;
+        }
+        
+        CardTemplate& gainStars(int value) {
+            return gainStars(value, value);
         }
         
         CardTemplate& addVigor(int value, int valueUpgraded) {
@@ -178,6 +186,17 @@ namespace SpireSim {
             upgradedData.cardAnyParam2 = valueUpgraded;
             addEffect(EffectId::CardGainVigor);
             return *this;
+        }
+        
+        CardTemplate& forge(int value, int valueUpgraded) {
+            normalData.cardAnyParam4 = value;
+            upgradedData.cardAnyParam4 = valueUpgraded;
+            addEffect(EffectId::CardForge);
+            return *this;
+        }
+        
+        CardTemplate& forge(int value) {
+            return forge(value, value);
         }
         
         CardTemplate& XCost(CardData &data) {

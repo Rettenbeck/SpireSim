@@ -22,10 +22,11 @@ namespace SpireSim {
         CosmicIndifference,
         Terraforming,
         Stardust,
+        BigBang,
         MakeItSo,
 
         // Regent - Generated
-        MinionStrike,
+        SovereignBlade, MinionStrike,
         
         // Defect
         Hologram, Claw,

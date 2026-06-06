@@ -126,6 +126,42 @@ namespace SpireSim {
             //     moveCard(ecs, deck[index], (hand.size() >= maxHandSize) ? CardLocation::Discard : CardLocation::Hand);
             // }
         }
+
+        Id findCardInPile(ECS &ecs, CardLocation cardLocation, CardId cardId) {
+            auto& pile = locationToPile(cardLocation);
+            for(auto cardEntityId : pile) {
+                auto& card = ecs.getCard(cardEntityId);
+                if(card.cardId == cardId) return cardEntityId;
+            }
+            return ENTITY_NONE;
+        }
+        
+        Ids findAllCardInPile(ECS &ecs, CardLocation cardLocation, CardId cardId) {
+            Ids ids;
+            auto& pile = locationToPile(cardLocation);
+            for(auto cardEntityId : pile) {
+                auto& card = ecs.getCard(cardEntityId);
+                if(card.cardId == cardId) ids.push_back(cardEntityId);
+            }
+            return ids;
+        }
+        
+        Id findCardInPile(ECS &ecs, const CardLocations &cardLocations, CardId cardId) {
+            for(auto cardLocation : cardLocations) {
+                auto cardEntityId = findCardInPile(ecs, cardLocation, cardId);
+                if(cardEntityId != ENTITY_NONE) return cardEntityId;
+            }
+            return ENTITY_NONE;
+        }
+        
+        Ids findAllCardsInPile(ECS &ecs, const CardLocations &cardLocations, CardId cardId) {
+            Ids ids;
+            for(auto cardLocation : cardLocations) {
+                auto tmp = findAllCardInPile(ecs, cardLocation, cardId);
+                for(auto id : tmp) ids.push_back(id);
+            }
+            return ids;
+        }
         
         void clearAllPiles() {
             deck.clear(); hand.clear(); discard.clear();

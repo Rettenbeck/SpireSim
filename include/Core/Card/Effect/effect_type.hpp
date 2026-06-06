@@ -12,6 +12,7 @@ namespace SpireSim {
         CardDealDamage, CardGainBlock, CardApplyVulnerable, CardApplyWeak,
         CardMultiHit,
         GainVigor,
+        Forge,
         LoseLifeSelf,
         MoveCard, MoveChosenCards,
         ModifyParentDamagePerc, CardModifyDamageFlat,
